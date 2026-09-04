@@ -3,151 +3,132 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Soru Avcısı | Yıldıray Hoca</title>
+  <title>SORU TEKRARI | Yıldıray Hoca</title>
   <meta name="theme-color" content="#09090b">
   
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Soru%20Avc%C4%B1s%C4%B1%22%2C%22short_name%22%3A%22SoruAvcisi%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Soru%20Tekrar%C4%B1%22%2C%22short_name%22%3A%22SoruTekrari%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Soru Avcısı">
+  <meta name="apple-mobile-web-app-title" content="Soru Tekrarı">
   <link rel="apple-touch-icon" href="logo.png">
   <link rel="icon" type="image/png" href="logo.png">
 
   <style>
     :root {
       --bg: #09090b;
-      --card-bg: rgba(24, 24, 27, 0.75);
+      --card-bg: rgba(24, 24, 27, 0.85);
       --card-border: rgba(255, 255, 255, 0.08);
       --accent-purple: #8b5cf6;
       --accent-cyan: #06b6d4;
       --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
       --text: #f4f4f5;
-      --text-muted: #71717a;
+      --text-muted: #a1a1aa;
       --success: #10b981;
-      --danger: #f43f5e;
-      --nav-height: 70px;
+      --danger: #ef4444;
+      --nav-height: 68px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 20px); min-height: 100vh; overflow-x: hidden; user-select: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 24px); min-height: 100vh; overflow-x: hidden; user-select: none; }
 
-    /* Üst Bar (Header) */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 14px 18px;
       position: sticky;
       top: 0;
       z-index: 30;
       backdrop-filter: blur(16px);
-      background: rgba(9, 9, 11, 0.8);
+      background: rgba(9, 9, 11, 0.85);
       border-bottom: 1px solid var(--card-border);
     }
     .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 34px; height: 34px; border-radius: 10px; object-fit: contain; }
-    .brand-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .streak-badge { display: flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 5px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; color: #f472b6; }
+    .brand-logo { width: 34px; height: 34px; border-radius: 8px; object-fit: contain; }
+    .brand-name { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .streak-badge { display: flex; align-items: center; gap: 5px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 5px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; color: #f472b6; }
 
-    /* Tab Görünümleri */
-    .tab-view { display: none; padding: 16px 20px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.25s ease-out; }
+    .tab-view { display: none; padding: 14px 16px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Pill Filter Kaydırıcı */
-    .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 14px; scrollbar-width: none; }
+    /* Yatay Filtre Çipleri */
+    .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .pills-scroll::-webkit-scrollbar { display: none; }
     .pill-chip { padding: 6px 14px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.78rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; cursor: pointer; transition: all 0.2s; }
-    .pill-chip.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .pill-chip.active { background: #fff; color: #000; border-color: #fff; }
 
-    /* Soru Kartları (Feed) */
+    /* Soru Kartları (Akış) */
     .feed-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
       margin-bottom: 16px;
       backdrop-filter: blur(10px);
-      transition: transform 0.15s;
     }
-    .feed-card:active { transform: scale(0.99); }
-    .card-top { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .card-top { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .tag-exam { font-weight: 700; color: var(--accent-cyan); }
-    .tag-reason { background: rgba(244, 63, 94, 0.15); color: #fb7185; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.7rem; }
-    
-    .card-image-wrap { width: 100%; height: 210px; background: #000; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.68rem; }
+    .card-image-wrap { width: 100%; height: 210px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
     .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .card-body { padding: 14px 16px; }
-    .topic-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
-    .note-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+    .card-body { padding: 12px 14px; }
+    .topic-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .note-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; background: rgba(0,0,0,0.25); padding: 6px 8px; border-radius: 6px; margin-top: 6px; }
 
-    .card-actions { padding: 10px 16px 14px; display: flex; gap: 8px; align-items: center; }
-    .btn-action { flex: 1; padding: 9px; border-radius: 12px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .btn-action:active { background: rgba(255,255,255,0.15); }
-    .btn-solve { background: var(--accent-gradient); border: none; font-weight: 700; }
+    .card-actions { padding: 10px 14px 12px; display: flex; gap: 8px; align-items: center; }
+    .btn-action { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-action:active { transform: scale(0.97); }
+    .btn-solve { background: var(--accent-gradient); border: none; font-weight: 700; color: #fff; }
 
-    /* Flaş Kart (Flipcard) Pratik Modu */
-    .flashcard-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 65vh; }
-    .flashcard {
-      width: 100%;
-      height: 420px;
-      perspective: 1000px;
-      cursor: pointer;
-      position: relative;
-    }
-    .flashcard-inner {
+    /* TINDER / JEST SWIPE PRATİK MODU */
+    .tinder-stage { position: relative; width: 100%; height: 500px; display: flex; align-items: center; justify-content: center; perspective: 1000px; touch-action: none; margin-top: 10px; }
+    .tinder-card {
+      position: absolute;
       width: 100%;
       height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
-      border-radius: 24px;
+      border-radius: 20px;
       border: 1px solid var(--card-border);
       background: var(--card-bg);
       backdrop-filter: blur(20px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      cursor: grab;
+      user-select: none;
+      transform-origin: 50% 100%;
+      transition: transform 0.15s ease-out, opacity 0.15s ease-out;
     }
-    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
-    .flashcard-front, .flashcard-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      border-radius: 24px;
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
+    .tinder-card.dragging { transition: none; cursor: grabbing; }
+    .card-flipper { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1); border-radius: 20px; }
+    .card-flipper.flipped { transform: rotateY(180deg); }
+    .flip-front, .flip-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; }
+    .flip-back { transform: rotateY(180deg); background: #121215; }
+
+    .stamp-badge {
+      position: absolute; top: 25px; padding: 6px 14px; border-radius: 8px; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; z-index: 10; opacity: 0; pointer-events: none; border-width: 3px; border-style: solid;
     }
-    .flashcard-back { transform: rotateY(180deg); background: rgba(18, 18, 22, 0.95); }
-    .flashcard-img-box { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #000; border-radius: 16px; }
-    .flashcard-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .stamp-like { right: 20px; border-color: var(--success); color: var(--success); transform: rotate(15deg); }
+    .stamp-dislike { left: 20px; border-color: var(--danger); color: var(--danger); transform: rotate(-15deg); }
 
-    .flashcard-controls { display: flex; gap: 12px; width: 100%; margin-top: 20px; }
-    .btn-choice { flex: 1; padding: 14px; border-radius: 16px; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; transition: transform 0.1s; }
-    .btn-choice:active { transform: scale(0.96); }
-    .btn-again { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
-    .btn-easy { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .tinder-buttons { display: flex; gap: 14px; margin-top: 16px; width: 100%; max-width: 320px; }
+    .tinder-btn { flex: 1; padding: 12px; border-radius: 14px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .tinder-btn-no { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .tinder-btn-yes { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
 
-    /* Form Girişi (Yeni Soru Ekleme) */
+    /* Form Girişi */
     .input-group { margin-bottom: 14px; }
     .input-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-    .input-group select, .input-group input, .input-group textarea {
-      width: 100%; padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); color: var(--text); font-size: 0.9rem; outline: none;
+    select, input, textarea {
+      width: 100%; padding: 12px 14px; border-radius: 12px; background: #18181b !important; color: #f4f4f5 !important; border: 1px solid var(--card-border); font-size: 0.9rem; outline: none;
     }
-    .input-group select:focus, .input-group input:focus { border-color: var(--accent-purple); }
+    select option { background-color: #18181b !important; color: #f4f4f5 !important; padding: 8px; }
+    select:focus, input:focus, textarea:focus { border-color: var(--accent-purple); }
 
-    /* Rapor & Analiz */
-    .stat-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-    .stat-hero-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
-    .hero-num { font-size: 1.8rem; font-weight: 900; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-
-    /* Alt Gezinme Çubuğu (Bottom Nav) */
+    /* Alt Navigasyon */
     nav.bottom-nav {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       height: var(--nav-height);
-      background: rgba(9, 9, 11, 0.85);
+      background: rgba(9, 9, 11, 0.9);
       backdrop-filter: blur(20px);
       border-top: 1px solid var(--card-border);
       display: flex;
@@ -160,40 +141,32 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       background: none;
       border: none;
       color: var(--text-muted);
       font-size: 0.65rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
       flex: 1;
     }
     .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.2s; }
-    .nav-item.active { color: var(--text); }
+    .nav-item.active { color: #fff; }
     .nav-item.active svg { stroke: url(#gradient); transform: translateY(-2px); }
 
-    /* Ortadaki Parlayan "+" Butonu */
     .nav-center-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
+      width: 48px; height: 48px; border-radius: 50%;
       background: var(--accent-gradient);
-      border: none;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+      border: none; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 18px rgba(168, 85, 247, 0.45);
       cursor: pointer;
       transform: translateY(-8px);
-      transition: transform 0.15s;
     }
     .nav-center-btn:active { transform: translateY(-8px) scale(0.92); }
     .nav-center-btn svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2.5; }
 
-    /* Çizim Modal */
+    /* Çizim / Karalama Modalı */
     .canvas-modal { position: fixed; inset: 0; background: #000; z-index: 100; display: none; flex-direction: column; }
     .canvas-modal.active { display: flex; }
     .canvas-nav { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: #121215; border-bottom: 1px solid var(--card-border); }
@@ -203,7 +176,6 @@
 </head>
 <body>
 
-  <!-- SVG Gradient Tanımı -->
   <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
     <defs>
       <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -217,165 +189,150 @@
   <header>
     <div class="brand">
       <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-      <div class="brand-name">SORU AVCISI</div>
+      <div class="brand-name">SORU TEKRARI</div>
     </div>
     <div class="streak-badge">
       <span>🔥</span>
-      <span id="streakCount">3 Günlük Seri</span>
+      <span id="streakCountText">1 Günlük Seri</span>
     </div>
   </header>
 
-  <!-- TAB 1: AKIŞ (FEED / ARŞİV) -->
+  <!-- TAB 1: AKIŞ / ARŞİV -->
   <div id="tab-feed" class="tab-view active">
-    <!-- Yatay Filtre Çipleri -->
-    <div class="pills-scroll" id="examFilterPills">
-      <div class="pill-chip active" onclick="setExamFilter('')">Tümü</div>
-      <div class="pill-chip" onclick="setExamFilter('YKS-TYT')">YKS-TYT</div>
-      <div class="pill-chip" onclick="setExamFilter('YKS-AYT')">YKS-AYT</div>
-      <div class="pill-chip" onclick="setExamFilter('LGS')">LGS</div>
-      <div class="pill-chip" onclick="setExamFilter('KPSS')">KPSS</div>
-    </div>
-
-    <!-- Soru Kartları -->
+    <div class="pills-scroll" id="examPillContainer"></div>
     <div id="feedList"></div>
   </div>
 
-  <!-- TAB 2: PRATİK (FLIP / TEKRAR KARTLARI) -->
-  <div id="tab-practice" class="tab-view">
-    <div class="flashcard-stage" id="practiceContainer">
-      <div class="flashcard" id="practiceFlashcard" onclick="flipCard()">
-        <div class="flashcard-inner">
-          <div class="flashcard-front">
-            <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:8px;" id="pCardHeader">SORU</div>
-            <div class="flashcard-img-box">
-              <img id="pCardFrontImg" src="" alt="Soru">
-            </div>
-            <div style="text-align:center; margin-top:10px; font-size:0.75rem; color:var(--text-muted);">Çözümü görmek için karta dokun 👆</div>
-          </div>
-          <div class="flashcard-back">
-            <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:8px;">ÇÖZÜM & NOT</div>
-            <div class="flashcard-img-box">
-              <img id="pCardBackImg" src="" alt="Çözüm">
-            </div>
-            <div id="pCardNote" style="font-size:0.8rem; margin-top:10px; color:var(--text);"></div>
-          </div>
-        </div>
-      </div>
-      <div class="flashcard-controls">
-        <button class="btn-choice btn-again" onclick="nextPracticeCard(false)">👎 Tekrar Et</button>
-        <button class="btn-choice btn-easy" onclick="nextPracticeCard(true)">👍 Anladım</button>
+  <!-- TAB 2: PRATİK (TINDER SWIPE / FLIP) -->
+  <div id="tab-practice" class="tab-view" style="text-align:center;">
+    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Sağa kaydır: Anladım 👍 | Sola kaydır: Tekrar et 👎 | Dokun: Çözümü gör 💡</div>
+    <div class="tinder-stage" id="tinderStage">
+      <!-- Dinamik Tinder Kartı -->
+    </div>
+    <div style="display:flex; justify-content:center;">
+      <div class="tinder-buttons">
+        <button class="tinder-btn tinder-btn-no" onclick="triggerCardSwipe('left')">👎 Tekrar Çöz</button>
+        <button class="tinder-btn tinder-btn-yes" onclick="triggerCardSwipe('right')">👍 Anladım</button>
       </div>
     </div>
   </div>
 
-  <!-- TAB 3: RAPOR (İSTATİSTİK & GRAFİK) -->
+  <!-- TAB 3: RAPOR & ANALİZ -->
   <div id="tab-analytics" class="tab-view">
-    <div class="stat-hero">
-      <div class="stat-hero-card">
-        <div class="hero-num" id="statTotalHero">0</div>
-        <div class="hero-label">Toplam Yanlış Soru</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px;">
+        <div style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);" id="statTotalCount">0</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Toplam Arşiv</div>
       </div>
-      <div class="stat-hero-card">
-        <div class="hero-num" id="statMasteredHero">0</div>
-        <div class="hero-label">Öğrenilen / Kavranan</div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px;">
+        <div style="font-size:1.8rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Öğrenildi / Kavrandı</div>
       </div>
     </div>
 
-    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:20px; padding:18px; margin-bottom:16px;">
-      <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">En Sık Yapılan Hatalar</h4>
-      <div id="reportReasonBars" style="display:flex; flex-direction:column; gap:8px;"></div>
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:16px; margin-bottom:14px;">
+      <h4 style="font-size:0.78rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Hata Nedenleri</h4>
+      <div id="chartReasons" style="display:flex; flex-direction:column; gap:8px;"></div>
     </div>
 
-    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:20px; padding:18px;">
-      <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Ders Dağılımı</h4>
-      <div id="reportSubjectBars" style="display:flex; flex-direction:column; gap:8px;"></div>
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:16px;">
+      <h4 style="font-size:0.78rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Ders Dağılımı</h4>
+      <div id="chartSubjects" style="display:flex; flex-direction:column; gap:8px;"></div>
     </div>
   </div>
 
-  <!-- TAB 4: YENİ SORU EKLE (HIZLI FORM) -->
+  <!-- TAB 4: HIZLI SORU EKLE -->
   <div id="tab-add" class="tab-view">
-    <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:14px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
+    <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:14px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
     
-    <form id="fastAddForm" onsubmit="saveFastQuestion(event)">
+    <form id="addForm" onsubmit="handleQuestionSubmit(event)">
       <div class="input-group">
         <label>Sınav & Ders</label>
         <div style="display:flex; gap:8px;">
-          <select id="fExam" required onchange="onFastExamChange()">
-            <option value="YKS-TYT">YKS-TYT</option>
-            <option value="YKS-AYT">YKS-AYT</option>
-            <option value="LGS">LGS</option>
-            <option value="KPSS">KPSS</option>
-            <option value="ALES">ALES</option>
-          </select>
-          <select id="fSubject" required onchange="onFastSubjectChange()"></select>
+          <select id="formExamSelect" required onchange="renderSubjectDropdown()"></select>
+          <select id="formSubjectSelect" required onchange="renderTopicDropdown()"></select>
         </div>
       </div>
 
       <div class="input-group">
         <label>Konu</label>
-        <select id="fTopicSelect" onchange="document.getElementById('fTopicCustom').value = this.value;"></select>
-        <input type="text" id="fTopicCustom" placeholder="Veya elle konu adı yazın" required style="margin-top:6px;">
+        <select id="formTopicSelect" onchange="if(this.value) document.getElementById('formTopicManual').value = this.value;">
+          <option value="">-- Listeden Seçin --</option>
+        </select>
+        <input type="text" id="formTopicManual" placeholder="Veya buraya elle konu yazın" required style="margin-top:6px;">
       </div>
 
       <div class="input-group">
-        <label>Neden Yanlış Yaptın?</label>
-        <select id="fReason" required>
+        <label>Hata Nedeni / Teşhis</label>
+        <select id="formReasonSelect" required>
           <option value="Bilgi / Konu Eksikliği">Bilgi / Konu Eksikliği</option>
           <option value="Ön Bilgi (Ön Koşul) Eksikliği">Ön Bilgi (Ön Koşul) Eksikliği</option>
           <option value="Dikkat / İşlem Hatası">Dikkat / İşlem Hatası</option>
           <option value="Soru Kökünü Yanlış Okuma">Soru Kökünü Yanlış Okuma</option>
           <option value="Ön Yargı / Ezbere Yaklaşım">Ön Yargı / Ezbere Yaklaşım</option>
-          <option value="Süre / Zaman Baskısı">Süre / Zaman Baskısı</option>
+          <option value="Şıklar Arasında Kalıp Yanlış Seçme">Şıklar Arasında Kalıp Yanlış Seçme</option>
+          <option value="Süre / Zaman Baskısı (Yetiştirememe)">Süre / Zaman Baskısı (Yetiştirememe)</option>
+          <option value="Grafik / Şekil Yorumlama Hatası">Grafik / Şekil Yorumlama Hatası</option>
           <option value="Yorumsal / Yeni Nesil Tıkanıklığı">Yorumsal / Yeni Nesil Tıkanıklığı</option>
+          <option value="Uykusuzluk / Zihinsel Yorgunluk">Uykusuzluk / Zihinsel Yorgunluk</option>
         </select>
       </div>
 
       <div class="input-group">
-        <label>📸 Soru Görseli</label>
-        <input type="file" id="fQuestionImg" accept="image/*" required>
+        <label>📸 Soru Görseli (Zorunlu)</label>
+        <input type="file" id="formQImg" accept="image/*" required>
       </div>
 
       <div class="input-group">
         <label>💡 Çözüm Görseli (İsteğe Bağlı)</label>
-        <input type="file" id="fSolutionImg" accept="image/*">
+        <input type="file" id="formSImg" accept="image/*">
       </div>
 
       <div class="input-group">
-        <label>Kısa Not / Hatırlatıcı</label>
-        <input type="text" id="fNotes" placeholder="Örn: Formülü ters yazdım...">
+        <label>🎙️ Sesli Not (Mikrofon)</label>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button type="button" id="audioRecBtn" onclick="toggleAudio()" style="padding:8px 12px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-size:0.78rem; font-weight:700; cursor:pointer;">🎙️ Kaydet</button>
+          <span id="audioStatus" style="font-size:0.75rem; color:var(--text-muted);">Kayıt yok</span>
+        </div>
+        <audio id="audioPreview" controls style="width:100%; margin-top:8px; display:none; height:36px;"></audio>
       </div>
 
-      <button type="submit" style="width:100%; padding:14px; border-radius:16px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; font-size:0.95rem; cursor:pointer; margin-top:10px;">
-        Roketle & Kaydet 🚀
+      <div class="input-group">
+        <label>Not / Kaynak</label>
+        <input type="text" id="formNotes" placeholder="Örn: 3D Yayınları TYT Deneme 2">
+      </div>
+
+      <button type="submit" style="width:100%; padding:14px; border-radius:14px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; font-size:0.95rem; cursor:pointer; margin-top:8px;">
+        Hemen Arşive Ekle 🚀
       </button>
     </form>
   </div>
 
-  <!-- ALT MENÜ (BOTTOM NAVIGATION BAR) -->
+  <!-- ALT MENÜ -->
   <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('feed', this)">
+    <button class="nav-item active" onclick="switchNavTab('feed', this)">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       <span>Akış</span>
     </button>
-    <button class="nav-item" onclick="switchTab('practice', this)">
+    <button class="nav-item" onclick="switchNavTab('practice', this)">
       <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
       <span>Pratik</span>
     </button>
-    <button class="nav-center-btn" onclick="switchTab('add', null)">
+    <button class="nav-center-btn" onclick="switchNavTab('add', null)">
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
     </button>
-    <button class="nav-item" onclick="switchTab('analytics', this)">
+    <button class="nav-item" onclick="switchNavTab('analytics', this)">
       <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
       <span>Rapor</span>
     </button>
   </nav>
 
-  <!-- Çizim Modalı -->
+  <!-- ÇİZİM TUVALİ -->
   <div class="canvas-modal" id="canvasModal">
     <div class="canvas-nav">
-      <button onclick="closeBoard()" style="background:none; border:none; color:#fff; font-weight:700;">✕ Kapat</button>
+      <button onclick="closeBoard()" style="background:none; border:none; color:#fff; font-weight:700; cursor:pointer;">✕ Kapat</button>
       <input type="color" id="penColor" value="#a855f7" style="border:none; width:30px; height:30px; border-radius:50%; background:none;">
-      <button onclick="clearCanvas()" style="background:none; border:none; color:#ef4444; font-weight:700;">Temizle</button>
+      <button onclick="clearCanvas()" style="background:none; border:none; color:var(--danger); font-weight:700; cursor:pointer;">Temizle</button>
     </div>
     <div class="canvas-box" id="canvasBox">
       <canvas id="drawCanvas"></canvas>
@@ -389,41 +346,59 @@ const CURRICULUM_DATA = {
     "Geometri": ["Doğruda ve Üçgende Açılar", "Özel Üçgenler", "Açıortay-Kenarortay", "Benzerlik", "Çokgenler", "Dörtgenler", "Çember ve Daire", "Katı Cisimler"],
     "Türkçe": ["Sözcükte Anlam", "Cümlede Anlam", "Paragrafta Anlam", "Yazım Kuralları", "Noktalama İşaretleri", "Dil Bilgisi"],
     "Fizik": ["Fizik Bilimine Giriş", "Madde ve Özellikleri", "Hareket ve Kuvvet", "İş, Güç ve Enerji", "Isı ve Sıcaklık", "Elektrostatik", "Optik", "Dalgalar"],
-    "Kimya": ["Kimya Bilimi", "Atom ve Periyodik Sistem", "Maddenin Halleri", "Asitler ve Bazlar", "Karışımlar"],
-    "Biyoloji": ["Hücre ve Organelleri", "Canlılar Dünyası", "Kalıtım", "Ekosistem"]
+    "Kimya": ["Kimya Bilimi", "Atom ve Periyodik Sistem", "Kimyasal Türler Arası Etkileşimler", "Maddenin Halleri", "Asitler, Bazlar ve Tuzlar", "Karışımlar"],
+    "Biyoloji": ["Canlıların Ortak Özellikleri", "Hücre ve Organelleri", "Canlılar Dünyası", "Hücre Bölünmeleri", "Kalıtım", "Ekosistem Ekolojisi"],
+    "Tarih": ["Tarih ve Zaman", "İlk Türk Devletleri", "İslam Tarihi", "Türk-İslam Devletleri", "Osmanlı Tarihi"],
+    "Coğrafya": ["Doğa ve İnsan", "Harita Bilgisi", "İklim Tipleri", "Yeryüzü Şekilleri", "Nüfus ve Yerleşme"],
+    "Felsefe": ["Bilgi Felsefesi", "Varlık Felsefesi", "Ahlak Felsefesi", "Sanat Felsefesi", "Din Felsefesi"],
+    "Din Kültürü": ["İnanç", "İbadet", "Ahlak ve Değerler", "Din ve Hayat"]
   },
   "YKS-AYT": {
-    "Matematik": ["Polinomlar", "2. Dereceden Denklemler", "Eşitsizlikler", "Parabol", "Trigonometri", "Logaritma", "Diziler", "Limit", "Türev", "İntegral"],
+    "Matematik": ["Polinomlar", "2. Dereceden Denklemler", "Eşitsizlikler", "Parabol", "Trigonometri", "Logaritma", "Diziler", "Limit ve Süreklilik", "Türev", "İntegral"],
     "Geometri": ["Analitik Geometri", "Çemberin Analitiği", "Dönüşümler", "Katı Cisimler"],
-    "Fizik": ["Vektörler", "Bağıl Hareket", "Newton Yasaları", "Atışlar", "Momentum", "Elektrik ve Manyetizma", "Dalga Mekaniği", "Modern Fizik"],
-    "Kimya": ["Modern Atom", "Gazlar", "Sıvı Çözeltiler", "Kimyasal Denge", "Elektrokimya", "Organik Kimya"],
-    "Biyoloji": ["Sinir Sistemi", "Dolaşım", "Solunum", "Fotosentez", "Genden Proteine", "Bitki Biyolojisi"]
+    "Fizik": ["Vektörler", "Newton Yasaları", "Atışlar", "Momentum", "Elektrik ve Manyetizma", "Dalga Mekaniği", "Modern Fizik"],
+    "Kimya": ["Modern Atom Teorisi", "Gazlar", "Sıvı Çözeltiler", "Entalpi", "Kimyasal Denge", "Elektrokimya", "Organik Kimya"],
+    "Biyoloji": ["Sinir Sistemi", "Endokrin Sistem", "Dolaşım", "Solunum", "Fotosentez", "Genden Proteine", "Bitki Biyolojisi"],
+    "Edebiyat": ["Şiir Bilgisi", "Halk Edebiyatı", "Divan Edebiyatı", "Tanzimat", "Milli Edebiyat", "Cumhuriyet Dönemi"],
+    "Tarih": ["Osmanlı Dağılma", "Kurtuluş Savaşı", "Cumhuriyet Tarihi"],
+    "Coğrafya": ["Ekosistem", "Türkiye Ekonomisi", "Küresel Örgütler"]
   },
   "LGS": {
     "Matematik": ["Çarpanlar ve Katlar", "Üslü İfadeler", "Kareköklü İfadeler", "Veri Analizi", "Olasılık", "Cebirsel İfadeler", "Doğrusal Denklemler", "Eşitsizlikler", "Üçgenler"],
     "Fen Bilimleri": ["Mevsimler ve İklim", "DNA ve Genetik Kod", "Basınç", "Madde ve Endüstri", "Basit Makineler", "Elektrik Yükleri"],
-    "Türkçe": ["Fiilimsiler", "Cümlenin Ögeleri", "Söz Sanatları", "Noktalama", "Paragraf"]
+    "Türkçe": ["Fiilimsiler", "Cümlenin Ögeleri", "Söz Sanatları", "Metin Türleri", "Paragraf"],
+    "İnkılap Tarihi": ["Bir Kahraman Doğuyor", "Milli Uyanış", "Ya İstiklal Ya Ölüm", "Atatürkçülük"],
+    "Din Kültürü": ["Kader İnancı", "Zekat ve Sadaka", "Din ve Hayat"],
+    "İngilizce": ["Friendship", "Teen Life", "In The Kitchen", "The Internet"]
   },
   "KPSS": {
     "Genel Yetenek": ["Sözel Mantık", "Sayısal Mantık", "Matematik", "Problemler", "Türkçe"],
-    "Genel Kültür": ["Tarih", "Coğrafya", "Vatandaşlık", "Güncel Bilgiler"]
+    "Genel Kültür": ["Tarih", "Coğrafya", "Anayasa", "Güncel Bilgiler"]
   },
   "ALES": {
     "Sayısal": ["Temel Matematik", "Cebir", "Sayısal Mantık", "Geometri"],
-    "Sözel": ["Paragraf", "Sözel Mantık"]
-  }
+    "Sözel": ["Sözcük ve Cümlede Anlam", "Paragraf", "Sözel Mantık"]
+  },
+  "DGS": {
+    "Sayısal": ["Temel Matematik", "Sayı Problemleri", "Rasyonel Sayılar", "Geometri"],
+    "Sözel": ["Sözcükte Anlam", "Paragraf", "Sözel Mantık"]
+  },
+  "ÖABT": { "Alan Bilgisi": ["Alan Konuları", "Öğretim Teknikleri"] },
+  "AGS": { "Genel Yetenek": ["Sözel Mantık", "Sayısal Mantık"], "Genel Kültür": ["Tarih", "Coğrafya"] },
+  "TUS": { "Temel Bilimler": ["Anatomi", "Fizyoloji", "Biyokimya"], "Klinik Bilimler": ["Dahiliye", "Pediatri", "Cerrahi"] },
+  "DUS": { "Temel Bilimler": ["Anatomi", "Histoloji"], "Klinik Bilimler": ["Ortodonti", "Endodonti", "Cerrahi"] }
 };
 
-const DB_NAME = "SoruAvcisiDB";
+/* ORİJİNAL VERİTABANI İSMİ KORUNDU */
+const DB_NAME = "SoruTekrariDB_YildirayHoca";
 const STORE_NAME = "questions";
 let db;
 let allQuestions = [];
-let activeExamFilter = "";
-let currentPracticeIndex = 0;
+let activeExam = "";
 
 function initDB() {
-  return new Promise((resolve) => {
-    const req = indexedDB.open(DB_NAME, 2);
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
     req.onupgradeneeded = (e) => {
       const d = e.target.result;
       if (!d.objectStoreNames.contains(STORE_NAME)) {
@@ -431,6 +406,7 @@ function initDB() {
       }
     };
     req.onsuccess = (e) => { db = e.target.result; resolve(); };
+    req.onerror = (e) => reject(e);
   });
 }
 
@@ -446,7 +422,7 @@ function dbGetAll() {
   return new Promise((resolve) => {
     const tx = db.transaction([STORE_NAME], "readonly");
     const req = tx.objectStore(STORE_NAME).getAll();
-    req.onsuccess = () => resolve(req.result);
+    req.onsuccess = () => resolve(req.result || []);
   });
 }
 
@@ -479,38 +455,67 @@ function compressImg(file) {
   });
 }
 
-function switchTab(tabId, btn) {
+/* STREAK (SERİ) YÖNETİMİ */
+function updateStreakDisplay() {
+  const today = new Date().toISOString().slice(0, 10);
+  const lastActive = localStorage.getItem("streak_last_date");
+  let count = parseInt(localStorage.getItem("streak_count") || "1", 10);
+
+  if (lastActive && lastActive !== today) {
+    const diffDays = Math.round((new Date(today) - new Date(lastActive)) / (1000 * 60 * 60 * 24));
+    if (diffDays === 1) {
+      count++;
+    } else if (diffDays > 1) {
+      count = 1;
+    }
+  }
+  localStorage.setItem("streak_last_date", today);
+  localStorage.setItem("streak_count", count);
+  document.getElementById("streakCountText").innerText = `${count} Günlük Seri`;
+}
+
+/* SEKME DEĞİŞTİRME */
+function switchNavTab(tabId, btn) {
   document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   
-  const activeTab = document.getElementById('tab-' + tabId);
-  if (activeTab) activeTab.classList.add('active');
+  const target = document.getElementById('tab-' + tabId);
+  if (target) target.classList.add('active');
   if (btn) btn.classList.add('active');
 
-  if (tabId === 'practice') setupPracticeMode();
+  if (tabId === 'practice') initTinderMode();
   if (tabId === 'analytics') renderAnalytics();
 }
 
-function setExamFilter(exam) {
-  activeExamFilter = exam;
-  document.querySelectorAll('#examFilterPills .pill-chip').forEach(c => {
-    c.classList.toggle('active', c.innerText === (exam || 'Tümü'));
+/* ÜST KAYAR PİLL FİLTRE */
+function buildExamPills() {
+  const container = document.getElementById("examPillContainer");
+  container.innerHTML = `<div class="pill-chip active" onclick="filterByExam('', this)">Tümü</div>`;
+  Object.keys(CURRICULUM_DATA).forEach(exam => {
+    container.innerHTML += `<div class="pill-chip" onclick="filterByExam('${exam}', this)">${exam}</div>`;
   });
+}
+
+function filterByExam(exam, el) {
+  activeExam = exam;
+  document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
   renderFeed();
 }
 
+/* AKIŞ KARTLARI */
 function renderFeed() {
   const container = document.getElementById("feedList");
   container.innerHTML = "";
 
-  const filtered = activeExamFilter ? allQuestions.filter(q => q.exam === activeExamFilter) : allQuestions;
+  const items = activeExam ? allQuestions.filter(q => q.exam === activeExam) : allQuestions;
 
-  if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:0.85rem;">Henüz kayıtlı soru yok. Ortadaki '+' ile ilk yanlışını avla! 🎯</div>`;
+  if (items.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:var(--text-muted); font-size:0.85rem;">Henüz soru eklenmedi. Alttaki '+' butonu ile hemen ekleyebilirsin!</div>`;
     return;
   }
 
-  filtered.forEach(q => {
+  items.forEach(q => {
     const card = document.createElement("div");
     card.className = "feed-card";
     card.innerHTML = `
@@ -524,126 +529,242 @@ function renderFeed() {
       <div class="card-body">
         <div class="topic-title">${q.topic}</div>
         ${q.notes ? `<div class="note-text">${q.notes}</div>` : ''}
+        ${q.audioData ? `
+          <div style="margin-top:8px;">
+            <audio controls src="${q.audioData}" style="width:100%; height:32px;"></audio>
+          </div>
+        ` : ''}
       </div>
       <div class="card-actions">
         <button class="btn-action btn-solve" onclick="openScratchpad('${q.questionImg}')">✏️ Üstünde Çöz</button>
-        ${q.solutionImg ? `<button class="btn-action" onclick="alertSolution('${q.id}')">💡 Çözüm</button>` : ''}
-        <button class="btn-action" style="flex:0.3; color:var(--danger);" onclick="deleteItem('${q.id}')">🗑️</button>
+        ${q.solutionImg ? `<button class="btn-action" onclick="openScratchpad('${q.solutionImg}')">💡 Çözüm</button>` : ''}
+        <button class="btn-action" style="flex:0.25; color:var(--danger);" onclick="deleteQuestion('${q.id}')">🗑️</button>
       </div>
     `;
     container.appendChild(card);
   });
 }
 
-function alertSolution(id) {
-  const q = allQuestions.find(x => x.id === id);
-  if (q && q.solutionImg) {
-    openScratchpad(q.solutionImg);
-  }
-}
-
-async function deleteItem(id) {
-  if (confirm("Bu soruyu arşivden çıkarmak istiyor musun?")) {
+async function deleteQuestion(id) {
+  if (confirm("Bu soruyu silmek istediğine emin misin?")) {
     await dbDelete(id);
-    await reloadData();
+    await refreshAll();
   }
 }
 
-/* Flaş Kart (Flipcard) Pratik Mantığı */
-function setupPracticeMode() {
+/* GERÇEK TINDER / SWIPE JEST MOTORU */
+let tinderQueue = [];
+let activeDragCard = null;
+let startX = 0, currentX = 0;
+
+function initTinderMode() {
+  const stage = document.getElementById("tinderStage");
+  stage.innerHTML = "";
+
   if (allQuestions.length === 0) {
-    document.getElementById("practiceContainer").innerHTML = `<div style="color:var(--text-muted); text-align:center;">Pratik yapacak soru bulunmuyor.</div>`;
+    stage.innerHTML = `<div style="color:var(--text-muted); padding:30px;">Pratik yapılacak kayıtlı soru bulunmuyor.</div>`;
     return;
   }
-  currentPracticeIndex = 0;
-  loadPracticeCard(currentPracticeIndex);
+
+  tinderQueue = [...allQuestions].sort(() => 0.5 - Math.random());
+  renderTopTinderCard();
 }
 
-function loadPracticeCard(idx) {
-  const q = allQuestions[idx];
-  if (!q) {
-    document.getElementById("practiceContainer").innerHTML = `<div style="text-align:center; padding:30px;"><h3 style="font-size:1.5rem; margin-bottom:10px;">Tebrikler! 🎉</h3><p style="color:var(--text-muted);">Tüm pratik sorularını tamamladın.</p></div>`;
+function renderTopTinderCard() {
+  const stage = document.getElementById("tinderStage");
+  stage.innerHTML = "";
+
+  if (tinderQueue.length === 0) {
+    stage.innerHTML = `<div style="text-align:center; padding:40px;"><h3 style="font-size:1.4rem; margin-bottom:8px;">Harika İş! 🎉</h3><p style="color:var(--text-muted); font-size:0.85rem;">Pratik havuzundaki tüm soruları tamamladın.</p></div>`;
     return;
   }
-  const card = document.getElementById("practiceFlashcard");
-  card.classList.remove("flipped");
-  document.getElementById("pCardHeader").innerText = `${q.exam} - ${q.subject} (${idx + 1}/${allQuestions.length})`;
-  document.getElementById("pCardFrontImg").src = q.questionImg;
-  document.getElementById("pCardBackImg").src = q.solutionImg || q.questionImg;
-  document.getElementById("pCardNote").innerText = q.notes ? "Not: " + q.notes : "Hata: " + q.reason;
+
+  const q = tinderQueue[0];
+  const card = document.createElement("div");
+  card.className = "tinder-card";
+  card.id = "currentTinderCard";
+  card.innerHTML = `
+    <div class="stamp-badge stamp-like">ANLADIM</div>
+    <div class="stamp-badge stamp-dislike">TEKRAR</div>
+    <div class="card-flipper" id="currentFlipper">
+      <div class="flip-front">
+        <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:6px;">${q.exam} • ${q.subject} - ${q.topic}</div>
+        <div style="flex:1; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+          <img src="${q.questionImg}" style="max-width:100%; max-height:100%; object-fit:contain;">
+        </div>
+        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:8px;">Dokun: Çözümü Gör 🔄 | Kaydır: Karar Ver ↔️</div>
+      </div>
+      <div class="flip-back">
+        <div style="font-size:0.75rem; font-weight:700; color:#34d399; margin-bottom:6px;">ÇÖZÜM & BİLGİ</div>
+        <div style="flex:1; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+          <img src="${q.solutionImg || q.questionImg}" style="max-width:100%; max-height:100%; object-fit:contain;">
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;"><strong>Hata:</strong> ${q.reason}</div>
+        ${q.notes ? `<div style="font-size:0.75rem; color:var(--text); margin-top:4px;">${q.notes}</div>` : ''}
+      </div>
+    </div>
+  `;
+
+  stage.appendChild(card);
+  attachSwipeEvents(card);
 }
 
-function flipCard() {
-  document.getElementById("practiceFlashcard").classList.toggle("flipped");
+function attachSwipeEvents(el) {
+  let isDragging = false;
+  let hasMoved = false;
+
+  const onStart = (clientX) => {
+    isDragging = true;
+    hasMoved = false;
+    startX = clientX;
+    el.classList.add("dragging");
+  };
+
+  const onMove = (clientX) => {
+    if (!isDragging) return;
+    currentX = clientX - startX;
+    if (Math.abs(currentX) > 5) hasMoved = true;
+
+    const rot = currentX * 0.08;
+    el.style.transform = `translateX(${currentX}px) rotate(${rot}deg)`;
+
+    const likeStamp = el.querySelector(".stamp-like");
+    const dislikeStamp = el.querySelector(".stamp-dislike");
+    if (currentX > 0) {
+      likeStamp.style.opacity = Math.min(currentX / 80, 1);
+      dislikeStamp.style.opacity = 0;
+    } else {
+      dislikeStamp.style.opacity = Math.min(Math.abs(currentX) / 80, 1);
+      likeStamp.style.opacity = 0;
+    }
+  };
+
+  const onEnd = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    el.classList.remove("dragging");
+
+    if (!hasMoved) {
+      // Sadece tıklandıysa: Çözümü çevir (Flip)
+      document.getElementById("currentFlipper").classList.toggle("flipped");
+      return;
+    }
+
+    if (currentX > 90) {
+      finalizeSwipe("right");
+    } else if (currentX < -90) {
+      finalizeSwipe("left");
+    } else {
+      el.style.transform = "translateX(0px) rotate(0deg)";
+      el.querySelector(".stamp-like").style.opacity = 0;
+      el.querySelector(".stamp-dislike").style.opacity = 0;
+    }
+  };
+
+  // Touch
+  el.addEventListener("touchstart", e => onStart(e.touches[0].clientX), { passive: true });
+  el.addEventListener("touchmove", e => onMove(e.touches[0].clientX), { passive: true });
+  el.addEventListener("touchend", onEnd);
+
+  // Mouse
+  el.addEventListener("mousedown", e => onStart(e.clientX));
+  window.addEventListener("mousemove", e => { if(isDragging) onMove(e.clientX); });
+  window.addEventListener("mouseup", () => { if(isDragging) onEnd(); });
 }
 
-function nextPracticeCard(mastered) {
-  currentPracticeIndex++;
-  loadPracticeCard(currentPracticeIndex);
+function finalizeSwipe(dir) {
+  const card = document.getElementById("currentTinderCard");
+  if (!card) return;
+
+  const moveOut = dir === "right" ? window.innerWidth + 100 : -window.innerWidth - 100;
+  card.style.transform = `translateX(${moveOut}px) rotate(${dir === "right" ? 25 : -25}deg)`;
+  card.style.opacity = "0";
+
+  setTimeout(() => {
+    if (dir === "right") {
+      let mastered = parseInt(localStorage.getItem("mastered_count") || "0", 10) + 1;
+      localStorage.setItem("mastered_count", mastered);
+    }
+    tinderQueue.shift();
+    renderTopTinderCard();
+  }, 180);
 }
 
-/* Rapor & Analiz */
+function triggerCardSwipe(dir) {
+  finalizeSwipe(dir);
+}
+
+/* RAPOR & ANALİZ */
 function renderAnalytics() {
-  document.getElementById("statTotalHero").innerText = allQuestions.length;
-  document.getElementById("statMasteredHero").innerText = Math.round(allQuestions.length * 0.4);
+  document.getElementById("statTotalCount").innerText = allQuestions.length;
+  document.getElementById("statMasteredCount").innerText = localStorage.getItem("mastered_count") || "0";
 
-  const reasonCounts = {}, subjectCounts = {};
+  const reasons = {}, subjects = {};
   allQuestions.forEach(q => {
-    reasonCounts[q.reason] = (reasonCounts[q.reason] || 0) + 1;
-    subjectCounts[q.subject] = (subjectCounts[q.subject] || 0) + 1;
+    reasons[q.reason] = (reasons[q.reason] || 0) + 1;
+    subjects[q.subject] = (subjects[q.subject] || 0) + 1;
   });
 
-  const maxR = Math.max(...Object.values(reasonCounts), 1);
-  const rBox = document.getElementById("reportReasonBars");
+  const maxR = Math.max(...Object.values(reasons), 1);
+  const rBox = document.getElementById("chartReasons");
   rBox.innerHTML = "";
-  for (const [r, cnt] of Object.entries(reasonCounts)) {
-    const pct = (cnt / maxR) * 100;
+  for (const [r, c] of Object.entries(reasons)) {
+    const pct = (c / maxR) * 100;
     rBox.innerHTML += `
       <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;">
         <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${r}</span>
-        <div style="flex:1; background:rgba(255,255,255,0.05); height:8px; border-radius:4px; overflow:hidden;">
+        <div style="flex:1; background:rgba(255,255,255,0.06); height:8px; border-radius:4px; overflow:hidden;">
           <div style="width:${pct}%; background:var(--accent-purple); height:100%;"></div>
         </div>
-        <span style="font-weight:700;">${cnt}</span>
+        <span style="font-weight:700; width:20px; text-align:right;">${c}</span>
       </div>
     `;
   }
 
-  const maxS = Math.max(...Object.values(subjectCounts), 1);
-  const sBox = document.getElementById("reportSubjectBars");
+  const maxS = Math.max(...Object.values(subjects), 1);
+  const sBox = document.getElementById("chartSubjects");
   sBox.innerHTML = "";
-  for (const [s, cnt] of Object.entries(subjectCounts)) {
-    const pct = (cnt / maxS) * 100;
+  for (const [s, c] of Object.entries(subjects)) {
+    const pct = (c / maxS) * 100;
     sBox.innerHTML += `
       <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;">
         <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${s}</span>
-        <div style="flex:1; background:rgba(255,255,255,0.05); height:8px; border-radius:4px; overflow:hidden;">
+        <div style="flex:1; background:rgba(255,255,255,0.06); height:8px; border-radius:4px; overflow:hidden;">
           <div style="width:${pct}%; background:var(--accent-cyan); height:100%;"></div>
         </div>
-        <span style="font-weight:700;">${cnt}</span>
+        <span style="font-weight:700; width:20px; text-align:right;">${c}</span>
       </div>
     `;
   }
 }
 
-/* Hızlı Form İşlemleri */
-function onFastExamChange() {
-  const exam = document.getElementById("fExam").value;
-  const sub = document.getElementById("fSubject");
+/* FORM DROPDOWNLARI */
+function initFormSelects() {
+  const ex = document.getElementById("formExamSelect");
+  ex.innerHTML = "";
+  Object.keys(CURRICULUM_DATA).forEach(k => {
+    ex.innerHTML += `<option value="${k}">${k}</option>`;
+  });
+  renderSubjectDropdown();
+}
+
+function renderSubjectDropdown() {
+  const exam = document.getElementById("formExamSelect").value;
+  const sub = document.getElementById("formSubjectSelect");
   sub.innerHTML = "";
   if (CURRICULUM_DATA[exam]) {
     Object.keys(CURRICULUM_DATA[exam]).forEach(s => {
       sub.innerHTML += `<option value="${s}">${s}</option>`;
     });
   }
-  onFastSubjectChange();
+  renderTopicDropdown();
 }
 
-function onFastSubjectChange() {
-  const exam = document.getElementById("fExam").value;
-  const sub = document.getElementById("fSubject").value;
-  const top = document.getElementById("fTopicSelect");
-  top.innerHTML = '<option value="">-- Konu Seç --</option>';
+function renderTopicDropdown() {
+  const exam = document.getElementById("formExamSelect").value;
+  const sub = document.getElementById("formSubjectSelect").value;
+  const top = document.getElementById("formTopicSelect");
+  top.innerHTML = '<option value="">-- Listeden Seçin --</option>';
   if (CURRICULUM_DATA[exam] && CURRICULUM_DATA[exam][sub]) {
     CURRICULUM_DATA[exam][sub].forEach(t => {
       top.innerHTML += `<option value="${t}">${t}</option>`;
@@ -651,84 +772,127 @@ function onFastSubjectChange() {
   }
 }
 
-async function saveFastQuestion(e) {
-  e.preventDefault();
-  const qFile = document.getElementById("fQuestionImg").files[0];
-  const sFile = document.getElementById("fSolutionImg").files[0];
-  const topic = document.getElementById("fTopicCustom").value.trim();
+/* SES KAYDI */
+let mediaRec, audioBlobBase64 = null, audioChunks = [];
+function toggleAudio() {
+  const btn = document.getElementById("audioRecBtn");
+  const status = document.getElementById("audioStatus");
+  const player = document.getElementById("audioPreview");
 
-  if (!qFile) return alert("Soru fotoğrafı zorunludur.");
-  if (!topic) return alert("Konu adı belirtmelisin.");
+  if (!mediaRec || mediaRec.state === "inactive") {
+    audioChunks = [];
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      mediaRec = new MediaRecorder(stream);
+      mediaRec.start();
+      btn.innerText = "⏹️ Bitir";
+      status.innerText = "Kaydediliyor...";
+      mediaRec.ondataavailable = e => audioChunks.push(e.data);
+      mediaRec.onstop = () => {
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          audioBlobBase64 = reader.result;
+          player.src = audioBlobBase64;
+          player.style.display = "block";
+          status.innerText = "Ses hazır!";
+        };
+      };
+    }).catch(() => alert("Mikrofon izni alınamadı."));
+  } else {
+    mediaRec.stop();
+    mediaRec.stream.getTracks().forEach(t => t.stop());
+    btn.innerText = "🎙️ Yeniden Kaydet";
+  }
+}
+
+/* YENİ SORU KAYDI */
+async function handleQuestionSubmit(e) {
+  e.preventDefault();
+  const qF = document.getElementById("formQImg").files[0];
+  const sF = document.getElementById("formSImg").files[0];
+  const topic = document.getElementById("formTopicManual").value.trim();
+
+  if (!qF) return alert("Soru görseli zorunludur.");
+  if (!topic) return alert("Lütfen konu belirtin.");
 
   const item = {
     id: "q_" + Date.now(),
-    exam: document.getElementById("fExam").value,
-    subject: document.getElementById("fSubject").value,
+    exam: document.getElementById("formExamSelect").value,
+    subject: document.getElementById("formSubjectSelect").value,
     topic: topic,
-    reason: document.getElementById("fReason").value,
-    notes: document.getElementById("fNotes").value,
-    questionImg: await compressImg(qFile),
-    solutionImg: sFile ? await compressImg(sFile) : null,
+    reason: document.getElementById("formReasonSelect").value,
+    notes: document.getElementById("formNotes").value,
+    audioData: audioBlobBase64,
+    questionImg: await compressImg(qF),
+    solutionImg: sF ? await compressImg(sF) : null,
     createdAt: new Date().toISOString()
   };
 
   await dbPut(item);
-  document.getElementById("fastAddForm").reset();
-  await reloadData();
-  switchTab("feed", document.querySelector(".bottom-nav .nav-item"));
+  document.getElementById("addForm").reset();
+  audioBlobBase64 = null;
+  document.getElementById("audioPreview").style.display = "none";
+  document.getElementById("audioStatus").innerText = "Kayıt yok";
+
+  await refreshAll();
+  switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
 }
 
-async function reloadData() {
-  allQuestions = await dbGetAll();
-  renderFeed();
-}
-
-/* Çizim Tuvali */
-let canvasCtx, isDrawing = false, bgImg = null;
-function initCanvas() {
-  const canvas = document.getElementById("drawCanvas");
-  canvasCtx = canvas.getContext("2d");
-  const getPos = e => {
-    const r = canvas.getBoundingClientRect();
+/* ÇİZİM TUVALİ */
+let canvasCtx, isPainting = false, cachedBg = null;
+function initCanvasEvents() {
+  const c = document.getElementById("drawCanvas");
+  canvasCtx = c.getContext("2d");
+  const getP = e => {
+    const r = c.getBoundingClientRect();
     const cx = e.touches ? e.touches[0].clientX : e.clientX;
     const cy = e.touches ? e.touches[0].clientY : e.clientY;
     return { x: cx - r.left, y: cy - r.top };
   };
-  const start = e => { isDrawing = true; const p = getPos(e); canvasCtx.beginPath(); canvasCtx.moveTo(p.x, p.y); };
-  const draw = e => {
-    if (!isDrawing) return;
-    const p = getPos(e);
+  const onD = e => { isPainting = true; const p = getP(e); canvasCtx.beginPath(); canvasCtx.moveTo(p.x, p.y); };
+  const onM = e => {
+    if (!isPainting) return;
+    const p = getP(e);
     canvasCtx.strokeStyle = document.getElementById("penColor").value;
     canvasCtx.lineWidth = 3;
     canvasCtx.lineCap = "round";
     canvasCtx.lineTo(p.x, p.y);
     canvasCtx.stroke();
   };
-  const stop = () => isDrawing = false;
-  canvas.addEventListener("mousedown", start); canvas.addEventListener("mousemove", draw); window.addEventListener("mouseup", stop);
-  canvas.addEventListener("touchstart", start, {passive:false}); canvas.addEventListener("touchmove", e => { e.preventDefault(); draw(e); }, {passive:false}); window.addEventListener("touchend", stop);
+  const onU = () => isPainting = false;
+  c.addEventListener("mousedown", onD); c.addEventListener("mousemove", onM); window.addEventListener("mouseup", onU);
+  c.addEventListener("touchstart", onD, {passive:false}); c.addEventListener("touchmove", e => { e.preventDefault(); onM(e); }, {passive:false}); window.addEventListener("touchend", onU);
 }
 
-function openScratchpad(imgSrc) {
+function openScratchpad(src) {
   document.getElementById("canvasModal").classList.add("active");
-  const box = document.getElementById("canvasBox");
+  const b = document.getElementById("canvasBox");
   const c = document.getElementById("drawCanvas");
-  c.width = box.clientWidth; c.height = box.clientHeight;
-  const im = new Image(); im.src = imgSrc;
+  c.width = b.clientWidth; c.height = b.clientHeight;
+  const im = new Image();
+  im.src = src;
   im.onload = () => {
-    bgImg = im;
-    const ratio = Math.min(c.width / im.width, c.height / im.height, 1);
-    canvasCtx.drawImage(im, 0, 0, im.width, im.height, (c.width - im.width*ratio)/2, (c.height - im.height*ratio)/2, im.width*ratio, im.height*ratio);
+    cachedBg = im;
+    const r = Math.min(c.width / im.width, c.height / im.height, 1);
+    canvasCtx.drawImage(im, 0, 0, im.width, im.height, (c.width - im.width*r)/2, (c.height - im.height*r)/2, im.width*r, im.height*r);
   };
 }
-function clearCanvas() { if (bgImg) openScratchpad(bgImg.src); }
+function clearCanvas() { if (cachedBg) openScratchpad(cachedBg.src); }
 function closeBoard() { document.getElementById("canvasModal").classList.remove("active"); }
+
+async function refreshAll() {
+  allQuestions = await dbGetAll();
+  renderFeed();
+}
 
 window.addEventListener("DOMContentLoaded", async () => {
   await initDB();
-  initCanvas();
-  onFastExamChange();
-  await reloadData();
+  initCanvasEvents();
+  buildExamPills();
+  initFormSelects();
+  updateStreakDisplay();
+  await refreshAll();
 });
 </script>
 </body>
