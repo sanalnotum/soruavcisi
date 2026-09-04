@@ -16,7 +16,7 @@
   <style>
     :root {
       --bg: #09090b;
-      --card-bg: rgba(24, 24, 27, 0.85);
+      --card-bg: rgba(24, 24, 27, 0.88);
       --card-border: rgba(255, 255, 255, 0.08);
       --accent-purple: #8b5cf6;
       --accent-cyan: #06b6d4;
@@ -40,116 +40,45 @@
       top: 0;
       z-index: 30;
       backdrop-filter: blur(16px);
-      background: rgba(9, 9, 11, 0.85);
+      background: rgba(9, 9, 11, 0.88);
       border-bottom: 1px solid var(--card-border);
       height: 52px;
     }
     .brand { display: flex; align-items: center; gap: 8px; }
     .brand-logo { width: 30px; height: 30px; border-radius: 8px; object-fit: contain; }
-    .brand-name { font-size: 1rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .header-actions { display: flex; align-items: center; gap: 8px; }
     .streak-badge { display: flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: #f472b6; }
+    .btn-icon-head { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); padding: 5px 8px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; }
 
     .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* PRATİK SEKME MOBİL UYUMU */
-    #tab-practice.active {
+    /* Hızlı Aksiyon Barı (Akış Üstü) */
+    .action-sub-bar {
       display: flex;
-      flex-direction: column;
-      height: calc(100dvh - 52px - var(--nav-height) - 10px);
-      padding: 6px 12px;
-      overflow: hidden;
+      gap: 8px;
+      margin-bottom: 10px;
     }
-    .practice-hint {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 6px;
-      flex-shrink: 0;
-    }
-    .tinder-stage {
-      position: relative;
-      width: 100%;
+    .btn-sub-action {
       flex: 1;
-      min-height: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 1000px;
-      touch-action: none;
-    }
-    .tinder-card {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      max-height: 100%;
-      border-radius: 18px;
+      padding: 9px;
+      border-radius: 12px;
       border: 1px solid var(--card-border);
       background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      cursor: grab;
-      user-select: none;
-      transform-origin: 50% 100%;
-      transition: transform 0.15s ease-out, opacity 0.15s ease-out;
-      touch-action: none;
-    }
-    .tinder-card.dragging { transition: none; cursor: grabbing; }
-    .card-flipper { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1); border-radius: 18px; }
-    .card-flipper.flipped { transform: rotateY(180deg); }
-    .flip-front, .flip-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      border-radius: 18px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .flip-back { transform: rotateY(180deg); background: #121215; }
-
-    .stamp-badge {
-      position: absolute;
-      top: 18px;
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-weight: 900;
-      font-size: 1rem;
-      text-transform: uppercase;
-      z-index: 15;
-      opacity: 0;
-      pointer-events: none;
-      border-width: 3px;
-      border-style: solid;
-    }
-    .stamp-like { right: 16px; border-color: var(--success); color: var(--success); transform: rotate(15deg); }
-    .stamp-dislike { left: 16px; border-color: var(--danger); color: var(--danger); transform: rotate(-15deg); }
-
-    .tinder-buttons {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      max-width: 380px;
-      margin: 8px auto 0 auto;
-      flex-shrink: 0;
-    }
-    .tinder-btn {
-      flex: 1;
-      padding: 11px;
-      border-radius: 12px;
-      border: none;
+      color: var(--text);
+      font-size: 0.78rem;
       font-weight: 700;
-      font-size: 0.85rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-    .tinder-btn-no { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .tinder-btn-yes { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .btn-sub-action:active { transform: scale(0.97); }
 
     /* Yatay Filtre Çipleri */
     .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -162,17 +91,184 @@
     .card-top { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .tag-exam { font-weight: 700; color: var(--accent-cyan); }
     .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; }
-    .card-image-wrap { width: 100%; height: 200px; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .tag-mood { background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; margin-left: 4px; }
+    
+    .card-image-wrap { width: 100%; height: 210px; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
     .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .card-body { padding: 10px 12px; }
     .topic-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
-    .note-text { font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.25); padding: 5px 8px; border-radius: 6px; margin-top: 6px; }
+    .note-text { font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.25); padding: 6px 8px; border-radius: 6px; margin-top: 6px; }
 
     .card-actions { padding: 8px 12px 10px; display: flex; gap: 6px; align-items: center; }
     .btn-action { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .btn-action:active { transform: scale(0.96); }
     .btn-solve { background: var(--accent-gradient); border: none; font-weight: 700; color: #fff; }
 
-    /* Form Girişi */
+    /* YENİ PRATİK SEKME MİMARİSİ (SWIPE YERİNE BUTONLU & DÖNDÜRMESİZ) */
+    #tab-practice.active {
+      display: flex;
+      flex-direction: column;
+      height: calc(100dvh - 52px - var(--nav-height) - 10px);
+      padding: 6px 12px;
+      overflow: hidden;
+    }
+    .practice-counter {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-align: center;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+    .practice-box {
+      flex: 1;
+      min-height: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      overflow: hidden;
+    }
+    .practice-img-area {
+      flex: 1;
+      min-height: 0;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .practice-img-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Çözüm Çekmecesi (Butonla Açılan) */
+    .solution-drawer {
+      display: none;
+      background: #121215;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin-top: 8px;
+      padding: 10px;
+      flex-shrink: 0;
+      max-height: 40%;
+      overflow-y: auto;
+    }
+    .solution-drawer.open { display: block; animation: slideDown 0.2s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .btn-toggle-solution {
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .btn-toggle-solution:active { background: rgba(255,255,255,0.12); }
+
+    .sweet-choice-bar {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      max-width: 420px;
+      margin: 10px auto 0 auto;
+      flex-shrink: 0;
+    }
+    .btn-sweet {
+      flex: 1;
+      padding: 13px;
+      border-radius: 16px;
+      border: none;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .btn-sweet:active { transform: scale(0.95); }
+    .btn-sweet-repeat {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(244, 63, 94, 0.35));
+      color: #fda4af;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      box-shadow: 0 4px 14px rgba(244, 63, 94, 0.15);
+    }
+    .btn-sweet-master {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.35));
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+    }
+
+    /* ROZETLER & ANALİZ */
+    .badge-shelf {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .trophy-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 8px 4px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .trophy-card.locked { opacity: 0.35; filter: grayscale(1); }
+    .trophy-icon { font-size: 1.4rem; }
+    .trophy-name { font-size: 0.65rem; font-weight: 700; }
+
+    /* Ruh Hali Seçiciler (Form) */
+    .mood-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .mood-pill {
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.03);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .mood-pill.active {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: var(--accent-purple);
+      color: #fff;
+    }
+
+    /* Form */
     .input-group { margin-bottom: 12px; }
     .input-group label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
     select, input, textarea {
@@ -227,6 +323,18 @@
     .canvas-nav { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; background: #121215; border-bottom: 1px solid var(--card-border); }
     .canvas-box { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top:0; left:0; }
+
+    @media print {
+      body { background:#fff !important; color:#000 !important; padding:0 !important; }
+      header, nav, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal { display: none !important; }
+      .tab-view { display: block !important; padding:0 !important; max-width: 100% !important; }
+      #tab-practice, #tab-analytics, #tab-add { display: none !important; }
+      #feedList { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
+      .feed-card { break-inside: avoid !important; border: 1px solid #ccc !important; background: #fff !important; color:#000 !important; margin-bottom: 10px; }
+      .card-image-wrap { background:#fff !important; height:220px !important; }
+      .card-image-wrap img { object-fit: contain !important; }
+      @page { size: A4 portrait; margin: 8mm; }
+    }
   </style>
 </head>
 <body>
@@ -246,46 +354,113 @@
       <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
       <div class="brand-name">SORU TEKRARI</div>
     </div>
-    <div class="streak-badge">
-      <span>🔥</span>
-      <span id="streakCountText">1 Günlük Seri</span>
+    <div class="header-actions">
+      <div class="streak-badge">
+        <span>🔥</span>
+        <span id="streakCountText">1 Günlük Seri</span>
+      </div>
+      <button class="btn-icon-head" onclick="window.print()" title="PDF / Yazdır">🖨️</button>
     </div>
   </header>
 
   <!-- TAB 1: AKIŞ -->
   <div id="tab-feed" class="tab-view active">
+    <div class="action-sub-bar">
+      <button class="btn-sub-action" onclick="startRandomFiveQuiz()" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3);">
+        🎲 Rastgele 5 Soru Çöz
+      </button>
+      <button class="btn-sub-action" onclick="switchNavTab('add', null)">
+        ➕ Yeni Ekle
+      </button>
+    </div>
     <div class="pills-scroll" id="examPillContainer"></div>
     <div id="feedList"></div>
   </div>
 
   <!-- TAB 2: PRATİK -->
   <div id="tab-practice" class="tab-view">
-    <div class="practice-hint">👆 Dokun: Çözümü Gör | ↔️ Kaydır: Karar Ver</div>
-    <div class="tinder-stage" id="tinderStage"></div>
-    <div class="tinder-buttons">
-      <button class="tinder-btn tinder-btn-no" onclick="triggerCardSwipe('left')">👎 Tekrar Çöz</button>
-      <button class="tinder-btn tinder-btn-yes" onclick="triggerCardSwipe('right')">👍 Anladım</button>
+    <div class="practice-counter" id="pCardCount">Soru 1 / 5</div>
+    
+    <div class="practice-box">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:6px; flex-shrink:0;" id="pMetaText">YKS • Matematik</div>
+      
+      <div class="practice-img-area">
+        <img id="pQuestionImg" src="" alt="Soru Görseli">
+      </div>
+
+      <button class="btn-toggle-solution" onclick="toggleSolutionDrawer()">
+        💡 Çözümü & Notu Göster / Gizle
+      </button>
+
+      <div class="solution-drawer" id="solutionDrawer">
+        <div style="font-size:0.72rem; font-weight:700; color:#34d399; margin-bottom:4px;">ÇÖZÜM GÖRSELİ & KOÇ NOTU</div>
+        <div style="max-height:180px; overflow:hidden; background:#000; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+          <img id="pSolutionImg" src="" style="max-width:100%; max-height:180px; object-fit:contain;">
+        </div>
+        <div id="pReasonText" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;"></div>
+        <div id="pNotesText" style="font-size:0.75rem; color:var(--text); margin-top:2px;"></div>
+      </div>
+    </div>
+
+    <div class="sweet-choice-bar">
+      <button class="btn-sweet btn-sweet-repeat" onclick="handleSweetChoice(false)">
+        👎 Tekrar Çöz
+      </button>
+      <button class="btn-sweet btn-sweet-master" onclick="handleSweetChoice(true)">
+        👍 Anladım
+      </button>
     </div>
   </div>
 
   <!-- TAB 3: RAPOR -->
   <div id="tab-analytics" class="tab-view">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+    <!-- Başarı Rozetleri -->
+    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Başarı Rozetlerim</div>
+    <div class="badge-shelf">
+      <div class="trophy-card locked" id="badge-first">
+        <div class="trophy-icon">🎯</div>
+        <div class="trophy-name">İlk Av</div>
+      </div>
+      <div class="trophy-card locked" id="badge-practiced">
+        <div class="trophy-icon">⚡</div>
+        <div class="trophy-name">Pratik Çırağı</div>
+      </div>
+      <div class="trophy-card locked" id="badge-streak">
+        <div class="trophy-icon">🔥</div>
+        <div class="trophy-name">Seri Ateşi</div>
+      </div>
+      <div class="trophy-card locked" id="badge-master">
+        <div class="trophy-icon">👑</div>
+        <div class="trophy-name">Soru Ustası</div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
       <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px;">
         <div style="font-size:1.6rem; font-weight:900; color:var(--accent-cyan);" id="statTotalCount">0</div>
-        <div style="font-size:0.7rem; color:var(--text-muted);">Toplam Arşiv</div>
+        <div style="font-size:0.7rem; color:var(--text-muted);">Toplam Yanlış Soru</div>
       </div>
       <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px;">
         <div style="font-size:1.6rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div>
         <div style="font-size:0.7rem; color:var(--text-muted);">Öğrenildi / Kavrandı</div>
       </div>
     </div>
+
+    <!-- Mood / Ruh Hali Analizi -->
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px; margin-bottom:12px;">
-      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">Hata Nedenleri</h4>
+      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--accent-purple); margin-bottom:8px;">Hata Anındaki Ruh Hali</h4>
+      <div id="chartMoods" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+
+    <!-- Hata Nedenleri -->
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px; margin-bottom:12px;">
+      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">Hata Nedenleri Dağılımı</h4>
       <div id="chartReasons" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
+
+    <!-- Dersler -->
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px;">
-      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">Ders Dağılımı</h4>
+      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">Ders Dağılımı</h4>
       <div id="chartSubjects" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
   </div>
@@ -323,8 +498,21 @@
           <option value="Uykusuzluk / Zihinsel Yorgunluk">Uykusuzluk / Zihinsel Yorgunluk</option>
         </select>
       </div>
+
+      <!-- Mood / Ruh Hali Seçimi (6. Madde) -->
       <div class="input-group">
-        <label>📸 Soru Görseli</label>
+        <label>Soruyu Çözerken Nasıl Hissediyordun?</label>
+        <input type="hidden" id="formMoodVal" value="Normal / Sakin 🧘">
+        <div class="mood-chips-grid">
+          <div class="mood-pill active" onclick="selectMood('Normal / Sakin 🧘', this)">Normal 🧘</div>
+          <div class="mood-pill" onclick="selectMood('Yorgun / Uykusuz 🤯', this)">Yorgundum 🤯</div>
+          <div class="mood-pill" onclick="selectMood('Aceleci / Telaşlı ⚡', this)">Acele Ettim ⚡</div>
+          <div class="mood-pill" onclick="selectMood('Soru Aşırı Zor 🧩', this)">Kazık Soru 🧩</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>📸 Soru Görseli (Zorunlu)</label>
         <input type="file" id="formQImg" accept="image/*" required>
       </div>
       <div class="input-group">
@@ -332,7 +520,7 @@
         <input type="file" id="formSImg" accept="image/*">
       </div>
       <div class="input-group">
-        <label>🎙️ Sesli Not</label>
+        <label>🎙️ Sesli Not (Mikrofon)</label>
         <div style="display:flex; gap:8px; align-items:center;">
           <button type="button" id="audioRecBtn" onclick="toggleAudio()" style="padding:6px 12px; background:#ef4444; color:#fff; border:none; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;">🎙️ Kaydet</button>
           <span id="audioStatus" style="font-size:0.72rem; color:var(--text-muted);">Kayıt yok</span>
@@ -343,7 +531,7 @@
         <label>Not / Kaynak</label>
         <input type="text" id="formNotes" placeholder="Örn: 3D Yayınları Deneme 2">
       </div>
-      <button type="submit" style="width:100%; padding:12px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; font-size:0.9rem; cursor:pointer; margin-top:4px;">
+      <button type="submit" style="width:100%; padding:13px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; font-size:0.9rem; cursor:pointer; margin-top:4px;">
         Arşive Ekle 🚀
       </button>
     </form>
@@ -412,7 +600,7 @@ const CURRICULUM_DATA = {
   },
   "KPSS": {
     "Genel Yetenek": ["Sözel Mantık", "Sayısal Mantık", "Matematik", "Problemler", "Türkçe"],
-    "Genel Kültür": ["Tarih", "Coğrafya", "Vatandaşlık", "Güncel Bilgiler"]
+    "Genel Kültür": ["Tarih", "Coğrafya", "Anayasa", "Güncel Bilgiler"]
   },
   "ALES": {
     "Sayısal": ["Temel Matematik", "Cebir", "Sayısal Mantık", "Geometri"],
@@ -512,7 +700,7 @@ function switchNavTab(tabId, btn) {
   if (target) target.classList.add('active');
   if (btn) btn.classList.add('active');
 
-  if (tabId === 'practice') initTinderMode();
+  if (tabId === 'practice') setupPracticeSession(allQuestions);
   if (tabId === 'analytics') renderAnalytics();
 }
 
@@ -531,6 +719,7 @@ function filterByExam(exam, el) {
   renderFeed();
 }
 
+/* AKIŞ KARTLARI */
 function renderFeed() {
   const container = document.getElementById("feedList");
   container.innerHTML = "";
@@ -548,7 +737,10 @@ function renderFeed() {
     card.innerHTML = `
       <div class="card-top">
         <span class="tag-exam">${q.exam} • ${q.subject}</span>
-        <span class="tag-reason">${q.reason}</span>
+        <div>
+          <span class="tag-reason">${q.reason}</span>
+          ${q.mood ? `<span class="tag-mood">${q.mood}</span>` : ''}
+        </div>
       </div>
       <div class="card-image-wrap" onclick="openScratchpad('${q.questionImg}')">
         <img src="${q.questionImg}" alt="Soru">
@@ -563,13 +755,41 @@ function renderFeed() {
         ` : ''}
       </div>
       <div class="card-actions">
-        <button class="btn-action btn-solve" onclick="openScratchpad('${q.questionImg}')">✏️ Üstünde Çöz</button>
+        <button class="btn-action btn-solve" onclick="openScratchpad('${q.questionImg}')">✏️ Çöz</button>
         ${q.solutionImg ? `<button class="btn-action" onclick="openScratchpad('${q.solutionImg}')">💡 Çözüm</button>` : ''}
+        <button class="btn-action" onclick="shareQuestion('${q.id}')" title="Koçuna Sor">📲 Sor</button>
         <button class="btn-action" style="flex:0.25; color:var(--danger);" onclick="deleteQuestion('${q.id}')">🗑️</button>
       </div>
     `;
     container.appendChild(card);
   });
+}
+
+async function shareQuestion(id) {
+  const q = allQuestions.find(x => x.id === id);
+  if (!q) return;
+
+  const shareText = `Hocam selam! "${q.exam} - ${q.subject} (${q.topic})" konusunda bu soruda takıldım. Hata notum: ${q.reason}. Yardımcı olabilir misiniz?`;
+  
+  if (navigator.share) {
+    try {
+      const res = await fetch(q.questionImg);
+      const blob = await res.blob();
+      const file = new File([blob], "soru.jpg", { type: "image/jpeg" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: "Soru Tekrarı",
+          text: shareText,
+          files: [file]
+        });
+        return;
+      }
+      await navigator.share({ title: "Soru Tekrarı", text: shareText });
+    } catch(err) {}
+  } else {
+    navigator.clipboard.writeText(shareText);
+    alert("Soru notu panoya kopyalandı! WhatsApp'tan koçunuza yapıştırıp gönderebilirsiniz.");
+  }
 }
 
 async function deleteQuestion(id) {
@@ -579,176 +799,107 @@ async function deleteQuestion(id) {
   }
 }
 
-/* JEST TABANLI TINDER SWIPE MOTORU (MOBİL OPTİMİZE) */
-let tinderQueue = [];
+/* PRATİK MODU (BUTONLU & ÇÖZÜM BUTONLU) */
+let practiceList = [];
+let currentPracticeIdx = 0;
 
-function initTinderMode() {
-  const stage = document.getElementById("tinderStage");
-  stage.innerHTML = "";
+function startRandomFiveQuiz() {
+  if (allQuestions.length < 5) {
+    alert("Rastgele 5 soru testi için arşivde en az 5 soru bulunmalı.");
+    return;
+  }
+  const shuffled = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 5);
+  setupPracticeSession(shuffled);
+  switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
+}
 
-  if (allQuestions.length === 0) {
-    stage.innerHTML = `<div style="color:var(--text-muted); padding:20px; font-size:0.85rem;">Pratik yapılacak soru bulunmuyor.</div>`;
+function setupPracticeSession(items) {
+  practiceList = items && items.length > 0 ? [...items] : [...allQuestions];
+  currentPracticeIdx = 0;
+  loadCurrentPracticeCard();
+}
+
+function loadCurrentPracticeCard() {
+  const drawer = document.getElementById("solutionDrawer");
+  drawer.classList.remove("open");
+
+  if (practiceList.length === 0) {
+    document.getElementById("pCardCount").innerText = "Soru Yok";
+    document.getElementById("pMetaText").innerText = "Arşiv boş";
+    document.getElementById("pQuestionImg").src = "";
+    document.getElementById("pReasonText").innerText = "";
+    document.getElementById("pNotesText").innerText = "";
     return;
   }
 
-  tinderQueue = [...allQuestions].sort(() => 0.5 - Math.random());
-  renderTopTinderCard();
-}
-
-function renderTopTinderCard() {
-  const stage = document.getElementById("tinderStage");
-  stage.innerHTML = "";
-
-  if (tinderQueue.length === 0) {
-    stage.innerHTML = `<div style="text-align:center; padding:30px;"><h3 style="font-size:1.3rem; margin-bottom:6px;">Tebrikler! 🎉</h3><p style="color:var(--text-muted); font-size:0.85rem;">Tüm pratik sorularını tamamladın.</p></div>`;
+  if (currentPracticeIdx >= practiceList.length) {
+    document.getElementById("pCardCount").innerText = "Tamamlandı 🎉";
+    document.getElementById("pMetaText").innerText = "Harika İş!";
+    document.getElementById("pQuestionImg").src = "";
+    alert("Tebrikler! Pratik serisindeki tüm soruları tamamladınız.");
+    switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
     return;
   }
 
-  const q = tinderQueue[0];
-  const card = document.createElement("div");
-  card.className = "tinder-card";
-  card.id = "currentTinderCard";
-  card.innerHTML = `
-    <div class="stamp-badge stamp-like">ANLADIM</div>
-    <div class="stamp-badge stamp-dislike">TEKRAR</div>
-    <div class="card-flipper" id="currentFlipper">
-      <div class="flip-front">
-        <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:4px; flex-shrink:0;">${q.exam} • ${q.subject} - ${q.topic}</div>
-        <div style="flex:1; min-height:0; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-          <img src="${q.questionImg}" style="width:100%; height:100%; object-fit:contain; pointer-events:none;">
-        </div>
-      </div>
-      <div class="flip-back">
-        <div style="font-size:0.75rem; font-weight:700; color:#34d399; margin-bottom:4px; flex-shrink:0;">ÇÖZÜM & NOT</div>
-        <div style="flex:1; min-height:0; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-          <img src="${q.solutionImg || q.questionImg}" style="width:100%; height:100%; object-fit:contain; pointer-events:none;">
-        </div>
-        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:4px; flex-shrink:0;"><strong>Hata:</strong> ${q.reason}</div>
-        ${q.notes ? `<div style="font-size:0.72rem; color:var(--text); margin-top:2px; flex-shrink:0;">${q.notes}</div>` : ''}
-      </div>
-    </div>
-  `;
-
-  stage.appendChild(card);
-  attachMobileSwipeEvents(card);
+  const q = practiceList[currentPracticeIdx];
+  document.getElementById("pCardCount").innerText = `Soru ${currentPracticeIdx + 1} / ${practiceList.length}`;
+  document.getElementById("pMetaText").innerText = `${q.exam} • ${q.subject} - ${q.topic}`;
+  document.getElementById("pQuestionImg").src = q.questionImg;
+  document.getElementById("pSolutionImg").src = q.solutionImg || q.questionImg;
+  document.getElementById("pReasonText").innerText = `Hata: ${q.reason} ${q.mood ? ' • ' + q.mood : ''}`;
+  document.getElementById("pNotesText").innerText = q.notes ? `Not: ${q.notes}` : "";
 }
 
-function attachMobileSwipeEvents(el) {
-  let isDragging = false;
-  let startX = 0, currentDeltaX = 0;
-  let startY = 0;
-  let startTime = 0;
-
-  const onTouchStart = (e) => {
-    isDragging = true;
-    startX = e.touches ? e.touches[0].clientX : e.clientX;
-    startY = e.touches ? e.touches[0].clientY : e.clientY;
-    currentDeltaX = 0;
-    startTime = Date.now();
-    el.classList.add("dragging");
-  };
-
-  const onTouchMove = (e) => {
-    if (!isDragging) return;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    currentDeltaX = clientX - startX;
-    const deltaY = clientY - startY;
-
-    // Yatay sürükleme baskınsa sayfa kaydırmasını engelle
-    if (Math.abs(currentDeltaX) > Math.abs(deltaY) && e.cancelable) {
-      e.preventDefault();
-    }
-
-    const rot = currentDeltaX * 0.07;
-    el.style.transform = `translateX(${currentDeltaX}px) rotate(${rot}deg)`;
-
-    const likeStamp = el.querySelector(".stamp-like");
-    const dislikeStamp = el.querySelector(".stamp-dislike");
-    if (currentDeltaX > 0) {
-      likeStamp.style.opacity = Math.min(currentDeltaX / 70, 1);
-      dislikeStamp.style.opacity = 0;
-    } else {
-      dislikeStamp.style.opacity = Math.min(Math.abs(currentDeltaX) / 70, 1);
-      likeStamp.style.opacity = 0;
-    }
-  };
-
-  const onTouchEnd = () => {
-    if (!isDragging) return;
-    isDragging = false;
-    el.classList.remove("dragging");
-
-    const timeDiff = Date.now() - startTime;
-    // Hızlı dokunuş (tap) algılama -> Çözümü Çevir
-    if (Math.abs(currentDeltaX) < 10 && timeDiff < 250) {
-      document.getElementById("currentFlipper").classList.toggle("flipped");
-      return;
-    }
-
-    // Sağa / Sola Fırlatma eşiği
-    if (currentDeltaX > 80) {
-      finalizeSwipe("right");
-    } else if (currentDeltaX < -80) {
-      finalizeSwipe("left");
-    } else {
-      el.style.transform = "translateX(0px) rotate(0deg)";
-      el.querySelector(".stamp-like").style.opacity = 0;
-      el.querySelector(".stamp-dislike").style.opacity = 0;
-    }
-  };
-
-  el.addEventListener("touchstart", onTouchStart, { passive: false });
-  el.addEventListener("touchmove", onTouchMove, { passive: false });
-  el.addEventListener("touchend", onTouchEnd);
-
-  el.addEventListener("mousedown", onTouchStart);
-  window.addEventListener("mousemove", (e) => { if(isDragging) onTouchMove(e); });
-  window.addEventListener("mouseup", () => { if(isDragging) onTouchEnd(); });
+function toggleSolutionDrawer() {
+  const drawer = document.getElementById("solutionDrawer");
+  drawer.classList.toggle("open");
 }
 
-function finalizeSwipe(dir) {
-  const card = document.getElementById("currentTinderCard");
-  if (!card) return;
+function handleSweetChoice(isMastered) {
+  if (practiceList.length === 0 || currentPracticeIdx >= practiceList.length) return;
 
-  const moveOut = dir === "right" ? window.innerWidth + 120 : -window.innerWidth - 120;
-  card.style.transform = `translateX(${moveOut}px) rotate(${dir === "right" ? 22 : -22}deg)`;
-  card.style.opacity = "0";
+  if (isMastered) {
+    let mastered = parseInt(localStorage.getItem("mastered_count") || "0", 10) + 1;
+    localStorage.setItem("mastered_count", mastered);
+  }
+  
+  let totalPracticed = parseInt(localStorage.getItem("total_practiced") || "0", 10) + 1;
+  localStorage.setItem("total_practiced", totalPracticed);
 
-  setTimeout(() => {
-    if (dir === "right") {
-      let mastered = parseInt(localStorage.getItem("mastered_count") || "0", 10) + 1;
-      localStorage.setItem("mastered_count", mastered);
-    }
-    tinderQueue.shift();
-    renderTopTinderCard();
-  }, 160);
+  currentPracticeIdx++;
+  loadCurrentPracticeCard();
 }
 
-function triggerCardSwipe(dir) {
-  finalizeSwipe(dir);
-}
-
-/* RAPOR & ANALİZ */
+/* ROZET & RAPOR ANALİZİ */
 function renderAnalytics() {
-  document.getElementById("statTotalCount").innerText = allQuestions.length;
-  document.getElementById("statMasteredCount").innerText = localStorage.getItem("mastered_count") || "0";
+  const total = allQuestions.length;
+  const mastered = parseInt(localStorage.getItem("mastered_count") || "0", 10);
+  const practiced = parseInt(localStorage.getItem("total_practiced") || "0", 10);
+  const streak = parseInt(localStorage.getItem("streak_count") || "1", 10);
 
-  const reasons = {}, subjects = {};
+  document.getElementById("statTotalCount").innerText = total;
+  document.getElementById("statMasteredCount").innerText = mastered;
+
+  // Rozet Kontrolleri
+  if (total >= 1) document.getElementById("badge-first").classList.remove("locked");
+  if (practiced >= 5) document.getElementById("badge-practiced").classList.remove("locked");
+  if (streak >= 3) document.getElementById("badge-streak").classList.remove("locked");
+  if (mastered >= 10) document.getElementById("badge-master").classList.remove("locked");
+
+  // Mood Dağılımı
+  const moods = {};
   allQuestions.forEach(q => {
-    reasons[q.reason] = (reasons[q.reason] || 0) + 1;
-    subjects[q.subject] = (subjects[q.subject] || 0) + 1;
+    const m = q.mood || "Normal / Sakin 🧘";
+    moods[m] = (moods[m] || 0) + 1;
   });
-
-  const maxR = Math.max(...Object.values(reasons), 1);
-  const rBox = document.getElementById("chartReasons");
-  rBox.innerHTML = "";
-  for (const [r, c] of Object.entries(reasons)) {
-    const pct = (c / maxR) * 100;
-    rBox.innerHTML += `
+  const maxM = Math.max(...Object.values(moods), 1);
+  const mBox = document.getElementById("chartMoods");
+  mBox.innerHTML = "";
+  for (const [m, c] of Object.entries(moods)) {
+    const pct = (c / maxM) * 100;
+    mBox.innerHTML += `
       <div style="display:flex; align-items:center; gap:8px; font-size:0.72rem;">
-        <span style="width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${r}</span>
+        <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${m}</span>
         <div style="flex:1; background:rgba(255,255,255,0.06); height:6px; border-radius:3px; overflow:hidden;">
           <div style="width:${pct}%; background:var(--accent-purple); height:100%;"></div>
         </div>
@@ -757,6 +908,28 @@ function renderAnalytics() {
     `;
   }
 
+  // Hata Nedenleri
+  const reasons = {};
+  allQuestions.forEach(q => { reasons[q.reason] = (reasons[q.reason] || 0) + 1; });
+  const maxR = Math.max(...Object.values(reasons), 1);
+  const rBox = document.getElementById("chartReasons");
+  rBox.innerHTML = "";
+  for (const [r, c] of Object.entries(reasons)) {
+    const pct = (c / maxR) * 100;
+    rBox.innerHTML += `
+      <div style="display:flex; align-items:center; gap:8px; font-size:0.72rem;">
+        <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${r}</span>
+        <div style="flex:1; background:rgba(255,255,255,0.06); height:6px; border-radius:3px; overflow:hidden;">
+          <div style="width:${pct}%; background:#ec4899; height:100%;"></div>
+        </div>
+        <span style="font-weight:700; width:18px; text-align:right;">${c}</span>
+      </div>
+    `;
+  }
+
+  // Dersler
+  const subjects = {};
+  allQuestions.forEach(q => { subjects[q.subject] = (subjects[q.subject] || 0) + 1; });
   const maxS = Math.max(...Object.values(subjects), 1);
   const sBox = document.getElementById("chartSubjects");
   sBox.innerHTML = "";
@@ -764,7 +937,7 @@ function renderAnalytics() {
     const pct = (c / maxS) * 100;
     sBox.innerHTML += `
       <div style="display:flex; align-items:center; gap:8px; font-size:0.72rem;">
-        <span style="width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${s}</span>
+        <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${s}</span>
         <div style="flex:1; background:rgba(255,255,255,0.06); height:6px; border-radius:3px; overflow:hidden;">
           <div style="width:${pct}%; background:var(--accent-cyan); height:100%;"></div>
         </div>
@@ -806,6 +979,12 @@ function renderTopicDropdown() {
       top.innerHTML += `<option value="${t}">${t}</option>`;
     });
   }
+}
+
+function selectMood(mood, el) {
+  document.getElementById("formMoodVal").value = mood;
+  document.querySelectorAll(".mood-pill").forEach(p => p.classList.remove("active"));
+  el.classList.add("active");
 }
 
 let mediaRec, audioBlobBase64 = null, audioChunks = [];
@@ -856,6 +1035,7 @@ async function handleQuestionSubmit(e) {
     subject: document.getElementById("formSubjectSelect").value,
     topic: topic,
     reason: document.getElementById("formReasonSelect").value,
+    mood: document.getElementById("formMoodVal").value,
     notes: document.getElementById("formNotes").value,
     audioData: audioBlobBase64,
     questionImg: await compressImg(qF),
