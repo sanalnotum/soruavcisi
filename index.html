@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>SORU TEKRARI | Yıldıray Hoca</title>
+  <title>SORU AVCISI | Yıldıray Hoca</title>
   <meta name="theme-color" content="#09090b">
   
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Soru%20Tekrar%C4%B1%22%2C%22short_name%22%3A%22SoruTekrari%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Soru%20Avcisi%22%2C%22short_name%22%3A%22SoruAvcisi%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Soru Tekrarı">
+  <meta name="apple-mobile-web-app-title" content="Soru Avcısı">
   <link rel="apple-touch-icon" href="logo.png">
   <link rel="icon" type="image/png" href="logo.png">
 
@@ -78,7 +78,6 @@
     .header-actions { display: flex; align-items: center; gap: 6px; }
     .streak-badge { display: flex; align-items: center; gap: 3px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 3px 6px; border-radius: 999px; font-size: 0.65rem; font-weight: 700; color: #f472b6; }
     
-    /* Üst Bar Hızlı Tema Değiştirici İkonlar */
     .theme-quick-bar { display: flex; gap: 3px; background: var(--card-bg); border: 1px solid var(--card-border); padding: 2px; border-radius: 8px; }
     .theme-icon-btn { background: none; border: none; font-size: 0.85rem; cursor: pointer; padding: 2px 5px; border-radius: 6px; opacity: 0.5; }
     .theme-icon-btn.active { opacity: 1; background: rgba(255,255,255,0.1); }
@@ -89,7 +88,6 @@
     .tab-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Clutch / Panik Bar */
     .clutch-bar {
       display: flex;
       justify-content: space-between;
@@ -104,35 +102,13 @@
     .clutch-title { font-size: 0.8rem; font-weight: 800; color: #fca5a5; display: flex; align-items: center; gap: 4px; }
     .clutch-sub { font-size: 0.68rem; color: var(--text-muted); }
     .btn-panic {
-      background: var(--danger);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      background: var(--danger); color: #fff; border: none; padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;
     }
     .btn-panic:active { transform: scale(0.95); }
 
     .action-sub-bar { display: flex; gap: 8px; margin-bottom: 10px; }
     .btn-sub-action {
-      flex: 1;
-      padding: 9px;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      color: var(--text);
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      flex: 1; padding: 9px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text); font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
     }
 
     .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -147,8 +123,9 @@
     .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; }
     .tag-mood { background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; margin-left: 4px; }
     
-    .star-btn { background: none; border: none; font-size: 1.15rem; cursor: pointer; padding: 0 4px; line-height: 1; vertical-align: middle; }
-    .star-btn.active { filter: drop-shadow(0 0 6px #fbbf24); }
+    /* Net Yıldız Butonu */
+    .star-btn { background: none; border: none; font-size: 1.25rem; cursor: pointer; padding: 0 6px; line-height: 1; vertical-align: middle; transition: transform 0.1s; }
+    .star-btn:active { transform: scale(1.3); }
 
     .card-image-wrap { width: 100%; height: 210px; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; position: relative; }
     .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
@@ -162,85 +139,33 @@
 
     /* PRATİK SEKME */
     #tab-practice.active {
-      display: flex;
-      flex-direction: column;
-      height: calc(100dvh - 54px - var(--nav-height) - 10px);
-      padding: 6px 12px;
-      overflow: hidden;
+      display: flex; flex-direction: column; height: calc(100dvh - 54px - var(--nav-height) - 10px); padding: 6px 12px; overflow: hidden;
     }
     .practice-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-shrink: 0; }
     .practice-counter { font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); }
     .practice-timer { font-size: 0.75rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); padding: 2px 8px; border-radius: 6px; }
 
     .practice-box {
-      flex: 1;
-      min-height: 0;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
-      overflow: hidden;
+      flex: 1; min-height: 0; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; display: flex; flex-direction: column; padding: 10px; overflow: hidden;
     }
     .practice-img-area {
-      flex: 1;
-      min-height: 0;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: zoom-in;
+      flex: 1; min-height: 0; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: zoom-in;
     }
     .practice-img-area img { width: 100%; height: 100%; object-fit: contain; }
 
     .solution-drawer {
-      display: none;
-      background: #121215;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      margin-top: 8px;
-      padding: 10px;
-      flex-shrink: 0;
-      max-height: 40%;
-      overflow-y: auto;
+      display: none; background: #121215; border: 1px solid var(--card-border); border-radius: 12px; margin-top: 8px; padding: 10px; flex-shrink: 0; max-height: 40%; overflow-y: auto;
     }
     .solution-drawer.open { display: block; animation: slideDown 0.2s ease-out; }
     @keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
     .btn-toggle-solution {
-      width: 100%;
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      font-weight: 700;
-      font-size: 0.8rem;
-      cursor: pointer;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      flex-shrink: 0;
+      width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.06); color: var(--text); font-weight: 700; font-size: 0.8rem; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0;
     }
 
     .sweet-choice-bar { display: flex; gap: 12px; width: 100%; max-width: 420px; margin: 10px auto 0 auto; flex-shrink: 0; }
     .btn-sweet {
-      flex: 1;
-      padding: 13px;
-      border-radius: 16px;
-      border: none;
-      font-weight: 800;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      flex: 1; padding: 13px; border-radius: 16px; border: none; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn-sweet:active { transform: scale(0.95); }
     .btn-sweet-repeat { background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(244, 63, 94, 0.35)); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.4); }
@@ -256,22 +181,19 @@
 
     /* PDF Modalı */
     .pdf-modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-      z-index: 150; display: none; align-items: center; justify-content: center; padding: 20px;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 150; display: none; align-items: center; justify-content: center; padding: 20px;
     }
     .pdf-modal.active { display: flex; }
     .pdf-modal-card {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; width: 100%; max-width: 360px;
     }
     .pdf-opt-btn {
-      width: 100%; padding: 12px; margin-top: 8px; border-radius: 12px; border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.05); color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: left;
+      width: 100%; padding: 12px; margin-top: 8px; border-radius: 12px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: left;
     }
 
     /* AirDrop Modalı */
     .airdrop-modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
-      z-index: 160; display: none; align-items: center; justify-content: center; padding: 16px;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 160; display: none; align-items: center; justify-content: center; padding: 16px;
     }
     .airdrop-modal.active { display: flex; }
     .airdrop-card {
@@ -281,8 +203,7 @@
 
     /* Rapor & Yedekleme */
     .backup-box {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; margin-bottom: 12px;
-      display: flex; flex-direction: column; gap: 8px;
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;
     }
     .backup-btn-row { display: flex; gap: 8px; }
     .btn-backup { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.75rem; font-weight: 700; cursor: pointer; }
@@ -329,37 +250,29 @@
     .canvas-box { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top:0; left:0; }
 
-    /* İYİLEŞTİRİLMİŞ YÜKSEK KALİTELİ PDF / BASKI ÇIKTI DÜZENİ */
+    /* PDF Baskı Düzeni */
     .print-header { display: none; }
     @media print {
       body { background:#fff !important; color:#000 !important; padding:0 !important; }
       header, nav, .clutch-bar, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal, .lightbox-modal, .pdf-modal, .airdrop-modal { display: none !important; }
-      .print-header {
-        display: block !important; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 12px;
-      }
+      .print-header { display: block !important; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 12px; }
       .print-header-top { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; }
       .print-header-title { font-size: 1.2rem; font-weight: 900; text-align: center; margin: 4px 0; text-transform: uppercase; }
       
       .tab-view { display: block !important; padding:0 !important; max-width: 100% !important; }
       #tab-practice, #tab-analytics, #tab-add { display: none !important; }
       
-      /* Baskı Akışı - Soru ve Çözümlerin Net ve Büyük Görünmesi İçin Dikey Tam Sayfa Düzen */
       #feedList { display: flex !important; flex-direction: column !important; gap: 20px !important; }
-      .feed-card {
-        break-inside: avoid !important; border: 1.5px solid #333 !important; background: #fff !important; color:#000 !important; margin-bottom: 14px; border-radius: 8px !important; box-shadow: none !important;
-      }
+      .feed-card { break-inside: avoid !important; border: 1.5px solid #333 !important; background: #fff !important; color:#000 !important; margin-bottom: 14px; border-radius: 8px !important; box-shadow: none !important; }
       .card-top { background: #f3f4f6 !important; color: #000 !important; border-bottom: 1px solid #ccc !important; font-size: 0.8rem !important; }
       
-      /* Soru Görselini Baskıda Büyütme */
       .card-image-wrap { background:#fff !important; height: auto !important; max-height: 450px !important; min-height: 280px !important; padding: 8px; }
       .card-image-wrap img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
       
-      /* Çözüm ve Notlar Baskısı */
       .card-solution-box { border-top: 1px solid #999 !important; padding-top: 10px !important; margin-top: 10px !important; }
       .card-solution-box img { max-height: 400px !important; object-fit: contain !important; width: 100% !important; }
       .note-text { background: #f9fafb !important; color: #000 !important; border: 1px dashed #999 !important; font-size: 0.8rem !important; }
 
-      /* Mod Seçim Filtreleri */
       body.print-mode-solutions .card-image-wrap { display: none !important; }
       body.print-mode-questions .card-solution-box, body.print-mode-questions .note-text { display: none !important; }
       
@@ -373,12 +286,11 @@
     <div class="brand-wrap">
       <div class="brand">
         <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-        <div class="brand-name">SORU TEKRARI</div>
+        <div class="brand-name">SORU AVCISI</div>
       </div>
       <div class="brand-author">HAZIRLAYAN: YILDIRAY HOCA</div>
     </div>
     <div class="header-actions">
-      <!-- Ulaşılabilir Hızlı Tema Değiştirici -->
       <div class="theme-quick-bar">
         <button class="theme-icon-btn active" onclick="setTheme('cyberpunk', this)" title="Cyberpunk">🔮</button>
         <button class="theme-icon-btn" onclick="setTheme('matrix', this)" title="Matrix">🟢</button>
@@ -786,7 +698,7 @@ async function exportDataBackup() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `SoruTekrari_Yedek_${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `SoruAvcisi_Yedek_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -921,7 +833,6 @@ function triggerPanicMode() {
   switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
 }
 
-/* Hızlı Tema Değiştirici (Header Üzerinden) */
 function setTheme(themeName, el) {
   document.body.setAttribute("data-theme", themeName);
   localStorage.setItem("app_theme", themeName);
@@ -1014,7 +925,7 @@ function renderFeed() {
       <div class="card-top">
         <span class="tag-exam">${q.exam} • ${q.subject}</span>
         <div>
-          <button class="star-btn ${q.starred ? 'active' : ''}" onclick="toggleStar('${q.id}')" title="Yıldızla">${q.starred ? '⭐' : '☆'}</button>
+          <button class="star-btn" onclick="toggleStar('${q.id}')" title="Yıldızla">${q.starred ? '⭐' : '☆'}</button>
           <span class="tag-reason">${q.reason}</span>
           ${q.mood ? `<span class="tag-mood">${q.mood}</span>` : ''}
         </div>
@@ -1057,10 +968,10 @@ async function shareQuestion(id) {
       const blob = await res.blob();
       const file = new File([blob], "soru.jpg", { type: "image/jpeg" });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ title: "Soru Tekrarı", text: shareText, files: [file] });
+        await navigator.share({ title: "Soru Avcısı", text: shareText, files: [file] });
         return;
       }
-      await navigator.share({ title: "Soru Tekrarı", text: shareText });
+      await navigator.share({ title: "Soru Avcısı", text: shareText });
     } catch(err) {}
   } else {
     navigator.clipboard.writeText(shareText);
