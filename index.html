@@ -14,7 +14,6 @@
   <link rel="icon" type="image/png" href="logo.png">
 
   <style>
-    /* 5. Madde: Kişiselleştirilebilir Neon Temalar */
     :root {
       --bg: #09090b;
       --card-bg: rgba(24, 24, 27, 0.88);
@@ -65,21 +64,23 @@
       backdrop-filter: blur(16px);
       background: rgba(9, 9, 11, 0.88);
       border-bottom: 1px solid var(--card-border);
-      height: 52px;
+      height: 54px;
     }
+    .brand-wrap { display: flex; flex-direction: column; }
     .brand { display: flex; align-items: center; gap: 8px; }
-    .brand-logo { width: 30px; height: 30px; border-radius: 8px; object-fit: contain; }
-    .brand-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
+    .brand-logo { width: 28px; height: 28px; border-radius: 6px; object-fit: contain; }
+    .brand-name { font-size: 1rem; font-weight: 900; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-author { font-size: 0.62rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
+
     .header-actions { display: flex; align-items: center; gap: 6px; }
-    .streak-badge { display: flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: #f472b6; }
-    .btn-icon-head { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); padding: 5px 8px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; }
+    .streak-badge { display: flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; color: #f472b6; }
+    .btn-icon-head { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); padding: 6px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
     .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 1. Madde: Sınav Geri Sayımı & Panik Butonu */
+    /* Clutch / Panik Bar */
     .clutch-bar {
       display: flex;
       justify-content: space-between;
@@ -91,8 +92,8 @@
       margin-bottom: 10px;
     }
     .clutch-left { display: flex; flex-direction: column; gap: 2px; }
-    .clutch-title { font-size: 0.82rem; font-weight: 800; color: #fca5a5; display: flex; align-items: center; gap: 4px; }
-    .clutch-sub { font-size: 0.7rem; color: var(--text-muted); }
+    .clutch-title { font-size: 0.8rem; font-weight: 800; color: #fca5a5; display: flex; align-items: center; gap: 4px; }
+    .clutch-sub { font-size: 0.68rem; color: var(--text-muted); }
     .btn-panic {
       background: var(--danger);
       color: #fff;
@@ -102,14 +103,12 @@
       font-size: 0.75rem;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(239, 68, 68, 0.35);
       display: flex;
       align-items: center;
       gap: 4px;
     }
     .btn-panic:active { transform: scale(0.95); }
 
-    /* Hızlı Aksiyon Barı (Akış Üstü) */
     .action-sub-bar { display: flex; gap: 8px; margin-bottom: 10px; }
     .btn-sub-action {
       flex: 1;
@@ -126,7 +125,6 @@
       justify-content: center;
       gap: 6px;
     }
-    .btn-sub-action:active { transform: scale(0.97); }
 
     .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .pills-scroll::-webkit-scrollbar { display: none; }
@@ -134,13 +132,14 @@
     .pill-chip.active { background: #fff; color: #000; border-color: #fff; }
 
     /* Akış Kartları */
-    .feed-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
+    .feed-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; margin-bottom: 14px; position: relative; }
     .card-top { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .tag-exam { font-weight: 700; color: var(--accent-primary); }
     .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; }
     .tag-mood { background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; margin-left: 4px; }
-    
-    .card-image-wrap { width: 100%; height: 210px; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+    .star-btn { background: none; border: none; font-size: 1rem; cursor: pointer; padding: 0 4px; }
+
+    .card-image-wrap { width: 100%; height: 210px; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; position: relative; }
     .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .card-body { padding: 10px 12px; }
     .topic-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
@@ -150,15 +149,18 @@
     .btn-action { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
     .btn-solve { background: var(--accent-gradient); border: none; font-weight: 700; color: #fff; }
 
-    /* PRATİK SEKME MİMARİSİ */
+    /* PRATİK SEKME */
     #tab-practice.active {
       display: flex;
       flex-direction: column;
-      height: calc(100dvh - 52px - var(--nav-height) - 10px);
+      height: calc(100dvh - 54px - var(--nav-height) - 10px);
       padding: 6px 12px;
       overflow: hidden;
     }
-    .practice-counter { font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); text-align: center; margin-bottom: 6px; flex-shrink: 0; }
+    .practice-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-shrink: 0; }
+    .practice-counter { font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); }
+    .practice-timer { font-size: 0.75rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); padding: 2px 8px; border-radius: 6px; }
+
     .practice-box {
       flex: 1;
       min-height: 0;
@@ -179,6 +181,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: zoom-in;
     }
     .practice-img-area img { width: 100%; height: 100%; object-fit: contain; }
 
@@ -232,39 +235,57 @@
     .btn-sweet-repeat { background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(244, 63, 94, 0.35)); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.4); }
     .btn-sweet-master { background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.35)); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
 
-    /* Rozetler */
+    /* Lightbox Modal (Geniş Görünüm) */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+    .lightbox-modal.active { display: flex; }
+    .lightbox-img { max-width: 100%; max-height: 90vh; object-fit: contain; }
+    .lightbox-close { position: absolute; top: 16px; right: 20px; color: #fff; font-size: 1.8rem; background: none; border: none; cursor: pointer; }
+
+    /* PDF Seçenek Modalı */
+    .pdf-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+      z-index: 150; display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .pdf-modal.active { display: flex; }
+    .pdf-modal-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; width: 100%; max-width: 360px;
+    }
+    .pdf-opt-btn {
+      width: 100%; padding: 12px; margin-top: 8px; border-radius: 12px; border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.05); color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: left;
+    }
+    .pdf-opt-btn:active { background: rgba(255,255,255,0.15); }
+
+    /* Rapor & Yedekleme */
+    .backup-box {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; margin-bottom: 12px;
+      display: flex; gap: 8px;
+    }
+    .btn-backup { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+
     .badge-shelf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
     .trophy-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .trophy-card.locked { opacity: 0.35; filter: grayscale(1); }
     .trophy-icon { font-size: 1.4rem; }
     .trophy-name { font-size: 0.65rem; font-weight: 700; }
 
-    /* Tema Seçim Alanı (Rapor/Ayarlar Sekmesinde) */
-    .theme-selector-box {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .theme-btn {
-      flex: 1;
-      padding: 10px 6px;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      font-size: 0.72rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-      background: var(--card-bg);
-      color: var(--text);
-    }
-    .theme-btn.active { border-color: var(--accent-primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+    .theme-selector-box { display: flex; gap: 8px; margin-bottom: 14px; }
+    .theme-btn { flex: 1; padding: 10px 6px; border-radius: 12px; border: 1px solid var(--card-border); font-size: 0.72rem; font-weight: 700; cursor: pointer; text-align: center; background: var(--card-bg); color: var(--text); }
+    .theme-btn.active { border-color: var(--accent-primary); }
 
-    /* Mood Hap Butonlar */
     .mood-chips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 4px; }
     .mood-pill { padding: 8px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.03); font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; text-align: center; }
     .mood-pill.active { background: rgba(168, 85, 247, 0.2); border-color: var(--accent-primary); color: #fff; }
 
-    /* Form */
     .input-group { margin-bottom: 12px; }
     .input-group label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
     select, input, textarea {
@@ -320,27 +341,31 @@
     .canvas-box { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top:0; left:0; }
 
-    /* 6. Madde: Kişisel Telafi Kitapçığı PDF Baskı Düzeni */
+    /* PDF / BASKI ÇIKTI DÜZENİ */
     .print-header { display: none; }
     @media print {
       body { background:#fff !important; color:#000 !important; padding:0 !important; }
-      header, nav, .clutch-bar, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal { display: none !important; }
+      header, nav, .clutch-bar, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal, .lightbox-modal, .pdf-modal { display: none !important; }
       .print-header {
         display: block !important;
         border-bottom: 2px solid #000;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
+        padding-bottom: 6px;
+        margin-bottom: 14px;
       }
       .print-header-top { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 800; }
-      .print-header-title { font-size: 1.3rem; font-weight: 900; text-align: center; margin: 4px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+      .print-header-title { font-size: 1.3rem; font-weight: 900; text-align: center; margin: 4px 0; text-transform: uppercase; }
       .tab-view { display: block !important; padding:0 !important; max-width: 100% !important; }
       #tab-practice, #tab-analytics, #tab-add { display: none !important; }
       #feedList { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
-      .feed-card { break-inside: avoid !important; border: 1px solid #777 !important; background: #fff !important; color:#000 !important; margin-bottom: 10px; border-radius: 8px !important; }
+      .feed-card { break-inside: avoid !important; border: 1px solid #777 !important; background: #fff !important; color:#000 !important; margin-bottom: 10px; border-radius: 6px !important; }
       .card-top { background: #f3f4f6 !important; color: #000 !important; border-bottom: 1px solid #ddd !important; }
       .card-image-wrap { background:#fff !important; height:230px !important; }
       .card-image-wrap img { object-fit: contain !important; }
-      .note-text { background: #f9fafb !important; color: #333 !important; border: 1px dashed #ccc; }
+      
+      /* Baskı Seçenekleri */
+      body.print-mode-solutions .card-image-wrap { display: none !important; }
+      body.print-mode-questions .card-solution-box, body.print-mode-questions .note-text { display: none !important; }
+      
       @page { size: A4 portrait; margin: 8mm; }
     }
   </style>
@@ -348,16 +373,19 @@
 <body data-theme="cyberpunk">
 
   <header>
-    <div class="brand">
-      <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-      <div class="brand-name">SORU TEKRARI</div>
+    <div class="brand-wrap">
+      <div class="brand">
+        <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+        <div class="brand-name">SORU TEKRARI</div>
+      </div>
+      <div class="brand-author">HAZIRLAYAN: YILDIRAY HOCA</div>
     </div>
     <div class="header-actions">
       <div class="streak-badge">
         <span>🔥</span>
-        <span id="streakCountText">1 Günlük Seri</span>
+        <span id="streakCountText">1 Gün</span>
       </div>
-      <button class="btn-icon-head" onclick="triggerPersonalBookletPrint()" title="Kişisel Deneme Kitapçığı Bas">🖨️ PDF</button>
+      <button class="btn-icon-head" onclick="openPdfModal()" title="Kişisel Deneme Kitapçığı Bas">🖨️ PDF</button>
     </div>
   </header>
 
@@ -366,19 +394,19 @@
     <div class="clutch-bar">
       <div class="clutch-left">
         <div class="clutch-title">⏳ Sınava Kalan: <span id="daysUntilExam">--</span> Gün</div>
-        <div class="clutch-sub">Yarın denemen mi var? En çok zorlandıklarına odaklan.</div>
+        <div class="clutch-sub">Yarın denemen mi var? En kritik 5 soruyu hemen getir.</div>
       </div>
       <button class="btn-panic" onclick="triggerPanicMode()">
-        🚨 Panik Butonu!
+        🚨 Panik Modu!
       </button>
     </div>
 
     <div class="action-sub-bar">
       <button class="btn-sub-action" onclick="startRandomFiveQuiz()" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3);">
-        🎲 Rastgele 5 Soru Çöz
+        🎲 Rastgele 5 Soru
       </button>
       <button class="btn-sub-action" onclick="switchNavTab('add', null)">
-        ➕ Yeni Ekle
+        ➕ Yeni Soru Ekle
       </button>
     </div>
 
@@ -386,23 +414,26 @@
 
     <div class="print-header">
       <div class="print-header-top">
-        <span>KURS / REHBERLİK: YILDIRAY HOCA</span>
+        <span>KİŞİSEL TELAFİ KİTAPÇIĞI</span>
+        <span>HAZIRLAYAN: YILDIRAY HOCA</span>
         <span id="printDateSpan">Tarih: --</span>
       </div>
-      <div class="print-header-title">ÖZEL HATA TELAFİ VE TEKRAR DENEMESİ</div>
-      <div style="font-size:0.75rem; text-align:center; color:#555;">Bu kitapçık öğrencinin kendi yanlış sorularından kişiselleştirilerek derlenmiştir.</div>
+      <div class="print-header-title" id="printDocTitle">ÖZEL TEKRAR DENEMESİ</div>
     </div>
 
     <div id="feedList"></div>
   </div>
 
   <div id="tab-practice" class="tab-view">
-    <div class="practice-counter" id="pCardCount">Soru 1 / 5</div>
+    <div class="practice-header-bar">
+      <div class="practice-counter" id="pCardCount">Soru 1 / 5</div>
+      <div class="practice-timer" id="pTimer">⏱️ 00:00</div>
+    </div>
     
     <div class="practice-box">
       <div style="font-size:0.75rem; font-weight:700; color:var(--accent-primary); margin-bottom:6px; flex-shrink:0;" id="pMetaText">YKS • Matematik</div>
       
-      <div class="practice-img-area">
+      <div class="practice-img-area" onclick="openLightbox(document.getElementById('pQuestionImg').src)">
         <img id="pQuestionImg" src="" alt="Soru Görseli">
       </div>
 
@@ -411,8 +442,8 @@
       </button>
 
       <div class="solution-drawer" id="solutionDrawer">
-        <div style="font-size:0.72rem; font-weight:700; color:#34d399; margin-bottom:4px;">ÇÖZÜM GÖRSELİ & KOÇ NOTU</div>
-        <div style="max-height:180px; overflow:hidden; background:#000; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+        <div style="font-size:0.72rem; font-weight:700; color:#34d399; margin-bottom:4px;">ÇÖZÜM GÖRSELİ (DOKUN: BÜYÜT)</div>
+        <div style="max-height:180px; overflow:hidden; background:#000; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:zoom-in;" onclick="openLightbox(document.getElementById('pSolutionImg').src)">
           <img id="pSolutionImg" src="" style="max-width:100%; max-height:180px; object-fit:contain;">
         </div>
         <div id="pReasonText" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;"></div>
@@ -432,6 +463,13 @@
 
   <div id="tab-analytics" class="tab-view">
     
+    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Cihaz Değişimi & Yedekleme</div>
+    <div class="backup-box">
+      <button class="btn-backup" onclick="exportDataBackup()">📦 Cihaza Yedekle (Aktar)</button>
+      <button class="btn-backup" onclick="document.getElementById('importFile').click()">📥 Yedekten Yükle</button>
+      <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataBackup(event)">
+    </div>
+
     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Uygulama Teması</div>
     <div class="theme-selector-box">
       <button class="theme-btn active" onclick="setTheme('cyberpunk', this)">🔮 Cyberpunk</button>
@@ -441,22 +479,10 @@
 
     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Başarı Rozetlerim</div>
     <div class="badge-shelf">
-      <div class="trophy-card locked" id="badge-first">
-        <div class="trophy-icon">🎯</div>
-        <div class="trophy-name">İlk Av</div>
-      </div>
-      <div class="trophy-card locked" id="badge-practiced">
-        <div class="trophy-icon">⚡</div>
-        <div class="trophy-name">Pratik Çırağı</div>
-      </div>
-      <div class="trophy-card locked" id="badge-streak">
-        <div class="trophy-icon">🔥</div>
-        <div class="trophy-name">Seri Ateşi</div>
-      </div>
-      <div class="trophy-card locked" id="badge-master">
-        <div class="trophy-icon">👑</div>
-        <div class="trophy-name">Soru Ustası</div>
-      </div>
+      <div class="trophy-card locked" id="badge-first"><div class="trophy-icon">🎯</div><div class="trophy-name">İlk Av</div></div>
+      <div class="trophy-card locked" id="badge-practiced"><div class="trophy-icon">⚡</div><div class="trophy-name">Pratik Çırağı</div></div>
+      <div class="trophy-card locked" id="badge-streak"><div class="trophy-icon">🔥</div><div class="trophy-name">Seri Ateşi</div></div>
+      <div class="trophy-card locked" id="badge-master"><div class="trophy-icon">👑</div><div class="trophy-name">Soru Ustası</div></div>
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
@@ -531,7 +557,7 @@
       </div>
 
       <div class="input-group">
-        <label>📸 Soru Görseli (Zorunlu)</label>
+        <label>📸 Soru Görseli (Zorunlu - Otomatik Cihaza İner)</label>
         <input type="file" id="formQImg" accept="image/*" required>
       </div>
       <div class="input-group">
@@ -573,6 +599,22 @@
       <span>Rapor</span>
     </button>
   </nav>
+
+  <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
+    <button class="lightbox-close">✕</button>
+    <img id="lightboxImg" class="lightbox-img" src="" alt="Tam Ekran Görsel">
+  </div>
+
+  <div class="pdf-modal" id="pdfModal">
+    <div class="pdf-modal-card">
+      <h3 style="font-size:1rem; font-weight:800; margin-bottom:10px;">🖨️ PDF Kitapçık Bas</h3>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px;">Yazdırmak istediğin formatı seç:</div>
+      <button class="pdf-opt-btn" onclick="executePrintMode('questions')">📝 Sadece Sorular (Boş Deneme Testi)</button>
+      <button class="pdf-opt-btn" onclick="executePrintMode('solutions')">💡 Sadece Çözümler & Notlar</button>
+      <button class="pdf-opt-btn" onclick="executePrintMode('full')">📑 Soru + Çözüm + Koç Analizi</button>
+      <button style="width:100%; padding:10px; margin-top:10px; background:none; border:none; color:var(--danger); font-weight:700; cursor:pointer;" onclick="closePdfModal()">Vazgeç</button>
+    </div>
+  </div>
 
   <div class="canvas-modal" id="canvasModal">
     <div class="canvas-nav">
@@ -637,6 +679,7 @@ const STORE_NAME = "questions";
 let db;
 let allQuestions = [];
 let activeExam = "";
+let onlyStarred = false;
 
 function initDB() {
   return new Promise((resolve) => {
@@ -696,35 +739,101 @@ function compressImg(file) {
   });
 }
 
-/* 1. Madde: Sınav Geri Sayımı */
+/* OTOMATİK CİHAZA İNDİRME GÜVENCESİ */
+function autoDownloadToGallery(base64Data, filename) {
+  try {
+    const a = document.createElement("a");
+    a.href = base64Data;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch(e) {}
+}
+
+/* CİHAZ AKTARIM / YEDEKLEME */
+async function exportDataBackup() {
+  const data = await dbGetAll();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `SoruTekrari_Yedek_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importDataBackup(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = async (ev) => {
+    try {
+      const list = JSON.parse(ev.target.result);
+      if (Array.isArray(list)) {
+        for (const item of list) {
+          await dbPut(item);
+        }
+        alert("Tüm sorular ve veriler başarıyla yüklendi!");
+        await refreshAll();
+      }
+    } catch(err) {
+      alert("Geçersiz yedek dosyası!");
+    }
+  };
+  r.readAsText(file);
+}
+
+/* LIGHTBOX */
+function openLightbox(src) {
+  if (!src) return;
+  document.getElementById("lightboxImg").src = src;
+  document.getElementById("lightboxModal").classList.add("active");
+}
+function closeLightbox() {
+  document.getElementById("lightboxModal").classList.remove("active");
+}
+
+/* PDF MODAL & YAZDIRMA SEÇENEKLERİ */
+function openPdfModal() { document.getElementById("pdfModal").classList.add("active"); }
+function closePdfModal() { document.getElementById("pdfModal").classList.remove("active"); }
+
+function executePrintMode(mode) {
+  closePdfModal();
+  document.body.classList.remove("print-mode-questions", "print-mode-solutions", "print-mode-full");
+  
+  if (mode === "questions") {
+    document.body.classList.add("print-mode-questions");
+    document.getElementById("printDocTitle").innerText = "ÖZEL TELAFİ DENEME SINAVI (BOŞ TEST)";
+  } else if (mode === "solutions") {
+    document.body.classList.add("print-mode-solutions");
+    document.getElementById("printDocTitle").innerText = "ÖZEL ÇÖZÜMLER VE DERS NOTLARI";
+  } else {
+    document.body.classList.add("print-mode-full");
+    document.getElementById("printDocTitle").innerText = "KAPSAMLI SORU & ÇÖZÜM ANALİZİ";
+  }
+
+  document.getElementById("printDateSpan").innerText = "Tarih: " + new Date().toLocaleDateString('tr-TR');
+  window.print();
+}
+
+/* GERİ SAYIM & PANİK */
 function updateExamCountdown() {
   const targetExamDate = new Date("2027-06-20T10:15:00");
   const now = new Date();
-  const diffTime = targetExamDate - now;
-  const diffDays = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+  const diffDays = Math.max(0, Math.ceil((targetExamDate - now) / (1000 * 60 * 60 * 24)));
   document.getElementById("daysUntilExam").innerText = diffDays;
 }
 
-/* 1. Madde: Panik Butonu (Clutch Mode) */
 function triggerPanicMode() {
-  if (allQuestions.length === 0) {
-    alert("Arşivinizde henüz soru bulunmuyor!");
-    return;
-  }
-  // En çok zorlanılan (Bilgi eksikliği, dikkat hatası veya acele edilen) soruları filtrele
-  let panicList = allQuestions.filter(q => 
-    q.reason.includes("Bilgi") || 
-    q.reason.includes("Dikkat") || 
-    (q.mood && q.mood.includes("Acele"))
-  );
+  if (allQuestions.length === 0) return alert("Arşivinizde henüz soru yok!");
+  let panicList = allQuestions.filter(q => q.reason.includes("Bilgi") || q.reason.includes("Dikkat") || (q.mood && q.mood.includes("Acele")));
   if (panicList.length === 0) panicList = [...allQuestions];
-  
   const chosen = panicList.sort(() => 0.5 - Math.random()).slice(0, 5);
   setupPracticeSession(chosen);
   switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
 }
 
-/* 5. Madde: Neon Tema Değiştirici */
 function setTheme(themeName, el) {
   document.body.setAttribute("data-theme", themeName);
   localStorage.setItem("app_theme", themeName);
@@ -739,12 +848,6 @@ function loadSavedTheme() {
   });
 }
 
-/* 6. Madde: Kişisel Telafi Kitapçığı PDF Baskısı */
-function triggerPersonalBookletPrint() {
-  document.getElementById("printDateSpan").innerText = "Tarih: " + new Date().toLocaleDateString('tr-TR');
-  window.print();
-}
-
 function updateStreakDisplay() {
   const today = new Date().toISOString().slice(0, 10);
   const lastActive = localStorage.getItem("streak_last_date");
@@ -757,7 +860,7 @@ function updateStreakDisplay() {
   }
   localStorage.setItem("streak_last_date", today);
   localStorage.setItem("streak_count", count);
-  document.getElementById("streakCountText").innerText = `${count} Günlük Seri`;
+  document.getElementById("streakCountText").innerText = `${count} Gün`;
 }
 
 function switchNavTab(tabId, btn) {
@@ -774,27 +877,42 @@ function switchNavTab(tabId, btn) {
 
 function buildExamPills() {
   const container = document.getElementById("examPillContainer");
-  container.innerHTML = `<div class="pill-chip active" onclick="filterByExam('', this)">Tümü</div>`;
+  container.innerHTML = `
+    <div class="pill-chip ${activeExam==='' && !onlyStarred ? 'active':''}" onclick="filterByExam('', false, this)">Tümü</div>
+    <div class="pill-chip ${onlyStarred ? 'active':''}" onclick="filterByExam('', true, this)">⭐ Yıldızlılar</div>
+  `;
   Object.keys(CURRICULUM_DATA).forEach(exam => {
-    container.innerHTML += `<div class="pill-chip" onclick="filterByExam('${exam}', this)">${exam}</div>`;
+    container.innerHTML += `<div class="pill-chip ${activeExam===exam ? 'active':''}" onclick="filterByExam('${exam}', false, this)">${exam}</div>`;
   });
 }
 
-function filterByExam(exam, el) {
+function filterByExam(exam, starOnly, el) {
   activeExam = exam;
+  onlyStarred = starOnly;
   document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   renderFeed();
+}
+
+async function toggleStar(id) {
+  const q = allQuestions.find(x => x.id === id);
+  if (q) {
+    q.starred = !q.starred;
+    await dbPut(q);
+    renderFeed();
+  }
 }
 
 function renderFeed() {
   const container = document.getElementById("feedList");
   container.innerHTML = "";
 
-  const items = activeExam ? allQuestions.filter(q => q.exam === activeExam) : allQuestions;
+  let items = allQuestions;
+  if (activeExam) items = items.filter(q => q.exam === activeExam);
+  if (onlyStarred) items = items.filter(q => q.starred);
 
   if (items.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:var(--text-muted); font-size:0.85rem;">Henüz soru eklenmedi. Alttaki '+' butonu ile hemen ekleyebilirsin!</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:var(--text-muted); font-size:0.85rem;">Soru bulunamadı.</div>`;
     return;
   }
 
@@ -805,16 +923,23 @@ function renderFeed() {
       <div class="card-top">
         <span class="tag-exam">${q.exam} • ${q.subject}</span>
         <div>
+          <button class="star-btn" onclick="toggleStar('${q.id}')">${q.starred ? '⭐' : '☆'}</button>
           <span class="tag-reason">${q.reason}</span>
           ${q.mood ? `<span class="tag-mood">${q.mood}</span>` : ''}
         </div>
       </div>
-      <div class="card-image-wrap" onclick="openScratchpad('${q.questionImg}')">
+      <div class="card-image-wrap" onclick="openLightbox('${q.questionImg}')">
         <img src="${q.questionImg}" alt="Soru">
       </div>
       <div class="card-body">
         <div class="topic-title">${q.topic}</div>
         ${q.notes ? `<div class="note-text">${q.notes}</div>` : ''}
+        ${q.solutionImg ? `
+          <div class="card-solution-box" style="margin-top:8px; border-top:1px dashed var(--card-border); padding-top:6px;">
+            <div style="font-size:0.7rem; font-weight:700; color:#34d399; margin-bottom:4px;">Çözüm:</div>
+            <img src="${q.solutionImg}" style="max-width:100%; max-height:120px; object-fit:contain; border-radius:6px; cursor:zoom-in;" onclick="openLightbox('${q.solutionImg}')">
+          </div>
+        ` : ''}
         ${q.audioData ? `
           <div style="margin-top:6px;">
             <audio controls src="${q.audioData}" style="width:100%; height:28px;"></audio>
@@ -823,7 +948,6 @@ function renderFeed() {
       </div>
       <div class="card-actions">
         <button class="btn-action btn-solve" onclick="openScratchpad('${q.questionImg}')">✏️ Çöz</button>
-        ${q.solutionImg ? `<button class="btn-action" onclick="openScratchpad('${q.solutionImg}')">💡 Çözüm</button>` : ''}
         <button class="btn-action" onclick="shareQuestion('${q.id}')" title="Koçuna Sor">📲 Sor</button>
         <button class="btn-action" style="flex:0.25; color:var(--danger);" onclick="deleteQuestion('${q.id}')">🗑️</button>
       </div>
@@ -835,27 +959,21 @@ function renderFeed() {
 async function shareQuestion(id) {
   const q = allQuestions.find(x => x.id === id);
   if (!q) return;
-
   const shareText = `Hocam selam! "${q.exam} - ${q.subject} (${q.topic})" konusunda bu soruda takıldım. Hata notum: ${q.reason}. Yardımcı olabilir misiniz?`;
-  
   if (navigator.share) {
     try {
       const res = await fetch(q.questionImg);
       const blob = await res.blob();
       const file = new File([blob], "soru.jpg", { type: "image/jpeg" });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: "Soru Tekrarı",
-          text: shareText,
-          files: [file]
-        });
+        await navigator.share({ title: "Soru Tekrarı", text: shareText, files: [file] });
         return;
       }
       await navigator.share({ title: "Soru Tekrarı", text: shareText });
     } catch(err) {}
   } else {
     navigator.clipboard.writeText(shareText);
-    alert("Soru notu panoya kopyalandı! WhatsApp'tan koçunuza yapıştırıp gönderebilirsiniz.");
+    alert("Soru notu panoya kopyalandı! WhatsApp'tan gönderebilirsiniz.");
   }
 }
 
@@ -866,14 +984,14 @@ async function deleteQuestion(id) {
   }
 }
 
+/* PRATİK & SÜRE SAYACI */
 let practiceList = [];
 let currentPracticeIdx = 0;
+let practiceTimerInterval = null;
+let practiceSeconds = 0;
 
 function startRandomFiveQuiz() {
-  if (allQuestions.length < 5) {
-    alert("Rastgele 5 soru testi için arşivde en az 5 soru bulunmalı.");
-    return;
-  }
+  if (allQuestions.length < 5) return alert("En az 5 soru eklemelisiniz.");
   const shuffled = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 5);
   setupPracticeSession(shuffled);
   switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
@@ -885,6 +1003,17 @@ function setupPracticeSession(items) {
   loadCurrentPracticeCard();
 }
 
+function startTimer() {
+  clearInterval(practiceTimerInterval);
+  practiceSeconds = 0;
+  practiceTimerInterval = setInterval(() => {
+    practiceSeconds++;
+    const m = String(Math.floor(practiceSeconds / 60)).padStart(2, '0');
+    const s = String(practiceSeconds % 60).padStart(2, '0');
+    document.getElementById("pTimer").innerText = `⏱️ ${m}:${s}`;
+  }, 1000);
+}
+
 function loadCurrentPracticeCard() {
   const drawer = document.getElementById("solutionDrawer");
   drawer.classList.remove("open");
@@ -893,20 +1022,19 @@ function loadCurrentPracticeCard() {
     document.getElementById("pCardCount").innerText = "Soru Yok";
     document.getElementById("pMetaText").innerText = "Arşiv boş";
     document.getElementById("pQuestionImg").src = "";
-    document.getElementById("pReasonText").innerText = "";
-    document.getElementById("pNotesText").innerText = "";
+    clearInterval(practiceTimerInterval);
     return;
   }
 
   if (currentPracticeIdx >= practiceList.length) {
-    document.getElementById("pCardCount").innerText = "Tamamlandı 🎉";
-    document.getElementById("pMetaText").innerText = "Harika İş!";
-    document.getElementById("pQuestionImg").src = "";
-    alert("Tebrikler! Pratik serisindeki tüm soruları tamamladınız.");
+    clearInterval(practiceTimerInterval);
+    document.getElementById("pCardCount").innerText = "Bitti 🎉";
+    alert("Tebrikler! Pratik serisini tamamladınız.");
     switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
     return;
   }
 
+  startTimer();
   const q = practiceList[currentPracticeIdx];
   document.getElementById("pCardCount").innerText = `Soru ${currentPracticeIdx + 1} / ${practiceList.length}`;
   document.getElementById("pMetaText").innerText = `${q.exam} • ${q.subject} - ${q.topic}`;
@@ -917,21 +1045,17 @@ function loadCurrentPracticeCard() {
 }
 
 function toggleSolutionDrawer() {
-  const drawer = document.getElementById("solutionDrawer");
-  drawer.classList.toggle("open");
+  document.getElementById("solutionDrawer").classList.toggle("open");
 }
 
 function handleSweetChoice(isMastered) {
   if (practiceList.length === 0 || currentPracticeIdx >= practiceList.length) return;
-
   if (isMastered) {
     let mastered = parseInt(localStorage.getItem("mastered_count") || "0", 10) + 1;
     localStorage.setItem("mastered_count", mastered);
   }
-  
   let totalPracticed = parseInt(localStorage.getItem("total_practiced") || "0", 10) + 1;
   localStorage.setItem("total_practiced", totalPracticed);
-
   currentPracticeIdx++;
   loadCurrentPracticeCard();
 }
@@ -951,10 +1075,7 @@ function renderAnalytics() {
   if (mastered >= 10) document.getElementById("badge-master").classList.remove("locked");
 
   const moods = {};
-  allQuestions.forEach(q => {
-    const m = q.mood || "Normal / Sakin 🧘";
-    moods[m] = (moods[m] || 0) + 1;
-  });
+  allQuestions.forEach(q => { const m = q.mood || "Normal / Sakin 🧘"; moods[m] = (moods[m] || 0) + 1; });
   const maxM = Math.max(...Object.values(moods), 1);
   const mBox = document.getElementById("chartMoods");
   mBox.innerHTML = "";
@@ -1011,36 +1132,27 @@ function renderAnalytics() {
 function initFormSelects() {
   const ex = document.getElementById("formExamSelect");
   ex.innerHTML = "";
-  Object.keys(CURRICULUM_DATA).forEach(k => {
-    ex.innerHTML += `<option value="${k}">${k}</option>`;
-  });
+  Object.keys(CURRICULUM_DATA).forEach(k => { ex.innerHTML += `<option value="${k}">${k}</option>`; });
   renderSubjectDropdown();
 }
-
 function renderSubjectDropdown() {
   const exam = document.getElementById("formExamSelect").value;
   const sub = document.getElementById("formSubjectSelect");
   sub.innerHTML = "";
   if (CURRICULUM_DATA[exam]) {
-    Object.keys(CURRICULUM_DATA[exam]).forEach(s => {
-      sub.innerHTML += `<option value="${s}">${s}</option>`;
-    });
+    Object.keys(CURRICULUM_DATA[exam]).forEach(s => { sub.innerHTML += `<option value="${s}">${s}</option>`; });
   }
   renderTopicDropdown();
 }
-
 function renderTopicDropdown() {
   const exam = document.getElementById("formExamSelect").value;
   const sub = document.getElementById("formSubjectSelect").value;
   const top = document.getElementById("formTopicSelect");
   top.innerHTML = '<option value="">-- Listeden Seçin --</option>';
   if (CURRICULUM_DATA[exam] && CURRICULUM_DATA[exam][sub]) {
-    CURRICULUM_DATA[exam][sub].forEach(t => {
-      top.innerHTML += `<option value="${t}">${t}</option>`;
-    });
+    CURRICULUM_DATA[exam][sub].forEach(t => { top.innerHTML += `<option value="${t}">${t}</option>`; });
   }
 }
-
 function selectMood(mood, el) {
   document.getElementById("formMoodVal").value = mood;
   document.querySelectorAll(".mood-pill").forEach(p => p.classList.remove("active"));
@@ -1052,7 +1164,6 @@ function toggleAudio() {
   const btn = document.getElementById("audioRecBtn");
   const status = document.getElementById("audioStatus");
   const player = document.getElementById("audioPreview");
-
   if (!mediaRec || mediaRec.state === "inactive") {
     audioChunks = [];
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
@@ -1089,6 +1200,12 @@ async function handleQuestionSubmit(e) {
   if (!qF) return alert("Soru görseli zorunludur.");
   if (!topic) return alert("Lütfen konu belirtin.");
 
+  const compressedQ = await compressImg(qF);
+  const compressedS = sF ? await compressImg(sF) : null;
+
+  // Cihaz Galerisine Otomatik İndir / Kopya Sakla
+  autoDownloadToGallery(compressedQ, `Soru_${Date.now()}.jpg`);
+
   const item = {
     id: "q_" + Date.now(),
     exam: document.getElementById("formExamSelect").value,
@@ -1097,9 +1214,10 @@ async function handleQuestionSubmit(e) {
     reason: document.getElementById("formReasonSelect").value,
     mood: document.getElementById("formMoodVal").value,
     notes: document.getElementById("formNotes").value,
+    starred: false,
     audioData: audioBlobBase64,
-    questionImg: await compressImg(qF),
-    solutionImg: sF ? await compressImg(sF) : null,
+    questionImg: compressedQ,
+    solutionImg: compressedS,
     createdAt: new Date().toISOString()
   };
 
@@ -1113,6 +1231,7 @@ async function handleQuestionSubmit(e) {
   switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
 }
 
+/* ÇİZİM */
 let canvasCtx, isPainting = false, cachedBg = null;
 function initCanvasEvents() {
   const c = document.getElementById("drawCanvas");
