@@ -14,12 +14,13 @@
   <link rel="icon" type="image/png" href="logo.png">
 
   <style>
+    /* 5. Madde: Kişiselleştirilebilir Neon Temalar */
     :root {
       --bg: #09090b;
       --card-bg: rgba(24, 24, 27, 0.88);
       --card-border: rgba(255, 255, 255, 0.08);
-      --accent-purple: #8b5cf6;
-      --accent-cyan: #06b6d4;
+      --accent-primary: #8b5cf6;
+      --accent-secondary: #ec4899;
       --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
       --text: #f4f4f5;
       --text-muted: #a1a1aa;
@@ -28,8 +29,30 @@
       --nav-height: 64px;
     }
 
+    body[data-theme="matrix"] {
+      --bg: #050a06;
+      --card-bg: rgba(9, 24, 14, 0.88);
+      --card-border: rgba(16, 185, 129, 0.15);
+      --accent-primary: #10b981;
+      --accent-secondary: #059669;
+      --accent-gradient: linear-gradient(135deg, #059669, #10b981, #34d399);
+      --text: #ecfdf5;
+      --text-muted: #6ee7b7;
+    }
+
+    body[data-theme="cyberblue"] {
+      --bg: #060913;
+      --card-bg: rgba(12, 19, 36, 0.88);
+      --card-border: rgba(6, 182, 212, 0.15);
+      --accent-primary: #06b6d4;
+      --accent-secondary: #3b82f6;
+      --accent-gradient: linear-gradient(135deg, #2563eb, #06b6d4, #38bdf8);
+      --text: #f0f9ff;
+      --text-muted: #7dd3fc;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 16px); min-height: 100vh; min-height: 100dvh; overflow-x: hidden; user-select: none; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 16px); min-height: 100vh; min-height: 100dvh; overflow-x: hidden; user-select: none; transition: background 0.3s; }
 
     header {
       display: flex;
@@ -48,7 +71,7 @@
     .brand-logo { width: 30px; height: 30px; border-radius: 8px; object-fit: contain; }
     .brand-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
-    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-actions { display: flex; align-items: center; gap: 6px; }
     .streak-badge { display: flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: #f472b6; }
     .btn-icon-head { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); padding: 5px 8px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; }
 
@@ -56,12 +79,38 @@
     .tab-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Hızlı Aksiyon Barı (Akış Üstü) */
-    .action-sub-bar {
+    /* 1. Madde: Sınav Geri Sayımı & Panik Butonu */
+    .clutch-bar {
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(168, 85, 247, 0.12));
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 14px;
+      padding: 10px 14px;
       margin-bottom: 10px;
     }
+    .clutch-left { display: flex; flex-direction: column; gap: 2px; }
+    .clutch-title { font-size: 0.82rem; font-weight: 800; color: #fca5a5; display: flex; align-items: center; gap: 4px; }
+    .clutch-sub { font-size: 0.7rem; color: var(--text-muted); }
+    .btn-panic {
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(239, 68, 68, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-panic:active { transform: scale(0.95); }
+
+    /* Hızlı Aksiyon Barı (Akış Üstü) */
+    .action-sub-bar { display: flex; gap: 8px; margin-bottom: 10px; }
     .btn-sub-action {
       flex: 1;
       padding: 9px;
@@ -76,11 +125,9 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
     .btn-sub-action:active { transform: scale(0.97); }
 
-    /* Yatay Filtre Çipleri */
     .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .pills-scroll::-webkit-scrollbar { display: none; }
     .pill-chip { padding: 6px 12px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.75rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; cursor: pointer; }
@@ -89,7 +136,7 @@
     /* Akış Kartları */
     .feed-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
     .card-top { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .tag-exam { font-weight: 700; color: var(--accent-cyan); }
+    .tag-exam { font-weight: 700; color: var(--accent-primary); }
     .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; }
     .tag-mood { background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; margin-left: 4px; }
     
@@ -101,10 +148,9 @@
 
     .card-actions { padding: 8px 12px 10px; display: flex; gap: 6px; align-items: center; }
     .btn-action { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
-    .btn-action:active { transform: scale(0.96); }
     .btn-solve { background: var(--accent-gradient); border: none; font-weight: 700; color: #fff; }
 
-    /* YENİ PRATİK SEKME MİMARİSİ (SWIPE YERİNE BUTONLU & DÖNDÜRMESİZ) */
+    /* PRATİK SEKME MİMARİSİ */
     #tab-practice.active {
       display: flex;
       flex-direction: column;
@@ -112,14 +158,7 @@
       padding: 6px 12px;
       overflow: hidden;
     }
-    .practice-counter {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-      text-align: center;
-      margin-bottom: 6px;
-      flex-shrink: 0;
-    }
+    .practice-counter { font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); text-align: center; margin-bottom: 6px; flex-shrink: 0; }
     .practice-box {
       flex: 1;
       min-height: 0;
@@ -140,15 +179,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
     }
-    .practice-img-area img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+    .practice-img-area img { width: 100%; height: 100%; object-fit: contain; }
 
-    /* Çözüm Çekmecesi (Butonla Açılan) */
     .solution-drawer {
       display: none;
       background: #121215;
@@ -180,16 +213,8 @@
       gap: 6px;
       flex-shrink: 0;
     }
-    .btn-toggle-solution:active { background: rgba(255,255,255,0.12); }
 
-    .sweet-choice-bar {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      max-width: 420px;
-      margin: 10px auto 0 auto;
-      flex-shrink: 0;
-    }
+    .sweet-choice-bar { display: flex; gap: 12px; width: 100%; max-width: 420px; margin: 10px auto 0 auto; flex-shrink: 0; }
     .btn-sweet {
       flex: 1;
       padding: 13px;
@@ -202,71 +227,42 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.12s, box-shadow 0.12s;
     }
     .btn-sweet:active { transform: scale(0.95); }
-    .btn-sweet-repeat {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(244, 63, 94, 0.35));
-      color: #fda4af;
-      border: 1px solid rgba(244, 63, 94, 0.4);
-      box-shadow: 0 4px 14px rgba(244, 63, 94, 0.15);
-    }
-    .btn-sweet-master {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.35));
-      color: #6ee7b7;
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
-    }
+    .btn-sweet-repeat { background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(244, 63, 94, 0.35)); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.4); }
+    .btn-sweet-master { background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.35)); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
 
-    /* ROZETLER & ANALİZ */
-    .badge-shelf {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .trophy-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 8px 4px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-    }
+    /* Rozetler */
+    .badge-shelf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .trophy-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .trophy-card.locked { opacity: 0.35; filter: grayscale(1); }
     .trophy-icon { font-size: 1.4rem; }
     .trophy-name { font-size: 0.65rem; font-weight: 700; }
 
-    /* Ruh Hali Seçiciler (Form) */
-    .mood-chips-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-      margin-top: 4px;
+    /* Tema Seçim Alanı (Rapor/Ayarlar Sekmesinde) */
+    .theme-selector-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
     }
-    .mood-pill {
-      padding: 8px;
-      border-radius: 10px;
+    .theme-btn {
+      flex: 1;
+      padding: 10px 6px;
+      border-radius: 12px;
       border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.03);
       font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
+      font-weight: 700;
       cursor: pointer;
       text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
+      background: var(--card-bg);
+      color: var(--text);
     }
-    .mood-pill.active {
-      background: rgba(168, 85, 247, 0.2);
-      border-color: var(--accent-purple);
-      color: #fff;
-    }
+    .theme-btn.active { border-color: var(--accent-primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+
+    /* Mood Hap Butonlar */
+    .mood-chips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 4px; }
+    .mood-pill { padding: 8px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.03); font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; text-align: center; }
+    .mood-pill.active { background: rgba(168, 85, 247, 0.2); border-color: var(--accent-primary); color: #fff; }
 
     /* Form */
     .input-group { margin-bottom: 12px; }
@@ -305,7 +301,7 @@
     }
     .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
     .nav-item.active { color: #fff; }
-    .nav-item.active svg { stroke: url(#gradient); }
+    .nav-item.active svg { stroke: var(--accent-primary); }
 
     .nav-center-btn {
       width: 44px; height: 44px; border-radius: 50%;
@@ -324,30 +320,32 @@
     .canvas-box { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top:0; left:0; }
 
+    /* 6. Madde: Kişisel Telafi Kitapçığı PDF Baskı Düzeni */
+    .print-header { display: none; }
     @media print {
       body { background:#fff !important; color:#000 !important; padding:0 !important; }
-      header, nav, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal { display: none !important; }
+      header, nav, .clutch-bar, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal { display: none !important; }
+      .print-header {
+        display: block !important;
+        border-bottom: 2px solid #000;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+      }
+      .print-header-top { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 800; }
+      .print-header-title { font-size: 1.3rem; font-weight: 900; text-align: center; margin: 4px 0; text-transform: uppercase; letter-spacing: 0.5px; }
       .tab-view { display: block !important; padding:0 !important; max-width: 100% !important; }
       #tab-practice, #tab-analytics, #tab-add { display: none !important; }
       #feedList { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
-      .feed-card { break-inside: avoid !important; border: 1px solid #ccc !important; background: #fff !important; color:#000 !important; margin-bottom: 10px; }
-      .card-image-wrap { background:#fff !important; height:220px !important; }
+      .feed-card { break-inside: avoid !important; border: 1px solid #777 !important; background: #fff !important; color:#000 !important; margin-bottom: 10px; border-radius: 8px !important; }
+      .card-top { background: #f3f4f6 !important; color: #000 !important; border-bottom: 1px solid #ddd !important; }
+      .card-image-wrap { background:#fff !important; height:230px !important; }
       .card-image-wrap img { object-fit: contain !important; }
+      .note-text { background: #f9fafb !important; color: #333 !important; border: 1px dashed #ccc; }
       @page { size: A4 portrait; margin: 8mm; }
     }
   </style>
 </head>
-<body>
-
-  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-    <defs>
-      <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#6366f1" />
-        <stop offset="50%" stop-color="#a855f7" />
-        <stop offset="100%" stop-color="#ec4899" />
-      </linearGradient>
-    </defs>
-  </svg>
+<body data-theme="cyberpunk">
 
   <header>
     <div class="brand">
@@ -359,12 +357,22 @@
         <span>🔥</span>
         <span id="streakCountText">1 Günlük Seri</span>
       </div>
-      <button class="btn-icon-head" onclick="window.print()" title="PDF / Yazdır">🖨️</button>
+      <button class="btn-icon-head" onclick="triggerPersonalBookletPrint()" title="Kişisel Deneme Kitapçığı Bas">🖨️ PDF</button>
     </div>
   </header>
 
-  <!-- TAB 1: AKIŞ -->
   <div id="tab-feed" class="tab-view active">
+    
+    <div class="clutch-bar">
+      <div class="clutch-left">
+        <div class="clutch-title">⏳ Sınava Kalan: <span id="daysUntilExam">--</span> Gün</div>
+        <div class="clutch-sub">Yarın denemen mi var? En çok zorlandıklarına odaklan.</div>
+      </div>
+      <button class="btn-panic" onclick="triggerPanicMode()">
+        🚨 Panik Butonu!
+      </button>
+    </div>
+
     <div class="action-sub-bar">
       <button class="btn-sub-action" onclick="startRandomFiveQuiz()" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3);">
         🎲 Rastgele 5 Soru Çöz
@@ -373,16 +381,26 @@
         ➕ Yeni Ekle
       </button>
     </div>
+
     <div class="pills-scroll" id="examPillContainer"></div>
+
+    <div class="print-header">
+      <div class="print-header-top">
+        <span>KURS / REHBERLİK: YILDIRAY HOCA</span>
+        <span id="printDateSpan">Tarih: --</span>
+      </div>
+      <div class="print-header-title">ÖZEL HATA TELAFİ VE TEKRAR DENEMESİ</div>
+      <div style="font-size:0.75rem; text-align:center; color:#555;">Bu kitapçık öğrencinin kendi yanlış sorularından kişiselleştirilerek derlenmiştir.</div>
+    </div>
+
     <div id="feedList"></div>
   </div>
 
-  <!-- TAB 2: PRATİK -->
   <div id="tab-practice" class="tab-view">
     <div class="practice-counter" id="pCardCount">Soru 1 / 5</div>
     
     <div class="practice-box">
-      <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:6px; flex-shrink:0;" id="pMetaText">YKS • Matematik</div>
+      <div style="font-size:0.75rem; font-weight:700; color:var(--accent-primary); margin-bottom:6px; flex-shrink:0;" id="pMetaText">YKS • Matematik</div>
       
       <div class="practice-img-area">
         <img id="pQuestionImg" src="" alt="Soru Görseli">
@@ -412,9 +430,15 @@
     </div>
   </div>
 
-  <!-- TAB 3: RAPOR -->
   <div id="tab-analytics" class="tab-view">
-    <!-- Başarı Rozetleri -->
+    
+    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Uygulama Teması</div>
+    <div class="theme-selector-box">
+      <button class="theme-btn active" onclick="setTheme('cyberpunk', this)">🔮 Cyberpunk</button>
+      <button class="theme-btn" onclick="setTheme('matrix', this)">🟢 Matrix Neon</button>
+      <button class="theme-btn" onclick="setTheme('cyberblue', this)">🔷 Buzul Mavi</button>
+    </div>
+
     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Başarı Rozetlerim</div>
     <div class="badge-shelf">
       <div class="trophy-card locked" id="badge-first">
@@ -437,7 +461,7 @@
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
       <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px;">
-        <div style="font-size:1.6rem; font-weight:900; color:var(--accent-cyan);" id="statTotalCount">0</div>
+        <div style="font-size:1.6rem; font-weight:900; color:var(--accent-primary);" id="statTotalCount">0</div>
         <div style="font-size:0.7rem; color:var(--text-muted);">Toplam Yanlış Soru</div>
       </div>
       <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px;">
@@ -446,26 +470,22 @@
       </div>
     </div>
 
-    <!-- Mood / Ruh Hali Analizi -->
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px; margin-bottom:12px;">
-      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--accent-purple); margin-bottom:8px;">Hata Anındaki Ruh Hali</h4>
+      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--accent-primary); margin-bottom:8px;">Hata Anındaki Ruh Hali</h4>
       <div id="chartMoods" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
 
-    <!-- Hata Nedenleri -->
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px; margin-bottom:12px;">
       <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">Hata Nedenleri Dağılımı</h4>
       <div id="chartReasons" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
 
-    <!-- Dersler -->
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px;">
       <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">Ders Dağılımı</h4>
       <div id="chartSubjects" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
   </div>
 
-  <!-- TAB 4: HIZLI EKLE -->
   <div id="tab-add" class="tab-view">
     <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
     <form id="addForm" onsubmit="handleQuestionSubmit(event)">
@@ -499,7 +519,6 @@
         </select>
       </div>
 
-      <!-- Mood / Ruh Hali Seçimi (6. Madde) -->
       <div class="input-group">
         <label>Soruyu Çözerken Nasıl Hissediyordun?</label>
         <input type="hidden" id="formMoodVal" value="Normal / Sakin 🧘">
@@ -677,6 +696,55 @@ function compressImg(file) {
   });
 }
 
+/* 1. Madde: Sınav Geri Sayımı */
+function updateExamCountdown() {
+  const targetExamDate = new Date("2027-06-20T10:15:00");
+  const now = new Date();
+  const diffTime = targetExamDate - now;
+  const diffDays = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+  document.getElementById("daysUntilExam").innerText = diffDays;
+}
+
+/* 1. Madde: Panik Butonu (Clutch Mode) */
+function triggerPanicMode() {
+  if (allQuestions.length === 0) {
+    alert("Arşivinizde henüz soru bulunmuyor!");
+    return;
+  }
+  // En çok zorlanılan (Bilgi eksikliği, dikkat hatası veya acele edilen) soruları filtrele
+  let panicList = allQuestions.filter(q => 
+    q.reason.includes("Bilgi") || 
+    q.reason.includes("Dikkat") || 
+    (q.mood && q.mood.includes("Acele"))
+  );
+  if (panicList.length === 0) panicList = [...allQuestions];
+  
+  const chosen = panicList.sort(() => 0.5 - Math.random()).slice(0, 5);
+  setupPracticeSession(chosen);
+  switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
+}
+
+/* 5. Madde: Neon Tema Değiştirici */
+function setTheme(themeName, el) {
+  document.body.setAttribute("data-theme", themeName);
+  localStorage.setItem("app_theme", themeName);
+  document.querySelectorAll(".theme-btn").forEach(b => b.classList.remove("active"));
+  if (el) el.classList.add("active");
+}
+function loadSavedTheme() {
+  const saved = localStorage.getItem("app_theme") || "cyberpunk";
+  document.body.setAttribute("data-theme", saved);
+  document.querySelectorAll(".theme-btn").forEach(b => {
+    if (b.innerText.toLowerCase().includes(saved)) b.classList.add("active");
+  });
+}
+
+/* 6. Madde: Kişisel Telafi Kitapçığı PDF Baskısı */
+function triggerPersonalBookletPrint() {
+  document.getElementById("printDateSpan").innerText = "Tarih: " + new Date().toLocaleDateString('tr-TR');
+  window.print();
+}
+
 function updateStreakDisplay() {
   const today = new Date().toISOString().slice(0, 10);
   const lastActive = localStorage.getItem("streak_last_date");
@@ -719,7 +787,6 @@ function filterByExam(exam, el) {
   renderFeed();
 }
 
-/* AKIŞ KARTLARI */
 function renderFeed() {
   const container = document.getElementById("feedList");
   container.innerHTML = "";
@@ -799,7 +866,6 @@ async function deleteQuestion(id) {
   }
 }
 
-/* PRATİK MODU (BUTONLU & ÇÖZÜM BUTONLU) */
 let practiceList = [];
 let currentPracticeIdx = 0;
 
@@ -870,7 +936,6 @@ function handleSweetChoice(isMastered) {
   loadCurrentPracticeCard();
 }
 
-/* ROZET & RAPOR ANALİZİ */
 function renderAnalytics() {
   const total = allQuestions.length;
   const mastered = parseInt(localStorage.getItem("mastered_count") || "0", 10);
@@ -880,13 +945,11 @@ function renderAnalytics() {
   document.getElementById("statTotalCount").innerText = total;
   document.getElementById("statMasteredCount").innerText = mastered;
 
-  // Rozet Kontrolleri
   if (total >= 1) document.getElementById("badge-first").classList.remove("locked");
   if (practiced >= 5) document.getElementById("badge-practiced").classList.remove("locked");
   if (streak >= 3) document.getElementById("badge-streak").classList.remove("locked");
   if (mastered >= 10) document.getElementById("badge-master").classList.remove("locked");
 
-  // Mood Dağılımı
   const moods = {};
   allQuestions.forEach(q => {
     const m = q.mood || "Normal / Sakin 🧘";
@@ -901,14 +964,13 @@ function renderAnalytics() {
       <div style="display:flex; align-items:center; gap:8px; font-size:0.72rem;">
         <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${m}</span>
         <div style="flex:1; background:rgba(255,255,255,0.06); height:6px; border-radius:3px; overflow:hidden;">
-          <div style="width:${pct}%; background:var(--accent-purple); height:100%;"></div>
+          <div style="width:${pct}%; background:var(--accent-primary); height:100%;"></div>
         </div>
         <span style="font-weight:700; width:18px; text-align:right;">${c}</span>
       </div>
     `;
   }
 
-  // Hata Nedenleri
   const reasons = {};
   allQuestions.forEach(q => { reasons[q.reason] = (reasons[q.reason] || 0) + 1; });
   const maxR = Math.max(...Object.values(reasons), 1);
@@ -927,7 +989,6 @@ function renderAnalytics() {
     `;
   }
 
-  // Dersler
   const subjects = {};
   allQuestions.forEach(q => { subjects[q.subject] = (subjects[q.subject] || 0) + 1; });
   const maxS = Math.max(...Object.values(subjects), 1);
@@ -939,7 +1000,7 @@ function renderAnalytics() {
       <div style="display:flex; align-items:center; gap:8px; font-size:0.72rem;">
         <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${s}</span>
         <div style="flex:1; background:rgba(255,255,255,0.06); height:6px; border-radius:3px; overflow:hidden;">
-          <div style="width:${pct}%; background:var(--accent-cyan); height:100%;"></div>
+          <div style="width:${pct}%; background:var(--accent-secondary); height:100%;"></div>
         </div>
         <span style="font-weight:700; width:18px; text-align:right;">${c}</span>
       </div>
@@ -947,7 +1008,6 @@ function renderAnalytics() {
   }
 }
 
-/* FORM İŞLEMLERİ */
 function initFormSelects() {
   const ex = document.getElementById("formExamSelect");
   ex.innerHTML = "";
@@ -1053,7 +1113,6 @@ async function handleQuestionSubmit(e) {
   switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
 }
 
-/* ÇİZİM */
 let canvasCtx, isPainting = false, cachedBg = null;
 function initCanvasEvents() {
   const c = document.getElementById("drawCanvas");
@@ -1106,6 +1165,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   buildExamPills();
   initFormSelects();
   updateStreakDisplay();
+  updateExamCountdown();
+  loadSavedTheme();
   await refreshAll();
 });
 </script>
