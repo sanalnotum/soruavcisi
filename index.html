@@ -94,7 +94,7 @@
     .stat-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
     .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
 
-    /* Filtre Alanı (Revize Edilmiş Sıralama: Sınav -> Ders -> Konu -> Hata Tipi -> Arama) */
+    /* Filtre Alanı (Sınav -> Ders -> Konu -> Hata Tipi -> Arama) */
     .filter-bar {
       background: var(--card-bg);
       padding: 1rem;
@@ -147,7 +147,7 @@
 
     .q-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     
-    /* Esnek Görsel Yapısı (Dikey, yatay veya kare her boyuta tam uyum) */
+    /* Esnek Görsel Yapısı */
     .q-image-wrap {
       width: 100%;
       max-height: 350px;
@@ -252,7 +252,6 @@
 </header>
 
 <div class="container">
-  <!-- Canlı İstatistik Paneli -->
   <div class="stats-grid">
     <div class="stat-card" style="border-left-color: var(--primary);">
       <div class="stat-title">Toplam Arşiv</div>
@@ -276,7 +275,6 @@
     </div>
   </div>
 
-  <!-- Revize Edilmiş Filtre Alanı: Sınav Tipi -> Ders -> Konu -> Hata Tipi -> Arama -->
   <div class="filter-bar">
     <select id="filterExam" onchange="filterExamChanged();">
       <option value="">Tüm Sınavlar</option>
@@ -297,11 +295,9 @@
     <input type="text" id="filterText" placeholder="Kaynak veya not ara..." oninput="applyFilters()">
   </div>
 
-  <!-- Soru Listesi -->
   <div class="question-grid" id="questionList"></div>
 </div>
 
-<!-- Soru Ekleme Modalı -->
 <div class="modal-backdrop" id="addModal">
   <div class="modal">
     <h3 style="margin-bottom:1rem;">Yeni Soru Ekle</h3>
@@ -348,7 +344,6 @@
   </div>
 </div>
 
-<!-- Yazdırma Seçenekleri Modalı -->
 <div class="modal-backdrop" id="printModal">
   <div class="modal">
     <h3 style="margin-bottom:0.5rem;">Yazdırma / PDF Formatı Seçin</h3>
@@ -364,7 +359,6 @@
   </div>
 </div>
 
-<!-- Dijital Karalama Tuvali Modalı -->
 <div class="canvas-modal" id="canvasModal">
   <div class="canvas-toolbar">
     <button class="btn btn-sm" onclick="closeBoard()">Kapat (X)</button>
@@ -379,9 +373,6 @@
 </div>
 
 <script>
-/* ==========================================================================
-   MÜFREDAT ARŞİVİ (TYT, AYT, LGS, KPSS, ALES, DGS, ÖABT, AGS, TUS, DUS)
-   ========================================================================== */
 const CURRICULUM_DATA = {
   "YKS-TYT": {
     "Matematik": ["Temel Kavramlar", "Sayı Basamakları", "Bölme-Bölünebilme", "EBOB-EKOK", "Rasyonel Sayılar", "Mutlak Değer", "Üslü-Köklü Sayılar", "Çarpanlara Ayırma", "Oran-Orantı", "Problemler", "Kümeler", "Fonksiyonlar", "Olasılık"],
@@ -434,9 +425,6 @@ const CURRICULUM_DATA = {
   }
 };
 
-/* ==========================================================================
-   INDEXEDDB & GÖRSEL SIKIŞTIRMA (CANVAS)
-   ========================================================================== */
 const DB_NAME = "SoruTekrariDB_YildirayHoca";
 const DB_VERSION = 1;
 const STORE_NAME = "questions";
@@ -511,9 +499,6 @@ function compressImage(file, maxWidth = 1200, quality = 0.75) {
   });
 }
 
-/* ==========================================================================
-   TEMA YÖNETİMİ
-   ========================================================================== */
 function toggleTheme() {
   const html = document.documentElement;
   const btn = document.getElementById("themeToggleBtn");
@@ -526,9 +511,6 @@ function toggleTheme() {
   }
 }
 
-/* ==========================================================================
-   FİLTRE & HİYERARŞİ KONTROLLERİ (Sınav -> Ders -> Konu)
-   ========================================================================== */
 let allQuestionsCache = [];
 
 function initDropdowns() {
@@ -543,7 +525,7 @@ function initDropdowns() {
     formExam.innerHTML += `<option value="${exam}">${exam}</option>`;
   });
   
-  populateFilterSubjects();
+  filterExamChanged();
 }
 
 function filterExamChanged() {
@@ -597,9 +579,6 @@ function populateFormTopics() {
   }
 }
 
-/* ==========================================================================
-   SORU İŞLEMLERİ
-   ========================================================================== */
 function openAddModal() { document.getElementById("addModal").classList.add("active"); }
 function closeAddModal() {
   document.getElementById("addModal").classList.remove("active");
@@ -709,9 +688,6 @@ function toggleSolution(id) {
   document.getElementById("sol_" + id).classList.toggle("active");
 }
 
-/* ==========================================================================
-   FİLTRE & RASTGELE TEST
-   ========================================================================== */
 function applyFilters() {
   const exam = document.getElementById("filterExam").value;
   const sub = document.getElementById("filterSubject").value;
@@ -736,9 +712,6 @@ function startRandomQuiz() {
   window.scrollTo({ top: 200, behavior: 'smooth' });
 }
 
-/* ==========================================================================
-   YAZDIRMA / PDF MODÜLÜ
-   ========================================================================== */
 function openPrintModal() { document.getElementById("printModal").classList.add("active"); }
 function closePrintModal() { document.getElementById("printModal").classList.remove("active"); }
 
@@ -749,9 +722,6 @@ function executePrint(mode) {
   window.print();
 }
 
-/* ==========================================================================
-   DİJİTAL ÇİZİM TUVALİ (CANVAS)
-   ========================================================================== */
 let isDrawing = false;
 let canvasCtx;
 let bgImageCache = null;
@@ -815,9 +785,6 @@ function redrawBoardBackground() {
 function clearCanvas() { redrawBoardBackground(); }
 function closeBoard() { document.getElementById("canvasModal").classList.remove("active"); }
 
-/* ==========================================================================
-   YEDEKLEME (JSON)
-   ========================================================================== */
 function exportData() {
   if (allQuestionsCache.length === 0) { alert("Yedeklenecek veri yok."); return; }
   const blob = new Blob([JSON.stringify(allQuestionsCache, null, 2)], { type: "application/json" });
@@ -855,6 +822,3 @@ window.addEventListener("DOMContentLoaded", async () => {
 </script>
 </body>
 </html>
-```eof
-
-Your updated single-file web application is fully prepared and generated. Feel free to download or copy the code into your GitHub Pages repository (`index.html`) and let me know if you need any adjustments!
