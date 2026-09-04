@@ -1,15 +1,10 @@
-"T.C. İnkılap Tarihi": ["Bir Kahraman Doğuyor", "Milli Uyanış: Bağımsızlık Yolunda Atılan Adımlar", "Milli Bir Destan: Ya İstiklal Ya Ölüm", "Atatürkçülük ve Çağdaşlaşan Türkiye", "DemokratHaklısınız Yıldıray hocam, önceki kodda müfredat verisini birleştirirken LGS bloğunun tam ortasında ufak bir metin kazası (kopyala-yapıştır kalıntısı) olmuş ve JavaScript dosyanın geri kalanını kilitlemiş. Bu yüzden üst bardaki butonların hiçbiri tetiklenmiyor.
-
-Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` kodunu paylaşıyorum. Dosyanızı bununla güncellediğinizde butonlar ve tüm özellikler kusursuz çalışacaktır:
-
-```html
 <!DOCTYPE html>
 <html lang="tr" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SORU TEKRARI | Yıldıray Hoca</title>
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#09090b">
   <style>
     :root {
       --bg: #f8fafc;
@@ -99,7 +94,7 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
     .stat-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
     .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
 
-    /* Filtre Alanı */
+    /* Filtre Alanı (Revize Edilmiş Sıralama: Sınav -> Ders -> Konu -> Hata Tipi -> Arama) */
     .filter-bar {
       background: var(--card-bg);
       padding: 1rem;
@@ -151,16 +146,26 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
     .badge-yorum { background: #8b5cf6; }
 
     .q-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    
+    /* Esnek Görsel Yapısı (Dikey, yatay veya kare her boyuta tam uyum) */
     .q-image-wrap {
       width: 100%;
+      max-height: 350px;
       border-radius: 0.5rem;
       overflow: hidden;
       background: #000;
       display: flex;
       justify-content: center;
+      align-items: center;
       cursor: zoom-in;
     }
-    .q-image-wrap img { max-width: 100%; max-height: 280px; object-fit: contain; }
+    .q-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-height: 320px;
+    }
+
     .solution-box { border: 1px dashed var(--border); border-radius: 0.5rem; overflow: hidden; display: none; background: rgba(0,0,0,0.02); }
     .solution-box.active { display: block; }
 
@@ -199,19 +204,21 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
     .canvas-workspace { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
 
-    /* Baskı Seçenekleri & A4 Yazdırma CSS */
+    /* Baskı Seçenekleri */
     .print-options-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; }
     .print-option-btn { padding: 1rem; text-align: left; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg); color: var(--text); cursor: pointer; font-weight: 600; }
     .print-option-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
+    /* Kusursuz A4 & PDF Baskı Stilleri */
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
       header, .stats-grid, .filter-bar, .nav-actions, .q-footer, .modal-backdrop, .canvas-modal { display: none !important; }
       .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
       .question-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
-      .q-card { border: 1px solid #ccc !important; box-shadow: none !important; break-inside: avoid !important; background: #fff !important; color: #000 !important; }
+      .q-card { border: 1px solid #999 !important; box-shadow: none !important; break-inside: avoid !important; background: #fff !important; color: #000 !important; margin-bottom: 15px; }
       .q-header { background: #eee !important; color: #000 !important; border-bottom: 1px solid #ccc !important; }
-      .q-image-wrap { background: #fff !important; }
+      .q-image-wrap { background: #fff !important; max-height: 250px !important; }
+      .q-image-wrap img { object-fit: contain !important; max-height: 230px !important; }
       .solution-box { border: 1px solid #999 !important; background: #fff !important; }
       
       body.print-questions-only .solution-box { display: none !important; }
@@ -245,6 +252,7 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
 </header>
 
 <div class="container">
+  <!-- Canlı İstatistik Paneli -->
   <div class="stats-grid">
     <div class="stat-card" style="border-left-color: var(--primary);">
       <div class="stat-title">Toplam Arşiv</div>
@@ -268,12 +276,16 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
     </div>
   </div>
 
+  <!-- Revize Edilmiş Filtre Alanı: Sınav Tipi -> Ders -> Konu -> Hata Tipi -> Arama -->
   <div class="filter-bar">
-    <select id="filterExam" onchange="populateFilterSubjects(); applyFilters();">
+    <select id="filterExam" onchange="filterExamChanged();">
       <option value="">Tüm Sınavlar</option>
     </select>
-    <select id="filterSubject" onchange="applyFilters();">
+    <select id="filterSubject" onchange="filterSubjectChanged();">
       <option value="">Tüm Dersler</option>
+    </select>
+    <select id="filterTopic" onchange="applyFilters();">
+      <option value="">Tüm Konular</option>
     </select>
     <select id="filterReason" onchange="applyFilters();">
       <option value="">Tüm Hata Tipleri</option>
@@ -282,12 +294,14 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
       <option value="Süre/Yetiştirememe">Süre/Yetiştirememe</option>
       <option value="Yeni Nesil/Yorum">Yeni Nesil/Yorum</option>
     </select>
-    <input type="text" id="filterText" placeholder="Konu, kaynak veya not ara..." oninput="applyFilters()">
+    <input type="text" id="filterText" placeholder="Kaynak veya not ara..." oninput="applyFilters()">
   </div>
 
+  <!-- Soru Listesi -->
   <div class="question-grid" id="questionList"></div>
 </div>
 
+<!-- Soru Ekleme Modalı -->
 <div class="modal-backdrop" id="addModal">
   <div class="modal">
     <h3 style="margin-bottom:1rem;">Yeni Soru Ekle</h3>
@@ -328,12 +342,13 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
       </div>
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1rem;">
         <button type="button" class="btn" onclick="closeAddModal()">İptal</button>
-        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <button type="submit" class="btn btn-primary">Arşive Kaydet</button>
       </div>
     </form>
   </div>
 </div>
 
+<!-- Yazdırma Seçenekleri Modalı -->
 <div class="modal-backdrop" id="printModal">
   <div class="modal">
     <h3 style="margin-bottom:0.5rem;">Yazdırma / PDF Formatı Seçin</h3>
@@ -349,6 +364,7 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
   </div>
 </div>
 
+<!-- Dijital Karalama Tuvali Modalı -->
 <div class="canvas-modal" id="canvasModal">
   <div class="canvas-toolbar">
     <button class="btn btn-sm" onclick="closeBoard()">Kapat (X)</button>
@@ -363,6 +379,9 @@ Hemen hatayı düzelten, hiçbir eksik bırakmayan tam ve kusursuz `index.html` 
 </div>
 
 <script>
+/* ==========================================================================
+   MÜFREDAT ARŞİVİ (TYT, AYT, LGS, KPSS, ALES, DGS, ÖABT, AGS, TUS, DUS)
+   ========================================================================== */
 const CURRICULUM_DATA = {
   "YKS-TYT": {
     "Matematik": ["Temel Kavramlar", "Sayı Basamakları", "Bölme-Bölünebilme", "EBOB-EKOK", "Rasyonel Sayılar", "Mutlak Değer", "Üslü-Köklü Sayılar", "Çarpanlara Ayırma", "Oran-Orantı", "Problemler", "Kümeler", "Fonksiyonlar", "Olasılık"],
@@ -415,6 +434,9 @@ const CURRICULUM_DATA = {
   }
 };
 
+/* ==========================================================================
+   INDEXEDDB & GÖRSEL SIKIŞTIRMA (CANVAS)
+   ========================================================================== */
 const DB_NAME = "SoruTekrariDB_YildirayHoca";
 const DB_VERSION = 1;
 const STORE_NAME = "questions";
@@ -489,6 +511,9 @@ function compressImage(file, maxWidth = 1200, quality = 0.75) {
   });
 }
 
+/* ==========================================================================
+   TEMA YÖNETİMİ
+   ========================================================================== */
 function toggleTheme() {
   const html = document.documentElement;
   const btn = document.getElementById("themeToggleBtn");
@@ -501,6 +526,9 @@ function toggleTheme() {
   }
 }
 
+/* ==========================================================================
+   FİLTRE & HİYERARŞİ KONTROLLERİ (Sınav -> Ders -> Konu)
+   ========================================================================== */
 let allQuestionsCache = [];
 
 function initDropdowns() {
@@ -514,17 +542,35 @@ function initDropdowns() {
     filterExam.innerHTML += `<option value="${exam}">${exam}</option>`;
     formExam.innerHTML += `<option value="${exam}">${exam}</option>`;
   });
+  
+  populateFilterSubjects();
 }
 
-function populateFilterSubjects() {
+function filterExamChanged() {
   const exam = document.getElementById("filterExam").value;
   const subSelect = document.getElementById("filterSubject");
   subSelect.innerHTML = '<option value="">Tüm Dersler</option>';
+  
   if (exam && CURRICULUM_DATA[exam]) {
     Object.keys(CURRICULUM_DATA[exam]).forEach(sub => {
       subSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
     });
   }
+  filterSubjectChanged();
+}
+
+function filterSubjectChanged() {
+  const exam = document.getElementById("filterExam").value;
+  const sub = document.getElementById("filterSubject").value;
+  const topSelect = document.getElementById("filterTopic");
+  topSelect.innerHTML = '<option value="">Tüm Konular</option>';
+  
+  if (exam && sub && CURRICULUM_DATA[exam][sub]) {
+    CURRICULUM_DATA[exam][sub].forEach(topic => {
+      topSelect.innerHTML += `<option value="${topic}">${topic}</option>`;
+    });
+  }
+  applyFilters();
 }
 
 function populateFormSubjects() {
@@ -551,6 +597,9 @@ function populateFormTopics() {
   }
 }
 
+/* ==========================================================================
+   SORU İŞLEMLERİ
+   ========================================================================== */
 function openAddModal() { document.getElementById("addModal").classList.add("active"); }
 function closeAddModal() {
   document.getElementById("addModal").classList.remove("active");
@@ -660,15 +709,20 @@ function toggleSolution(id) {
   document.getElementById("sol_" + id).classList.toggle("active");
 }
 
+/* ==========================================================================
+   FİLTRE & RASTGELE TEST
+   ========================================================================== */
 function applyFilters() {
   const exam = document.getElementById("filterExam").value;
   const sub = document.getElementById("filterSubject").value;
+  const topic = document.getElementById("filterTopic").value;
   const reason = document.getElementById("filterReason").value;
   const text = document.getElementById("filterText").value.toLowerCase();
 
   const filtered = allQuestionsCache.filter(q => {
     return (!exam || q.exam === exam) &&
            (!sub || q.subject === sub) &&
+           (!topic || q.topic === topic) &&
            (!reason || q.reason === reason) &&
            (!text || q.topic.toLowerCase().includes(text) || (q.notes && q.notes.toLowerCase().includes(text)));
   });
@@ -682,6 +736,9 @@ function startRandomQuiz() {
   window.scrollTo({ top: 200, behavior: 'smooth' });
 }
 
+/* ==========================================================================
+   YAZDIRMA / PDF MODÜLÜ
+   ========================================================================== */
 function openPrintModal() { document.getElementById("printModal").classList.add("active"); }
 function closePrintModal() { document.getElementById("printModal").classList.remove("active"); }
 
@@ -692,6 +749,9 @@ function executePrint(mode) {
   window.print();
 }
 
+/* ==========================================================================
+   DİJİTAL ÇİZİM TUVALİ (CANVAS)
+   ========================================================================== */
 let isDrawing = false;
 let canvasCtx;
 let bgImageCache = null;
@@ -755,6 +815,9 @@ function redrawBoardBackground() {
 function clearCanvas() { redrawBoardBackground(); }
 function closeBoard() { document.getElementById("canvasModal").classList.remove("active"); }
 
+/* ==========================================================================
+   YEDEKLEME (JSON)
+   ========================================================================== */
 function exportData() {
   if (allQuestionsCache.length === 0) { alert("Yedeklenecek veri yok."); return; }
   const blob = new Blob([JSON.stringify(allQuestionsCache, null, 2)], { type: "application/json" });
@@ -792,3 +855,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 </script>
 </body>
 </html>
+```eof
+
+Your updated single-file web application is fully prepared and generated. Feel free to download or copy the code into your GitHub Pages repository (`index.html`) and let me know if you need any adjustments!
