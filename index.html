@@ -94,7 +94,7 @@
     .stat-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
     .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
 
-    /* Filtre Alanı (Sınav -> Ders -> Konu -> Hata Tipi -> Arama) */
+    /* Filtre Alanı */
     .filter-bar {
       background: var(--card-bg);
       padding: 1rem;
@@ -209,12 +209,16 @@
     .print-option-btn { padding: 1rem; text-align: left; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg); color: var(--text); cursor: pointer; font-weight: 600; }
     .print-option-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* Kusursuz A4 & PDF Baskı Stilleri */
+    /* Geliştirilmiş Kusursuz A4 & PDF Baskı Stilleri */
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
       header, .stats-grid, .filter-bar, .nav-actions, .q-footer, .modal-backdrop, .canvas-modal { display: none !important; }
       .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
       .question-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
+      
+      /* Sadece Çözüm modunda çözümü olmayan kartları tamamen gizle */
+      body.print-solutions-only .q-card:has(.no-solution) { display: none !important; }
+
       .q-card { border: 1px solid #999 !important; box-shadow: none !important; break-inside: avoid !important; background: #fff !important; color: #000 !important; margin-bottom: 15px; }
       .q-header { background: #eee !important; color: #000 !important; border-bottom: 1px solid #ccc !important; }
       .q-image-wrap { background: #fff !important; max-height: 250px !important; }
@@ -222,7 +226,8 @@
       .solution-box { border: 1px solid #999 !important; background: #fff !important; }
       
       body.print-questions-only .solution-box { display: none !important; }
-      body.print-solutions-only .q-image-wrap:not(.sol-img) { display: none !important; }
+      body.print-solutions-only .q-main-img { display: none !important; }
+      body.print-solutions-only .solution-box { display: block !important; border: none !important; }
       body.print-both .solution-box { display: block !important; }
       @page { size: A4 portrait; margin: 10mm; }
     }
@@ -350,7 +355,7 @@
     <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">A4 çift sütun test düzeni için tercih belirleyin:</p>
     <div class="print-options-grid">
       <button class="print-option-btn" onclick="executePrint('questions-only')">📄 Sadece Sorular (Klasik Test)</button>
-      <button class="print-option-btn" onclick="executePrint('solutions-only')">💡 Sadece Çözümler</button>
+      <button class="print-option-btn" onclick="executePrint('solutions-only')">💡 Sadece Çözümler (Çözümü Olanlar)</button>
       <button class="print-option-btn" onclick="executePrint('both')">📑 Soru + Çözüm Alt Alta (Çalışma Kağıdı)</button>
     </div>
     <div style="display:flex; justify-content:flex-end; margin-top:1.5rem;">
@@ -653,8 +658,9 @@ function renderQuestions(items) {
   }
 
   items.forEach(q => {
+    const hasSolution = !!q.solutionImg;
     const card = document.createElement("div");
-    card.className = "q-card";
+    card.className = `q-card ${hasSolution ? 'has-solution' : 'no-solution'}`;
     card.innerHTML = `
       <div class="q-header">
         <strong>${q.exam} - ${q.subject}</strong>
@@ -662,12 +668,12 @@ function renderQuestions(items) {
       </div>
       <div class="q-body">
         <div style="font-size:0.85rem; font-weight:700;">${q.topic}</div>
-        <div class="q-image-wrap">
+        <div class="q-image-wrap q-main-img">
           <img src="${q.questionImg}" alt="Soru">
         </div>
-        ${q.solutionImg ? `
+        ${hasSolution ? `
           <button class="btn btn-sm" onclick="toggleSolution('${q.id}')" style="align-self: flex-start;">💡 Çözümü Göster/Gizle</button>
-          <div class="solution-box sol-img" id="sol_${q.id}">
+          <div class="solution-box" id="sol_${q.id}">
             <div class="q-image-wrap">
               <img src="${q.solutionImg}" alt="Çözüm">
             </div>
