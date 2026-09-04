@@ -6,7 +6,6 @@
   <title>SORU TEKRARI | Yıldıray Hoca</title>
   <meta name="theme-color" content="#09090b">
   
-  <!-- PWA & Masaüstü Uygulama / iOS Tam Ekran Entegrasyonu -->
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Soru%20Tekrar%C4%B1%22%2C%22short_name%22%3A%22SoruTekrar%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -102,6 +101,26 @@
     .stat-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
     .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
 
+    /* Analiz ve Grafik Paneli Alanı */
+    .analytics-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .chart-box h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; }
+    .chart-bars { display: flex; flex-direction: column; gap: 8px; }
+    .bar-row { display: flex; align-items: center; font-size: 0.75rem; gap: 8px; }
+    .bar-label { width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+    .bar-track { flex: 1; background: var(--bg); border-radius: 4px; height: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .bar-fill { background: var(--primary); height: 100%; border-radius: 4px; transition: width 0.4s; }
+    .bar-count { width: 25px; text-align: right; font-weight: 700; }
+
     .filter-bar {
       background: var(--card-bg);
       padding: 1rem;
@@ -146,10 +165,7 @@
       font-size: 0.8rem;
     }
     .badge { padding: 3px 8px; border-radius: 9999px; font-size: 0.68rem; font-weight: 700; color: #fff; }
-    .badge-bilgi { background: #ef4444; }
-    .badge-dikkat { background: #f59e0b; color: #000; }
-    .badge-sure { background: #06b6d4; color: #000; }
-    .badge-yorum { background: #8b5cf6; }
+    .badge-default { background: var(--primary); }
 
     .q-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     
@@ -173,6 +189,9 @@
 
     .solution-box { border: 1px dashed var(--border); border-radius: 0.5rem; overflow: hidden; display: none; background: rgba(0,0,0,0.02); }
     .solution-box.active { display: block; }
+
+    .audio-player-box { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 6px 10px; border-radius: 0.375rem; border: 1px solid var(--border); }
+    .audio-player-box audio { width: 100%; height: 32px; }
 
     .q-footer {
       padding: 0.75rem 1rem;
@@ -199,6 +218,12 @@
       font-size: 0.9rem; background: var(--bg); color: var(--text);
     }
 
+    /* Ses Kayıt Kontrolleri */
+    .recorder-controls { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+    .rec-btn { background: #ef4444; color: #fff; border: none; padding: 0.4rem 0.8rem; border-radius: 0.375rem; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .rec-btn.recording { animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
     .canvas-modal {
       position: fixed; inset: 0; background: #09090b; z-index: 200; display: none; flex-direction: column;
     }
@@ -213,7 +238,7 @@
 
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
-      header, .stats-grid, .filter-bar, .nav-actions, .q-footer, .modal-backdrop, .canvas-modal { display: none !important; }
+      header, .stats-grid, .analytics-panel, .filter-bar, .nav-actions, .q-footer, .modal-backdrop, .canvas-modal { display: none !important; }
       .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
       .question-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
       
@@ -263,20 +288,31 @@
       <div class="stat-value" id="stat-total">0</div>
     </div>
     <div class="stat-card" style="border-left-color: #ef4444;">
-      <div class="stat-title">Bilgi Eksikliği</div>
+      <div class="stat-title">Bilgi / Ön Koşul</div>
       <div class="stat-value" id="stat-bilgi">0</div>
     </div>
     <div class="stat-card" style="border-left-color: #f59e0b;">
-      <div class="stat-title">Dikkat Hatası</div>
+      <div class="stat-title">Dikkat / İşlem</div>
       <div class="stat-value" id="stat-dikkat">0</div>
     </div>
     <div class="stat-card" style="border-left-color: #06b6d4;">
-      <div class="stat-title">Süre Problemi</div>
-      <div class="stat-value" id="stat-sure">0</div>
+      <div class="stat-title">Soru Kökü / Yorum</div>
+      <div class="stat-value" id="stat-yorum">0</div>
     </div>
     <div class="stat-card" style="border-left-color: #8b5cf6;">
-      <div class="stat-title">Yeni Nesil / Yorum</div>
-      <div class="stat-value" id="stat-yorum">0</div>
+      <div class="stat-title">Diğer / Zaman</div>
+      <div class="stat-value" id="stat-diger">0</div>
+    </div>
+  </div>
+
+  <div class="analytics-panel">
+    <div class="chart-box">
+      <h4>Hata Nedeni Dağılımı</h4>
+      <div class="chart-bars" id="reasonChartBars"></div>
+    </div>
+    <div class="chart-box">
+      <h4>Ders Bazlı Soru Dağılımı</h4>
+      <div class="chart-bars" id="subjectChartBars"></div>
     </div>
   </div>
 
@@ -292,10 +328,16 @@
     </select>
     <select id="filterReason" onchange="applyFilters();">
       <option value="">Tüm Hata Tipleri</option>
-      <option value="Bilgi Eksikliği">Bilgi Eksikliği</option>
-      <option value="Dikkat/İşlem Hatası">Dikkat/İşlem Hatası</option>
-      <option value="Süre/Yetiştirememe">Süre/Yetiştirememe</option>
-      <option value="Yeni Nesil/Yorum">Yeni Nesil/Yorum</option>
+      <option value="Bilgi / Konu Eksikliği">Bilgi / Konu Eksikliği</option>
+      <option value="Ön Bilgi (Ön Koşul) Eksikliği">Ön Bilgi (Ön Koşul) Eksikliği</option>
+      <option value="Dikkat / İşlem Hatası">Dikkat / İşlem Hatası</option>
+      <option value="Soru Kökünü Yanlış Okuma">Soru Kökünü Yanlış Okuma</option>
+      <option value="Ön Yargı / Ezbere Yaklaşım">Ön Yargı / Ezbere Yaklaşım</option>
+      <option value="Şıklar Arasında Kalıp Yanlış Seçme">Şıklar Arasında Kalıp Yanlış Seçme</option>
+      <option value="Süre / Zaman Baskısı (Yetiştirememe)">Süre / Zaman Baskısı (Yetiştirememe)</option>
+      <option value="Grafik / Şekil Yorumlama Hatası">Grafik / Şekil Yorumlama Hatası</option>
+      <option value="Yorumsal / Yeni Nesil Tıkanıklığı">Yorumsal / Yeni Nesil Tıkanıklığı</option>
+      <option value="Uykusuzluk / Zihinsel Yorgunluk">Uykusuzluk / Zihinsel Yorgunluk</option>
     </select>
     <input type="text" id="filterText" placeholder="Kaynak veya not ara..." oninput="applyFilters()">
   </div>
@@ -316,19 +358,25 @@
         <select id="formSubject" required onchange="populateFormTopics()"></select>
       </div>
       <div class="form-group">
-        <label>Konu (Listeden Seçin Veya Aşağıya Elle Yazın)</label>
+        <label>Konu (Listeden Seçin veya Aşağıya Elle Yazın)</label>
         <select id="formTopicSelect" class="form-control" style="margin-bottom:6px;" onchange="onTopicSelectChanged(this.value)">
           <option value="">-- Listeden Konu Seçin --</option>
         </select>
         <input type="text" id="formTopic" required placeholder="Veya buraya elle konu yazın">
       </div>
       <div class="form-group">
-        <label>Hata Nedeni</label>
+        <label>Hata Nedeni / Teşhis</label>
         <select id="formReason" required>
-          <option value="Bilgi Eksikliği">Bilgi Eksikliği</option>
-          <option value="Dikkat/İşlem Hatası">Dikkat/İşlem Hatası</option>
-          <option value="Süre/Yetiştirememe">Süre/Yetiştirememe</option>
-          <option value="Yeni Nesil/Yorum">Yeni Nesil/Yorum</option>
+          <option value="Bilgi / Konu Eksikliği">Bilgi / Konu Eksikliği</option>
+          <option value="Ön Bilgi (Ön Koşul) Eksikliği">Ön Bilgi (Ön Koşul) Eksikliği</option>
+          <option value="Dikkat / İşlem Hatası">Dikkat / İşlem Hatası</option>
+          <option value="Soru Kökünü Yanlış Okuma">Soru Kökünü Yanlış Okuma</option>
+          <option value="Ön Yargı / Ezbere Yaklaşım">Ön Yargı / Ezbere Yaklaşım</option>
+          <option value="Şıklar Arasında Kalıp Yanlış Seçme">Şıklar Arasında Kalıp Yanlış Seçme</option>
+          <option value="Süre / Zaman Baskısı (Yetiştirememe)">Süre / Zaman Baskısı (Yetiştirememe)</option>
+          <option value="Grafik / Şekil Yorumlama Hatası">Grafik / Şekil Yorumlama Hatası</option>
+          <option value="Yorumsal / Yeni Nesil Tıkanıklığı">Yorumsal / Yeni Nesil Tıkanıklığı</option>
+          <option value="Uykusuzluk / Zihinsel Yorgunluk">Uykusuzluk / Zihinsel Yorgunluk</option>
         </select>
       </div>
       <div class="form-group">
@@ -340,7 +388,15 @@
         <input type="file" id="inputSolutionImg" accept="image/*">
       </div>
       <div class="form-group">
-        <label>Kaynak / Not / Hatırlatıcı</label>
+        <label>Sesli Hatırlatıcı / Not Ekle (Mikrofon)</label>
+        <div class="recorder-controls">
+          <button type="button" class="rec-btn" id="recToggleBtn" onclick="toggleAudioRecording()">🎙️ Kaydı Başlat</button>
+          <span id="recStatusText" style="font-size:0.75rem; color:var(--text-muted);">Kayıt yok</span>
+        </div>
+        <audio id="audioPlayback" controls style="width:100%; margin-top:8px; display:none;"></audio>
+      </div>
+      <div class="form-group">
+        <label>Kaynak / Not / Hatırlatıcı Metin</label>
         <textarea id="formNotes" rows="2" placeholder="Örn: 3D Yayınları Deneme 4"></textarea>
       </div>
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1rem;">
@@ -531,6 +587,46 @@ function toggleTheme() {
 }
 
 let allQuestionsCache = [];
+let mediaRecorder;
+let audioChunks = [];
+let recordedAudioBase64 = null;
+
+function toggleAudioRecording() {
+  const btn = document.getElementById("recToggleBtn");
+  const status = document.getElementById("recStatusText");
+  const playback = document.getElementById("audioPlayback");
+
+  if (!mediaRecorder || mediaRecorder.state === "inactive") {
+    audioChunks = [];
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      btn.innerText = "⏹️ Kaydı Durdur";
+      btn.classList.add("recording");
+      status.innerText = "Kayıt yapılıyor...";
+
+      mediaRecorder.ondataavailable = e => { audioChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = () => {
+          recordedAudioBase64 = reader.result;
+          playback.src = recordedAudioBase64;
+          playback.style.display = "block";
+          status.innerText = "Sesli hatırlatıcı hazır!";
+        };
+      };
+    }).catch(err => {
+      alert("Mikrofon erişim izni reddedildi veya desteklenmiyor.");
+    });
+  } else {
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    btn.innerText = "🎙️ Yeniden Kaydet";
+    btn.classList.remove("recording");
+  }
+}
 
 function initDropdowns() {
   const filterExam = document.getElementById("filterExam");
@@ -610,6 +706,9 @@ function closeAddModal() {
   document.getElementById("addModal").classList.remove("active");
   document.getElementById("addQuestionForm").reset();
   document.getElementById("formTopicSelect").innerHTML = '<option value="">-- Önce ders seçin --</option>';
+  document.getElementById("audioPlayback").style.display = "none";
+  document.getElementById("recStatusText").innerText = "Kayıt yok";
+  recordedAudioBase64 = null;
 }
 
 async function saveQuestion(e) {
@@ -631,6 +730,7 @@ async function saveQuestion(e) {
     topic: topicVal,
     reason: document.getElementById("formReason").value,
     notes: document.getElementById("formNotes").value,
+    audioData: recordedAudioBase64,
     questionImg: questionImgBase64,
     solutionImg: solutionImgBase64,
     createdAt: new Date().toISOString()
@@ -651,25 +751,67 @@ async function removeQuestion(id) {
 async function loadQuestions() {
   allQuestionsCache = await dbGetAll();
   updateStats(allQuestionsCache);
+  updateAnalyticsCharts(allQuestionsCache);
   renderQuestions(allQuestionsCache);
 }
 
 function updateStats(data) {
   document.getElementById("stat-total").innerText = data.length;
-  document.getElementById("stat-bilgi").innerText = data.filter(q => q.reason === "Bilgi Eksikliği").length;
-  document.getElementById("stat-dikkat").innerText = data.filter(q => q.reason === "Dikkat/İşlem Hatası").length;
-  document.getElementById("stat-sure").innerText = data.filter(q => q.reason === "Süre/Yetiştirememe").length;
-  document.getElementById("stat-yorum").innerText = data.filter(q => q.reason === "Yeni Nesil/Yorum").length;
+  document.getElementById("stat-bilgi").innerText = data.filter(q => q.reason.includes("Bilgi") || q.reason.includes("Ön Koşul")).length;
+  document.getElementById("stat-dikkat").innerText = data.filter(q => q.reason.includes("Dikkat") || q.reason.includes("İşlem")).length;
+  document.getElementById("stat-yorum").innerText = data.filter(q => q.reason.includes("Okuma") || q.reason.includes("Yorum") || q.reason.includes("Tıkanıklığı")).length;
+  document.getElementById("stat-diger").innerText = data.filter(q => !q.reason.includes("Bilgi") && !q.reason.includes("Ön Koşul") && !q.reason.includes("Dikkat") && !q.reason.includes("İşlem") && !q.reason.includes("Okuma") && !q.reason.includes("Yorum") && !q.reason.includes("Tıkanıklığı")).length;
+}
+
+function updateAnalyticsCharts(data) {
+  const reasonCounts = {};
+  const subjectCounts = {};
+
+  data.forEach(q => {
+    reasonCounts[q.reason] = (reasonCounts[q.reason] || 0) + 1;
+    subjectCounts[q.subject] = (subjectCounts[q.subject] || 0) + 1;
+  });
+
+  const maxReason = Math.max(...Object.values(reasonCounts), 1);
+  const maxSubject = Math.max(...Object.values(subjectCounts), 1);
+
+  const reasonContainer = document.getElementById("reasonChartBars");
+  reasonContainer.innerHTML = "";
+  if (Object.keys(reasonCounts).length === 0) {
+    reasonContainer.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">Henüz veri yok.</span>`;
+  } else {
+    for (const [reason, count] of Object.entries(reasonCounts)) {
+      const pct = (count / maxReason) * 100;
+      reasonContainer.innerHTML += `
+        <div class="bar-row">
+          <div class="bar-label" title="${reason}">${reason}</div>
+          <div class="bar-track"><div class="bar-fill" style="width: ${pct}%;"></div></div>
+          <div class="bar-count">${count}</div>
+        </div>
+      `;
+    }
+  }
+
+  const subjectContainer = document.getElementById("subjectChartBars");
+  subjectContainer.innerHTML = "";
+  if (Object.keys(subjectCounts).length === 0) {
+    subjectContainer.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">Henüz veri yok.</span>`;
+  } else {
+    for (const [sub, count] of Object.entries(subjectCounts)) {
+      const pct = (count / maxSubject) * 100;
+      subjectContainer.innerHTML += `
+        <div class="bar-row">
+          <div class="bar-label" title="${sub}">${sub}</div>
+          <div class="bar-track"><div class="bar-fill" style="background:#8b5cf6; width: ${pct}%;"></div></div>
+          <div class="bar-count">${count}</div>
+        </div>
+      `;
+    }
+  }
 }
 
 function getBadgeClass(reason) {
-  switch (reason) {
-    case "Bilgi Eksikliği": return "badge-bilgi";
-    case "Dikkat/İşlem Hatası": return "badge-dikkat";
-    case "Süre/Yetiştirememe": return "badge-sure";
-    case "Yeni Nesil/Yorum": return "badge-yorum";
-    default: return "badge-bilgi";
-  }
+  return "badge-default";
 }
 
 function renderQuestions(items) {
@@ -701,6 +843,12 @@ function renderQuestions(items) {
             <div class="q-image-wrap">
               <img src="${q.solutionImg}" alt="Çözüm">
             </div>
+          </div>
+        ` : ''}
+        ${q.audioData ? `
+          <div class="audio-player-box">
+            <span style="font-size:0.75rem; font-weight:700;">🎙️ Sesli Not:</span>
+            <audio controls src="${q.audioData}"></audio>
           </div>
         ` : ''}
         ${q.notes ? `<div style="font-size:0.78rem; color:var(--text-muted); background:rgba(0,0,0,0.03); padding:6px; border-radius:4px;"><strong>Not:</strong> ${q.notes}</div>` : ''}
