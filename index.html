@@ -101,25 +101,13 @@
     .stat-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
     .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
 
-    /* Analiz ve Grafik Paneli Alanı */
-    .analytics-panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      align-items: center;
-    }
-    .chart-box h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; }
-    .chart-bars { display: flex; flex-direction: column; gap: 8px; }
-    .bar-row { display: flex; align-items: center; font-size: 0.75rem; gap: 8px; }
-    .bar-label { width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
-    .bar-track { flex: 1; background: var(--bg); border-radius: 4px; height: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .chart-box h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase; }
+    .chart-bars { display: flex; flex-direction: column; gap: 10px; }
+    .bar-row { display: flex; align-items: center; font-size: 0.78rem; gap: 10px; }
+    .bar-label { width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+    .bar-track { flex: 1; background: var(--bg); border-radius: 4px; height: 14px; overflow: hidden; border: 1px solid var(--border); }
     .bar-fill { background: var(--primary); height: 100%; border-radius: 4px; transition: width 0.4s; }
-    .bar-count { width: 25px; text-align: right; font-weight: 700; }
+    .bar-count { width: 30px; text-align: right; font-weight: 700; }
 
     .filter-bar {
       background: var(--card-bg);
@@ -164,8 +152,7 @@
       align-items: center;
       font-size: 0.8rem;
     }
-    .badge { padding: 3px 8px; border-radius: 9999px; font-size: 0.68rem; font-weight: 700; color: #fff; }
-    .badge-default { background: var(--primary); }
+    .badge { padding: 3px 8px; border-radius: 9999px; font-size: 0.68rem; font-weight: 700; color: #fff; background: var(--primary); }
 
     .q-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     
@@ -218,7 +205,18 @@
       font-size: 0.9rem; background: var(--bg); color: var(--text);
     }
 
-    /* Ses Kayıt Kontrolleri */
+    .custom-topic-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin: 6px 0;
+      cursor: pointer;
+    }
+    .custom-topic-toggle input { width: auto; cursor: pointer; }
+
     .recorder-controls { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
     .rec-btn { background: #ef4444; color: #fff; border: none; padding: 0.4rem 0.8rem; border-radius: 0.375rem; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
     .rec-btn.recording { animation: pulse 1.2s infinite; }
@@ -238,7 +236,7 @@
 
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
-      header, .stats-grid, .analytics-panel, .filter-bar, .nav-actions, .q-footer, .modal-backdrop, .canvas-modal { display: none !important; }
+      header, .stats-grid, .filter-bar, .nav-actions, .q-footer, .modal-backdrop, .canvas-modal { display: none !important; }
       .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
       .question-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
       
@@ -271,6 +269,7 @@
     </div>
     <div class="nav-actions">
       <button class="btn btn-primary" onclick="openAddModal()">+ Soru Ekle</button>
+      <button class="btn" onclick="openAnalyticsModal()">📊 Gelişmiş Analiz / Rapor</button>
       <button class="btn" onclick="startRandomQuiz()">🎲 Rastgele 5 Soru</button>
       <button class="btn" onclick="openPrintModal()">🖨️ PDF / Baskı Al</button>
       <button class="btn" onclick="toggleTheme()" id="themeToggleBtn">☀️ Aydınlık</button>
@@ -305,17 +304,6 @@
     </div>
   </div>
 
-  <div class="analytics-panel">
-    <div class="chart-box">
-      <h4>Hata Nedeni Dağılımı</h4>
-      <div class="chart-bars" id="reasonChartBars"></div>
-    </div>
-    <div class="chart-box">
-      <h4>Ders Bazlı Soru Dağılımı</h4>
-      <div class="chart-bars" id="subjectChartBars"></div>
-    </div>
-  </div>
-
   <div class="filter-bar">
     <select id="filterExam" onchange="filterExamChanged();">
       <option value="">Tüm Sınavlar</option>
@@ -345,6 +333,25 @@
   <div class="question-grid" id="questionList"></div>
 </div>
 
+<div class="modal-backdrop" id="analyticsModal">
+  <div class="modal" style="max-width: 650px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+      <h3>📊 Gelişmiş Hata & Ders Analiz Raporu</h3>
+      <button class="btn btn-sm" onclick="closeAnalyticsModal()">Kapat (X)</button>
+    </div>
+    
+    <div class="chart-box" style="margin-bottom:1.5rem;">
+      <h4>Hata Nedeni Dağılımı</h4>
+      <div class="chart-bars" id="reasonChartBars"></div>
+    </div>
+
+    <div class="chart-box">
+      <h4>Ders Bazlı Soru Dağılımı</h4>
+      <div class="chart-bars" id="subjectChartBars"></div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="addModal">
   <div class="modal">
     <h3 style="margin-bottom:1rem;">Yeni Soru Ekle</h3>
@@ -358,11 +365,17 @@
         <select id="formSubject" required onchange="populateFormTopics()"></select>
       </div>
       <div class="form-group">
-        <label>Konu (Listeden Seçin veya Aşağıya Elle Yazın)</label>
-        <select id="formTopicSelect" class="form-control" style="margin-bottom:6px;" onchange="onTopicSelectChanged(this.value)">
+        <label>Konu</label>
+        <select id="formTopicSelect">
           <option value="">-- Listeden Konu Seçin --</option>
         </select>
-        <input type="text" id="formTopic" required placeholder="Veya buraya elle konu yazın">
+        
+        <label class="custom-topic-toggle">
+          <input type="checkbox" id="customTopicCheckbox" onchange="toggleCustomTopicInput()">
+          <span>Farklı bir konuyu elle yazmak istiyorum</span>
+        </label>
+        
+        <input type="text" id="formTopicCustom" placeholder="Konu adını elle yazın" style="display:none;">
       </div>
       <div class="form-group">
         <label>Hata Nedeni / Teşhis</label>
@@ -477,7 +490,7 @@ const CURRICULUM_DATA = {
   },
   "ALES": {
     "Sayısal": ["Temel Matematik", "Cebir", "Sayı Problemleri", "Sayısal Mantık", "Geometri"],
-    "Sözel": ["Sözcükte ve Cümlede Anlam", "Paragraf Çözümleme", "Sözel Mantık Bulmacaları"]
+    "Sözel": ["Sözcük ve Cümlede Anlam", "Paragraf Çözümleme", "Sözel Mantık Bulmacaları"]
   },
   "DGS": {
     "Sayısal": ["Temel Matematik", "Cebirsel İşlemler", "Sayı Problemleri", "Rasyonel Sayılar", "Geometri"],
@@ -695,9 +708,19 @@ function populateFormTopics() {
   }
 }
 
-function onTopicSelectChanged(val) {
-  if (val) {
-    document.getElementById("formTopic").value = val;
+function toggleCustomTopicInput() {
+  const isChecked = document.getElementById("customTopicCheckbox").checked;
+  const customInput = document.getElementById("formTopicCustom");
+  const selectEl = document.getElementById("formTopicSelect");
+  
+  if (isChecked) {
+    customInput.style.display = "block";
+    customInput.focus();
+    selectEl.disabled = true;
+  } else {
+    customInput.style.display = "none";
+    customInput.value = "";
+    selectEl.disabled = false;
   }
 }
 
@@ -706,19 +729,34 @@ function closeAddModal() {
   document.getElementById("addModal").classList.remove("active");
   document.getElementById("addQuestionForm").reset();
   document.getElementById("formTopicSelect").innerHTML = '<option value="">-- Önce ders seçin --</option>';
+  document.getElementById("formTopicSelect").disabled = false;
+  document.getElementById("formTopicCustom").style.display = "none";
+  document.getElementById("formTopicCustom").value = "";
   document.getElementById("audioPlayback").style.display = "none";
   document.getElementById("recStatusText").innerText = "Kayıt yok";
   recordedAudioBase64 = null;
+}
+
+function openAnalyticsModal() {
+  updateAnalyticsCharts(allQuestionsCache);
+  document.getElementById("analyticsModal").classList.add("active");
+}
+function closeAnalyticsModal() {
+  document.getElementById("analyticsModal").classList.remove("active");
 }
 
 async function saveQuestion(e) {
   e.preventDefault();
   const qFileInput = document.getElementById("inputQuestionImg").files[0];
   const sFileInput = document.getElementById("inputSolutionImg").files[0];
-  const topicVal = document.getElementById("formTopic").value.trim();
+  
+  const isCustomTopic = document.getElementById("customTopicCheckbox").checked;
+  const topicVal = isCustomTopic 
+    ? document.getElementById("formTopicCustom").value.trim() 
+    : document.getElementById("formTopicSelect").value.trim();
 
   if (!qFileInput) { alert("Lütfen soru görseli seçin."); return; }
-  if (!topicVal) { alert("Lütfen konu seçin veya yazın."); return; }
+  if (!topicVal) { alert("Lütfen bir konu belirleyin (listeden seçin veya onay kutusunu işaretleyip elle yazın)."); return; }
 
   const questionImgBase64 = await compressImage(qFileInput);
   const solutionImgBase64 = sFileInput ? await compressImage(sFileInput) : null;
@@ -751,7 +789,6 @@ async function removeQuestion(id) {
 async function loadQuestions() {
   allQuestionsCache = await dbGetAll();
   updateStats(allQuestionsCache);
-  updateAnalyticsCharts(allQuestionsCache);
   renderQuestions(allQuestionsCache);
 }
 
@@ -778,7 +815,7 @@ function updateAnalyticsCharts(data) {
   const reasonContainer = document.getElementById("reasonChartBars");
   reasonContainer.innerHTML = "";
   if (Object.keys(reasonCounts).length === 0) {
-    reasonContainer.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">Henüz veri yok.</span>`;
+    reasonContainer.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">Henüz arşivde soru verisi bulunmuyor.</span>`;
   } else {
     for (const [reason, count] of Object.entries(reasonCounts)) {
       const pct = (count / maxReason) * 100;
@@ -795,7 +832,7 @@ function updateAnalyticsCharts(data) {
   const subjectContainer = document.getElementById("subjectChartBars");
   subjectContainer.innerHTML = "";
   if (Object.keys(subjectCounts).length === 0) {
-    subjectContainer.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">Henüz veri yok.</span>`;
+    subjectContainer.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">Henüz arşivde soru verisi bulunmuyor.</span>`;
   } else {
     for (const [sub, count] of Object.entries(subjectCounts)) {
       const pct = (count / maxSubject) * 100;
@@ -808,10 +845,6 @@ function updateAnalyticsCharts(data) {
       `;
     }
   }
-}
-
-function getBadgeClass(reason) {
-  return "badge-default";
 }
 
 function renderQuestions(items) {
@@ -830,7 +863,7 @@ function renderQuestions(items) {
     card.innerHTML = `
       <div class="q-header">
         <strong>${q.exam} - ${q.subject}</strong>
-        <span class="badge ${getBadgeClass(q.reason)}">${q.reason}</span>
+        <span class="badge">${q.reason}</span>
       </div>
       <div class="q-body">
         <div style="font-size:0.85rem; font-weight:700;">${q.topic}</div>
@@ -974,7 +1007,7 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
-function importFile(event) {
+function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
