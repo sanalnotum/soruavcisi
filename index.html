@@ -60,24 +60,30 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
+      padding: 8px 14px;
       position: sticky;
       top: 0;
       z-index: 30;
       backdrop-filter: blur(16px);
-      background: rgba(9, 9, 11, 0.88);
+      background: rgba(9, 9, 11, 0.9);
       border-bottom: 1px solid var(--card-border);
       height: 54px;
     }
     .brand-wrap { display: flex; flex-direction: column; }
-    .brand { display: flex; align-items: center; gap: 8px; }
-    .brand-logo { width: 28px; height: 28px; border-radius: 6px; object-fit: contain; }
-    .brand-name { font-size: 1rem; font-weight: 900; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .brand-author { font-size: 0.62rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
+    .brand { display: flex; align-items: center; gap: 6px; }
+    .brand-logo { width: 26px; height: 26px; border-radius: 6px; object-fit: contain; }
+    .brand-name { font-size: 0.95rem; font-weight: 900; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-author { font-size: 0.58rem; font-weight: 700; color: var(--text-muted); }
 
     .header-actions { display: flex; align-items: center; gap: 6px; }
-    .streak-badge { display: flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; color: #f472b6; }
-    .btn-icon-head { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); padding: 6px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .streak-badge { display: flex; align-items: center; gap: 3px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 3px 6px; border-radius: 999px; font-size: 0.65rem; font-weight: 700; color: #f472b6; }
+    
+    /* Üst Bar Hızlı Tema Değiştirici İkonlar */
+    .theme-quick-bar { display: flex; gap: 3px; background: var(--card-bg); border: 1px solid var(--card-border); padding: 2px; border-radius: 8px; }
+    .theme-icon-btn { background: none; border: none; font-size: 0.85rem; cursor: pointer; padding: 2px 5px; border-radius: 6px; opacity: 0.5; }
+    .theme-icon-btn.active { opacity: 1; background: rgba(255,255,255,0.1); }
+
+    .btn-icon-head { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); padding: 5px 8px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 3px; }
 
     .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
@@ -240,22 +246,15 @@
     .btn-sweet-repeat { background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(244, 63, 94, 0.35)); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.4); }
     .btn-sweet-master { background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.35)); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
 
-    /* Lightbox Modal (Geniş Görünüm) */
+    /* Lightbox Modal */
     .lightbox-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 200;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 200; display: none; align-items: center; justify-content: center; padding: 10px;
     }
     .lightbox-modal.active { display: flex; }
     .lightbox-img { max-width: 100%; max-height: 90vh; object-fit: contain; }
     .lightbox-close { position: absolute; top: 16px; right: 20px; color: #fff; font-size: 1.8rem; background: none; border: none; cursor: pointer; }
 
-    /* PDF Seçenek Modalı */
+    /* PDF Modalı */
     .pdf-modal {
       position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
       z-index: 150; display: none; align-items: center; justify-content: center; padding: 20px;
@@ -269,7 +268,7 @@
       background: rgba(255,255,255,0.05); color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: left;
     }
 
-    /* P2P AirDrop Modalı */
+    /* AirDrop Modalı */
     .airdrop-modal {
       position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
       z-index: 160; display: none; align-items: center; justify-content: center; padding: 16px;
@@ -278,9 +277,7 @@
     .airdrop-card {
       background: #18181b; border: 1px solid var(--card-border); border-radius: 24px; padding: 20px; width: 100%; max-width: 380px; text-align: center;
     }
-    #qrcodeBox {
-      background: #fff; padding: 12px; border-radius: 16px; display: inline-block; margin: 14px 0;
-    }
+    #qrcodeBox { background: #fff; padding: 12px; border-radius: 16px; display: inline-block; margin: 14px 0; }
 
     /* Rapor & Yedekleme */
     .backup-box {
@@ -297,10 +294,6 @@
     .trophy-icon { font-size: 1.4rem; }
     .trophy-name { font-size: 0.65rem; font-weight: 700; }
 
-    .theme-selector-box { display: flex; gap: 8px; margin-bottom: 14px; }
-    .theme-btn { flex: 1; padding: 10px 6px; border-radius: 12px; border: 1px solid var(--card-border); font-size: 0.72rem; font-weight: 700; cursor: pointer; text-align: center; background: var(--card-bg); color: var(--text); }
-    .theme-btn.active { border-color: var(--accent-primary); }
-
     .mood-chips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 4px; }
     .mood-pill { padding: 8px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.03); font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; text-align: center; }
     .mood-pill.active { background: rgba(168, 85, 247, 0.2); border-color: var(--accent-primary); color: #fff; }
@@ -314,43 +307,19 @@
 
     /* Alt Bar */
     nav.bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: var(--nav-height);
-      background: rgba(9, 9, 11, 0.92);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 50;
-      padding-bottom: env(safe-area-inset-bottom);
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height);
+      background: rgba(9, 9, 11, 0.92); backdrop-filter: blur(20px); border-top: 1px solid var(--card-border);
+      display: flex; justify-content: space-around; align-items: center; z-index: 50; padding-bottom: env(safe-area-inset-bottom);
     }
     .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.65rem;
-      font-weight: 700;
-      cursor: pointer;
-      flex: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: none; color: var(--text-muted); font-size: 0.65rem; font-weight: 700; cursor: pointer; flex: 1;
     }
     .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
     .nav-item.active { color: #fff; }
     .nav-item.active svg { stroke: var(--accent-primary); }
 
     .nav-center-btn {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: var(--accent-gradient);
-      border: none; color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
-      cursor: pointer;
-      transform: translateY(-6px);
+      width: 44px; height: 44px; border-radius: 50%; background: var(--accent-gradient); border: none; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4); cursor: pointer; transform: translateY(-6px);
     }
     .nav-center-btn svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.5; }
 
@@ -360,31 +329,41 @@
     .canvas-box { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top:0; left:0; }
 
-    /* PDF BASKI ÇIKTI DÜZENİ */
+    /* İYİLEŞTİRİLMİŞ YÜKSEK KALİTELİ PDF / BASKI ÇIKTI DÜZENİ */
     .print-header { display: none; }
     @media print {
       body { background:#fff !important; color:#000 !important; padding:0 !important; }
       header, nav, .clutch-bar, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal, .lightbox-modal, .pdf-modal, .airdrop-modal { display: none !important; }
       .print-header {
-        display: block !important;
-        border-bottom: 2px solid #000;
-        padding-bottom: 6px;
-        margin-bottom: 14px;
+        display: block !important; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 12px;
       }
-      .print-header-top { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 800; }
-      .print-header-title { font-size: 1.3rem; font-weight: 900; text-align: center; margin: 4px 0; text-transform: uppercase; }
+      .print-header-top { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; }
+      .print-header-title { font-size: 1.2rem; font-weight: 900; text-align: center; margin: 4px 0; text-transform: uppercase; }
+      
       .tab-view { display: block !important; padding:0 !important; max-width: 100% !important; }
       #tab-practice, #tab-analytics, #tab-add { display: none !important; }
-      #feedList { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
-      .feed-card { break-inside: avoid !important; border: 1px solid #777 !important; background: #fff !important; color:#000 !important; margin-bottom: 10px; border-radius: 6px !important; }
-      .card-top { background: #f3f4f6 !important; color: #000 !important; border-bottom: 1px solid #ddd !important; }
-      .card-image-wrap { background:#fff !important; height:230px !important; }
-      .card-image-wrap img { object-fit: contain !important; }
       
+      /* Baskı Akışı - Soru ve Çözümlerin Net ve Büyük Görünmesi İçin Dikey Tam Sayfa Düzen */
+      #feedList { display: flex !important; flex-direction: column !important; gap: 20px !important; }
+      .feed-card {
+        break-inside: avoid !important; border: 1.5px solid #333 !important; background: #fff !important; color:#000 !important; margin-bottom: 14px; border-radius: 8px !important; box-shadow: none !important;
+      }
+      .card-top { background: #f3f4f6 !important; color: #000 !important; border-bottom: 1px solid #ccc !important; font-size: 0.8rem !important; }
+      
+      /* Soru Görselini Baskıda Büyütme */
+      .card-image-wrap { background:#fff !important; height: auto !important; max-height: 450px !important; min-height: 280px !important; padding: 8px; }
+      .card-image-wrap img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
+      
+      /* Çözüm ve Notlar Baskısı */
+      .card-solution-box { border-top: 1px solid #999 !important; padding-top: 10px !important; margin-top: 10px !important; }
+      .card-solution-box img { max-height: 400px !important; object-fit: contain !important; width: 100% !important; }
+      .note-text { background: #f9fafb !important; color: #000 !important; border: 1px dashed #999 !important; font-size: 0.8rem !important; }
+
+      /* Mod Seçim Filtreleri */
       body.print-mode-solutions .card-image-wrap { display: none !important; }
       body.print-mode-questions .card-solution-box, body.print-mode-questions .note-text { display: none !important; }
       
-      @page { size: A4 portrait; margin: 8mm; }
+      @page { size: A4 portrait; margin: 10mm; }
     }
   </style>
 </head>
@@ -399,14 +378,21 @@
       <div class="brand-author">HAZIRLAYAN: YILDIRAY HOCA</div>
     </div>
     <div class="header-actions">
+      <!-- Ulaşılabilir Hızlı Tema Değiştirici -->
+      <div class="theme-quick-bar">
+        <button class="theme-icon-btn active" onclick="setTheme('cyberpunk', this)" title="Cyberpunk">🔮</button>
+        <button class="theme-icon-btn" onclick="setTheme('matrix', this)" title="Matrix">🟢</button>
+        <button class="theme-icon-btn" onclick="setTheme('cyberblue', this)" title="Buzul Mavi">🔷</button>
+      </div>
       <div class="streak-badge">
         <span>🔥</span>
         <span id="streakCountText">1 Gün</span>
       </div>
-      <button class="btn-icon-head" onclick="openPdfModal()" title="Kişisel Deneme Kitapçığı Bas">🖨️ PDF</button>
+      <button class="btn-icon-head" onclick="openPdfModal()" title="PDF Kitapçık Bas">🖨️ PDF</button>
     </div>
   </header>
 
+  <!-- TAB 1: AKIŞ -->
   <div id="tab-feed" class="tab-view active">
     
     <div class="clutch-bar">
@@ -442,6 +428,7 @@
     <div id="feedList"></div>
   </div>
 
+  <!-- TAB 2: PRATİK -->
   <div id="tab-practice" class="tab-view">
     <div class="practice-header-bar">
       <div class="practice-counter" id="pCardCount">Soru 1 / 5</div>
@@ -479,24 +466,18 @@
     </div>
   </div>
 
+  <!-- TAB 3: RAPOR & AYARLAR -->
   <div id="tab-analytics" class="tab-view">
     
     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Cihaz Değişimi & Aktarım</div>
     <div class="backup-box">
       <button class="btn-airdrop" onclick="openAirDropSender()">📲➡️💻 QR / AirDrop ile Tablete Aktar</button>
       <div class="backup-btn-row">
-        <button class="btn-backup" onclick="openAirDropReceiver()">📥 Tabletten Al (Eşleş)</button>
+        <button class="btn-backup" onclick="openAirDropReceiver()">📥 Tabletten Al</button>
         <button class="btn-backup" onclick="exportDataBackup()">📦 JSON İndir</button>
         <button class="btn-backup" onclick="document.getElementById('importFile').click()">📂 JSON Yükle</button>
         <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataBackup(event)">
       </div>
-    </div>
-
-    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Uygulama Teması</div>
-    <div class="theme-selector-box">
-      <button class="theme-btn active" onclick="setTheme('cyberpunk', this)">🔮 Cyberpunk</button>
-      <button class="theme-btn" onclick="setTheme('matrix', this)">🟢 Matrix Neon</button>
-      <button class="theme-btn" onclick="setTheme('cyberblue', this)">🔷 Buzul Mavi</button>
     </div>
 
     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Başarı Rozetlerim</div>
@@ -534,6 +515,7 @@
     </div>
   </div>
 
+  <!-- TAB 4: HIZLI EKLE -->
   <div id="tab-add" class="tab-view">
     <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
     <form id="addForm" onsubmit="handleQuestionSubmit(event)">
@@ -604,6 +586,7 @@
     </form>
   </div>
 
+  <!-- ALT MENÜ -->
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="switchNavTab('feed', this)">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -622,11 +605,13 @@
     </button>
   </nav>
 
+  <!-- LIGHTBOX MODAL -->
   <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
     <button class="lightbox-close">✕</button>
     <img id="lightboxImg" class="lightbox-img" src="" alt="Tam Ekran Görsel">
   </div>
 
+  <!-- PDF MODALI -->
   <div class="pdf-modal" id="pdfModal">
     <div class="pdf-modal-card">
       <h3 style="font-size:1rem; font-weight:800; margin-bottom:10px;">🖨️ PDF Kitapçık Bas</h3>
@@ -638,6 +623,7 @@
     </div>
   </div>
 
+  <!-- AIRDROP MODALI -->
   <div class="airdrop-modal" id="airdropModal">
     <div class="airdrop-card">
       <h3 style="font-size:1.1rem; font-weight:800;" id="airdropTitle">AirDrop Cihaz Eşleme</h3>
@@ -646,11 +632,10 @@
       <div id="airdropSenderView">
         <div id="qrcodeBox"></div>
         <div style="font-size:0.8rem; font-weight:700; margin-top:4px;">Eşleşme Kodu: <span id="airdropCode" style="color:var(--accent-primary); font-size:1.1rem;">----</span></div>
-        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">Tabletin kamerasıyla QR kodu okutun veya kodu tablete yazın.</div>
       </div>
 
       <div id="airdropReceiverView" style="display:none; margin-top:14px;">
-        <input type="text" id="joinPeerInput" placeholder="Telefonda yazan 4 haneli kodu girin" style="text-align:center; font-weight:800; letter-spacing:2px; font-size:1.1rem;">
+        <input type="text" id="joinPeerInput" placeholder="Telefonda yazan kodu girin" style="text-align:center; font-weight:800; letter-spacing:2px; font-size:1.1rem;">
         <button onclick="connectAndFetchData()" style="width:100%; padding:12px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; margin-top:10px; cursor:pointer;">
           Verileri Çek & Yükle 🚀
         </button>
@@ -660,6 +645,7 @@
     </div>
   </div>
 
+  <!-- ÇİZİM MODALI -->
   <div class="canvas-modal" id="canvasModal">
     <div class="canvas-nav">
       <button onclick="closeBoard()" style="background:none; border:none; color:#fff; font-weight:700; cursor:pointer;">✕ Kapat</button>
@@ -813,26 +799,17 @@ function importDataBackup(e) {
     try {
       const list = JSON.parse(ev.target.result);
       if (Array.isArray(list)) {
-        for (const item of list) {
-          await dbPut(item);
-        }
+        for (const item of list) { await dbPut(item); }
         alert("Tüm sorular ve veriler başarıyla yüklendi!");
         await refreshAll();
       }
-    } catch(err) {
-      alert("Geçersiz yedek dosyası!");
-    }
+    } catch(err) { alert("Geçersiz yedek dosyası!"); }
   };
   r.readAsText(file);
 }
 
-/* PEERJS İLE P2P AIRDROP / QR MOTORU */
 let peer = null;
-let currentPeerConn = null;
-
-function generateShortId() {
-  return Math.floor(1000 + Math.random() * 9000).toString();
-}
+function generateShortId() { return Math.floor(1000 + Math.random() * 9000).toString(); }
 
 function openAirDropSender() {
   document.getElementById("airdropModal").classList.add("active");
@@ -853,20 +830,16 @@ function openAirDropSender() {
     qrContainer.innerHTML = "";
     new QRCode(qrContainer, {
       text: window.location.origin + window.location.pathname + "?pair=" + randomCode,
-      width: 140,
-      height: 140
+      width: 140, height: 140
     });
   });
 
   peer.on('connection', (conn) => {
-    currentPeerConn = conn;
     document.getElementById("airdropStatus").innerText = "Tablete bağlanıldı, veriler aktarılıyor... 🚀";
     conn.on('open', async () => {
       const data = await dbGetAll();
       conn.send({ type: "SYNC_DATA", questions: data });
-      setTimeout(() => {
-        document.getElementById("airdropStatus").innerText = "Aktarım tamamlandı! 🎉";
-      }, 800);
+      setTimeout(() => { document.getElementById("airdropStatus").innerText = "Aktarım tamamlandı! 🎉"; }, 800);
     });
   });
 }
@@ -876,32 +849,25 @@ function openAirDropReceiver() {
   document.getElementById("airdropSenderView").style.display = "none";
   document.getElementById("airdropReceiverView").style.display = "block";
   document.getElementById("airdropTitle").innerText = "📥 Tablete Al";
-  document.getElementById("airdropStatus").innerText = "Telefonda üretilen 4 haneli kodu girin:";
+  document.getElementById("airdropStatus").innerText = "Telefonda yazan kodu girin:";
 }
 
 function connectAndFetchData(pairParam) {
   const code = pairParam || document.getElementById("joinPeerInput").value.trim();
   if (!code) return alert("Lütfen eşleşme kodunu girin.");
-
   document.getElementById("airdropStatus").innerText = "Telefona bağlanılıyor...";
   if (peer) peer.destroy();
   peer = new Peer();
 
   peer.on('open', () => {
     const conn = peer.connect("st-yildiray-" + code);
-    conn.on('open', () => {
-      document.getElementById("airdropStatus").innerText = "Bağlandı! Veriler indiriliyor...";
-    });
+    conn.on('open', () => { document.getElementById("airdropStatus").innerText = "Bağlandı! Veriler indiriliyor..."; });
     conn.on('data', async (data) => {
       if (data.type === "SYNC_DATA" && Array.isArray(data.questions)) {
-        for (const q of data.questions) {
-          await dbPut(q);
-        }
-        document.getElementById("airdropStatus").innerText = "Tüm sorular tablete aktarıldı! 🎉";
+        for (const q of data.questions) { await dbPut(q); }
+        document.getElementById("airdropStatus").innerText = "Tüm sorular aktarıldı! 🎉";
         await refreshAll();
-        setTimeout(() => {
-          closeAirDropModal();
-        }, 1200);
+        setTimeout(() => { closeAirDropModal(); }, 1200);
       }
     });
   });
@@ -912,24 +878,19 @@ function closeAirDropModal() {
   if (peer) { peer.destroy(); peer = null; }
 }
 
-/* LIGHTBOX */
 function openLightbox(src) {
   if (!src) return;
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightboxModal").classList.add("active");
 }
-function closeLightbox() {
-  document.getElementById("lightboxModal").classList.remove("active");
-}
+function closeLightbox() { document.getElementById("lightboxModal").classList.remove("active"); }
 
-/* PDF MODAL & YAZDIRMA */
 function openPdfModal() { document.getElementById("pdfModal").classList.add("active"); }
 function closePdfModal() { document.getElementById("pdfModal").classList.remove("active"); }
 
 function executePrintMode(mode) {
   closePdfModal();
   document.body.classList.remove("print-mode-questions", "print-mode-solutions", "print-mode-full");
-  
   if (mode === "questions") {
     document.body.classList.add("print-mode-questions");
     document.getElementById("printDocTitle").innerText = "ÖZEL TELAFİ DENEME SINAVI (BOŞ TEST)";
@@ -940,7 +901,6 @@ function executePrintMode(mode) {
     document.body.classList.add("print-mode-full");
     document.getElementById("printDocTitle").innerText = "KAPSAMLI SORU & ÇÖZÜM ANALİZİ";
   }
-
   document.getElementById("printDateSpan").innerText = "Tarih: " + new Date().toLocaleDateString('tr-TR');
   window.print();
 }
@@ -961,17 +921,18 @@ function triggerPanicMode() {
   switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
 }
 
+/* Hızlı Tema Değiştirici (Header Üzerinden) */
 function setTheme(themeName, el) {
   document.body.setAttribute("data-theme", themeName);
   localStorage.setItem("app_theme", themeName);
-  document.querySelectorAll(".theme-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".theme-icon-btn").forEach(b => b.classList.remove("active"));
   if (el) el.classList.add("active");
 }
 function loadSavedTheme() {
   const saved = localStorage.getItem("app_theme") || "cyberpunk";
   document.body.setAttribute("data-theme", saved);
-  document.querySelectorAll(".theme-btn").forEach(b => {
-    if (b.innerText.toLowerCase().includes(saved)) b.classList.add("active");
+  document.querySelectorAll(".theme-icon-btn").forEach(b => {
+    if (b.getAttribute("onclick").includes(saved)) b.classList.add("active");
   });
 }
 
@@ -1002,7 +963,6 @@ function switchNavTab(tabId, btn) {
   if (tabId === 'analytics') renderAnalytics();
 }
 
-/* ⭐ YILDIZLI SORU FİLTRESİ */
 function buildExamPills() {
   const container = document.getElementById("examPillContainer");
   container.innerHTML = `
@@ -1068,7 +1028,7 @@ function renderFeed() {
         ${q.solutionImg ? `
           <div class="card-solution-box" style="margin-top:8px; border-top:1px dashed var(--card-border); padding-top:6px;">
             <div style="font-size:0.7rem; font-weight:700; color:#34d399; margin-bottom:4px;">Çözüm:</div>
-            <img src="${q.solutionImg}" style="max-width:100%; max-height:120px; object-fit:contain; border-radius:6px; cursor:zoom-in;" onclick="openLightbox('${q.solutionImg}')">
+            <img src="${q.solutionImg}" style="max-width:100%; max-height:140px; object-fit:contain; border-radius:6px; cursor:zoom-in;" onclick="openLightbox('${q.solutionImg}')">
           </div>
         ` : ''}
         ${q.audioData ? `
@@ -1174,9 +1134,7 @@ function loadCurrentPracticeCard() {
   document.getElementById("pNotesText").innerText = q.notes ? `Not: ${q.notes}` : "";
 }
 
-function toggleSolutionDrawer() {
-  document.getElementById("solutionDrawer").classList.toggle("open");
-}
+function toggleSolutionDrawer() { document.getElementById("solutionDrawer").classList.toggle("open"); }
 
 function handleSweetChoice(isMastered) {
   if (practiceList.length === 0 || currentPracticeIdx >= practiceList.length) return;
@@ -1333,7 +1291,6 @@ async function handleQuestionSubmit(e) {
   const compressedQ = await compressImg(qF);
   const compressedS = sF ? await compressImg(sF) : null;
 
-  // Cihaz Galerisine Otomatik İndirme
   autoDownloadToGallery(compressedQ, `Soru_${Date.now()}.jpg`);
 
   const item = {
@@ -1376,10 +1333,8 @@ function initCanvasEvents() {
     if (!isPainting) return;
     const p = getP(e);
     canvasCtx.strokeStyle = document.getElementById("penColor").value;
-    canvasCtx.lineWidth = 3;
-    canvasCtx.lineCap = "round";
-    canvasCtx.lineTo(p.x, p.y);
-    canvasCtx.stroke();
+    canvasCtx.lineWidth = 3; canvasCtx.lineCap = "round";
+    canvasCtx.lineTo(p.x, p.y); canvasCtx.stroke();
   };
   const onU = () => isPainting = false;
   c.addEventListener("mousedown", onD); c.addEventListener("mousemove", onM); window.addEventListener("mouseup", onU);
@@ -1417,7 +1372,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   loadSavedTheme();
   await refreshAll();
 
-  // QR ile otomatik eşleşme parametresi varsa (?pair=XXXX)
   const urlParams = new URLSearchParams(window.location.search);
   const pairParam = urlParams.get('pair');
   if (pairParam) {
