@@ -25,110 +25,167 @@
       --text-muted: #a1a1aa;
       --success: #10b981;
       --danger: #ef4444;
-      --nav-height: 68px;
+      --nav-height: 64px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 24px); min-height: 100vh; overflow-x: hidden; user-select: none; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 16px); min-height: 100vh; min-height: 100dvh; overflow-x: hidden; user-select: none; }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 18px;
+      padding: 10px 16px;
       position: sticky;
       top: 0;
       z-index: 30;
       backdrop-filter: blur(16px);
       background: rgba(9, 9, 11, 0.85);
       border-bottom: 1px solid var(--card-border);
+      height: 52px;
     }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 34px; height: 34px; border-radius: 8px; object-fit: contain; }
-    .brand-name { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .streak-badge { display: flex; align-items: center; gap: 5px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 5px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; color: #f472b6; }
+    .brand { display: flex; align-items: center; gap: 8px; }
+    .brand-logo { width: 30px; height: 30px; border-radius: 8px; object-fit: contain; }
+    .brand-name { font-size: 1rem; font-weight: 800; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .streak-badge { display: flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: #f472b6; }
 
-    .tab-view { display: none; padding: 14px 16px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
+    .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Yatay Filtre Çipleri */
-    .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-    .pills-scroll::-webkit-scrollbar { display: none; }
-    .pill-chip { padding: 6px 14px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.78rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; cursor: pointer; transition: all 0.2s; }
-    .pill-chip.active { background: #fff; color: #000; border-color: #fff; }
-
-    /* Soru Kartları (Akış) */
-    .feed-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
+    /* PRATİK SEKME MOBİL UYUMU */
+    #tab-practice.active {
+      display: flex;
+      flex-direction: column;
+      height: calc(100dvh - 52px - var(--nav-height) - 10px);
+      padding: 6px 12px;
       overflow: hidden;
-      margin-bottom: 16px;
-      backdrop-filter: blur(10px);
     }
-    .card-top { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .tag-exam { font-weight: 700; color: var(--accent-cyan); }
-    .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.68rem; }
-    .card-image-wrap { width: 100%; height: 210px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
-    .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .card-body { padding: 12px 14px; }
-    .topic-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
-    .note-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; background: rgba(0,0,0,0.25); padding: 6px 8px; border-radius: 6px; margin-top: 6px; }
-
-    .card-actions { padding: 10px 14px 12px; display: flex; gap: 8px; align-items: center; }
-    .btn-action { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .btn-action:active { transform: scale(0.97); }
-    .btn-solve { background: var(--accent-gradient); border: none; font-weight: 700; color: #fff; }
-
-    /* TINDER / JEST SWIPE PRATİK MODU */
-    .tinder-stage { position: relative; width: 100%; height: 500px; display: flex; align-items: center; justify-content: center; perspective: 1000px; touch-action: none; margin-top: 10px; }
+    .practice-hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+    .tinder-stage {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+      touch-action: none;
+    }
     .tinder-card {
       position: absolute;
       width: 100%;
       height: 100%;
-      border-radius: 20px;
+      max-height: 100%;
+      border-radius: 18px;
       border: 1px solid var(--card-border);
       background: var(--card-bg);
       backdrop-filter: blur(20px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
       cursor: grab;
       user-select: none;
       transform-origin: 50% 100%;
       transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+      touch-action: none;
     }
     .tinder-card.dragging { transition: none; cursor: grabbing; }
-    .card-flipper { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1); border-radius: 20px; }
+    .card-flipper { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1); border-radius: 18px; }
     .card-flipper.flipped { transform: rotateY(180deg); }
-    .flip-front, .flip-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; }
+    .flip-front, .flip-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
     .flip-back { transform: rotateY(180deg); background: #121215; }
 
     .stamp-badge {
-      position: absolute; top: 25px; padding: 6px 14px; border-radius: 8px; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; z-index: 10; opacity: 0; pointer-events: none; border-width: 3px; border-style: solid;
+      position: absolute;
+      top: 18px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 1rem;
+      text-transform: uppercase;
+      z-index: 15;
+      opacity: 0;
+      pointer-events: none;
+      border-width: 3px;
+      border-style: solid;
     }
-    .stamp-like { right: 20px; border-color: var(--success); color: var(--success); transform: rotate(15deg); }
-    .stamp-dislike { left: 20px; border-color: var(--danger); color: var(--danger); transform: rotate(-15deg); }
+    .stamp-like { right: 16px; border-color: var(--success); color: var(--success); transform: rotate(15deg); }
+    .stamp-dislike { left: 16px; border-color: var(--danger); color: var(--danger); transform: rotate(-15deg); }
 
-    .tinder-buttons { display: flex; gap: 14px; margin-top: 16px; width: 100%; max-width: 320px; }
-    .tinder-btn { flex: 1; padding: 12px; border-radius: 14px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .tinder-buttons {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      max-width: 380px;
+      margin: 8px auto 0 auto;
+      flex-shrink: 0;
+    }
+    .tinder-btn {
+      flex: 1;
+      padding: 11px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
     .tinder-btn-no { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
     .tinder-btn-yes { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
 
-    /* Form Girişi */
-    .input-group { margin-bottom: 14px; }
-    .input-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-    select, input, textarea {
-      width: 100%; padding: 12px 14px; border-radius: 12px; background: #18181b !important; color: #f4f4f5 !important; border: 1px solid var(--card-border); font-size: 0.9rem; outline: none;
-    }
-    select option { background-color: #18181b !important; color: #f4f4f5 !important; padding: 8px; }
-    select:focus, input:focus, textarea:focus { border-color: var(--accent-purple); }
+    /* Yatay Filtre Çipleri */
+    .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .pills-scroll::-webkit-scrollbar { display: none; }
+    .pill-chip { padding: 6px 12px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.75rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; cursor: pointer; }
+    .pill-chip.active { background: #fff; color: #000; border-color: #fff; }
 
-    /* Alt Navigasyon */
+    /* Akış Kartları */
+    .feed-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
+    .card-top { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .tag-exam { font-weight: 700; color: var(--accent-cyan); }
+    .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; }
+    .card-image-wrap { width: 100%; height: 200px; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .card-body { padding: 10px 12px; }
+    .topic-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+    .note-text { font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.25); padding: 5px 8px; border-radius: 6px; margin-top: 6px; }
+
+    .card-actions { padding: 8px 12px 10px; display: flex; gap: 6px; align-items: center; }
+    .btn-action { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .btn-solve { background: var(--accent-gradient); border: none; font-weight: 700; color: #fff; }
+
+    /* Form Girişi */
+    .input-group { margin-bottom: 12px; }
+    .input-group label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
+    select, input, textarea {
+      width: 100%; padding: 10px 12px; border-radius: 10px; background: #18181b !important; color: #f4f4f5 !important; border: 1px solid var(--card-border); font-size: 0.85rem; outline: none;
+    }
+    select option { background-color: #18181b !important; color: #f4f4f5 !important; }
+
+    /* Alt Bar */
     nav.bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       height: var(--nav-height);
-      background: rgba(9, 9, 11, 0.9);
+      background: rgba(9, 9, 11, 0.92);
       backdrop-filter: blur(20px);
       border-top: 1px solid var(--card-border);
       display: flex;
@@ -141,7 +198,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      gap: 2px;
       background: none;
       border: none;
       color: var(--text-muted);
@@ -150,26 +207,24 @@
       cursor: pointer;
       flex: 1;
     }
-    .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.2s; }
+    .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
     .nav-item.active { color: #fff; }
-    .nav-item.active svg { stroke: url(#gradient); transform: translateY(-2px); }
+    .nav-item.active svg { stroke: url(#gradient); }
 
     .nav-center-btn {
-      width: 48px; height: 48px; border-radius: 50%;
+      width: 44px; height: 44px; border-radius: 50%;
       background: var(--accent-gradient);
       border: none; color: #fff;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 18px rgba(168, 85, 247, 0.45);
+      box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
       cursor: pointer;
-      transform: translateY(-8px);
+      transform: translateY(-6px);
     }
-    .nav-center-btn:active { transform: translateY(-8px) scale(0.92); }
-    .nav-center-btn svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2.5; }
+    .nav-center-btn svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.5; }
 
-    /* Çizim / Karalama Modalı */
     .canvas-modal { position: fixed; inset: 0; background: #000; z-index: 100; display: none; flex-direction: column; }
     .canvas-modal.active { display: flex; }
-    .canvas-nav { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: #121215; border-bottom: 1px solid var(--card-border); }
+    .canvas-nav { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; background: #121215; border-bottom: 1px solid var(--card-border); }
     .canvas-box { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top:0; left:0; }
   </style>
@@ -197,63 +252,55 @@
     </div>
   </header>
 
-  <!-- TAB 1: AKIŞ / ARŞİV -->
+  <!-- TAB 1: AKIŞ -->
   <div id="tab-feed" class="tab-view active">
     <div class="pills-scroll" id="examPillContainer"></div>
     <div id="feedList"></div>
   </div>
 
-  <!-- TAB 2: PRATİK (TINDER SWIPE / FLIP) -->
-  <div id="tab-practice" class="tab-view" style="text-align:center;">
-    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Sağa kaydır: Anladım 👍 | Sola kaydır: Tekrar et 👎 | Dokun: Çözümü gör 💡</div>
-    <div class="tinder-stage" id="tinderStage">
-      <!-- Dinamik Tinder Kartı -->
-    </div>
-    <div style="display:flex; justify-content:center;">
-      <div class="tinder-buttons">
-        <button class="tinder-btn tinder-btn-no" onclick="triggerCardSwipe('left')">👎 Tekrar Çöz</button>
-        <button class="tinder-btn tinder-btn-yes" onclick="triggerCardSwipe('right')">👍 Anladım</button>
-      </div>
+  <!-- TAB 2: PRATİK -->
+  <div id="tab-practice" class="tab-view">
+    <div class="practice-hint">👆 Dokun: Çözümü Gör | ↔️ Kaydır: Karar Ver</div>
+    <div class="tinder-stage" id="tinderStage"></div>
+    <div class="tinder-buttons">
+      <button class="tinder-btn tinder-btn-no" onclick="triggerCardSwipe('left')">👎 Tekrar Çöz</button>
+      <button class="tinder-btn tinder-btn-yes" onclick="triggerCardSwipe('right')">👍 Anladım</button>
     </div>
   </div>
 
-  <!-- TAB 3: RAPOR & ANALİZ -->
+  <!-- TAB 3: RAPOR -->
   <div id="tab-analytics" class="tab-view">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
-      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px;">
-        <div style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);" id="statTotalCount">0</div>
-        <div style="font-size:0.75rem; color:var(--text-muted);">Toplam Arşiv</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px;">
+        <div style="font-size:1.6rem; font-weight:900; color:var(--accent-cyan);" id="statTotalCount">0</div>
+        <div style="font-size:0.7rem; color:var(--text-muted);">Toplam Arşiv</div>
       </div>
-      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px;">
-        <div style="font-size:1.8rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div>
-        <div style="font-size:0.75rem; color:var(--text-muted);">Öğrenildi / Kavrandı</div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px;">
+        <div style="font-size:1.6rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div>
+        <div style="font-size:0.7rem; color:var(--text-muted);">Öğrenildi / Kavrandı</div>
       </div>
     </div>
-
-    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:16px; margin-bottom:14px;">
-      <h4 style="font-size:0.78rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Hata Nedenleri</h4>
-      <div id="chartReasons" style="display:flex; flex-direction:column; gap:8px;"></div>
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px; margin-bottom:12px;">
+      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">Hata Nedenleri</h4>
+      <div id="chartReasons" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
-
-    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:16px;">
-      <h4 style="font-size:0.78rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Ders Dağılımı</h4>
-      <div id="chartSubjects" style="display:flex; flex-direction:column; gap:8px;"></div>
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:14px;">
+      <h4 style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">Ders Dağılımı</h4>
+      <div id="chartSubjects" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
   </div>
 
-  <!-- TAB 4: HIZLI SORU EKLE -->
+  <!-- TAB 4: HIZLI EKLE -->
   <div id="tab-add" class="tab-view">
-    <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:14px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
-    
+    <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
     <form id="addForm" onsubmit="handleQuestionSubmit(event)">
       <div class="input-group">
         <label>Sınav & Ders</label>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:6px;">
           <select id="formExamSelect" required onchange="renderSubjectDropdown()"></select>
           <select id="formSubjectSelect" required onchange="renderTopicDropdown()"></select>
         </div>
       </div>
-
       <div class="input-group">
         <label>Konu</label>
         <select id="formTopicSelect" onchange="if(this.value) document.getElementById('formTopicManual').value = this.value;">
@@ -261,7 +308,6 @@
         </select>
         <input type="text" id="formTopicManual" placeholder="Veya buraya elle konu yazın" required style="margin-top:6px;">
       </div>
-
       <div class="input-group">
         <label>Hata Nedeni / Teşhis</label>
         <select id="formReasonSelect" required>
@@ -277,38 +323,32 @@
           <option value="Uykusuzluk / Zihinsel Yorgunluk">Uykusuzluk / Zihinsel Yorgunluk</option>
         </select>
       </div>
-
       <div class="input-group">
-        <label>📸 Soru Görseli (Zorunlu)</label>
+        <label>📸 Soru Görseli</label>
         <input type="file" id="formQImg" accept="image/*" required>
       </div>
-
       <div class="input-group">
         <label>💡 Çözüm Görseli (İsteğe Bağlı)</label>
         <input type="file" id="formSImg" accept="image/*">
       </div>
-
       <div class="input-group">
-        <label>🎙️ Sesli Not (Mikrofon)</label>
+        <label>🎙️ Sesli Not</label>
         <div style="display:flex; gap:8px; align-items:center;">
-          <button type="button" id="audioRecBtn" onclick="toggleAudio()" style="padding:8px 12px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-size:0.78rem; font-weight:700; cursor:pointer;">🎙️ Kaydet</button>
-          <span id="audioStatus" style="font-size:0.75rem; color:var(--text-muted);">Kayıt yok</span>
+          <button type="button" id="audioRecBtn" onclick="toggleAudio()" style="padding:6px 12px; background:#ef4444; color:#fff; border:none; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;">🎙️ Kaydet</button>
+          <span id="audioStatus" style="font-size:0.72rem; color:var(--text-muted);">Kayıt yok</span>
         </div>
-        <audio id="audioPreview" controls style="width:100%; margin-top:8px; display:none; height:36px;"></audio>
+        <audio id="audioPreview" controls style="width:100%; margin-top:6px; display:none; height:32px;"></audio>
       </div>
-
       <div class="input-group">
         <label>Not / Kaynak</label>
-        <input type="text" id="formNotes" placeholder="Örn: 3D Yayınları TYT Deneme 2">
+        <input type="text" id="formNotes" placeholder="Örn: 3D Yayınları Deneme 2">
       </div>
-
-      <button type="submit" style="width:100%; padding:14px; border-radius:14px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; font-size:0.95rem; cursor:pointer; margin-top:8px;">
-        Hemen Arşive Ekle 🚀
+      <button type="submit" style="width:100%; padding:12px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; font-size:0.9rem; cursor:pointer; margin-top:4px;">
+        Arşive Ekle 🚀
       </button>
     </form>
   </div>
 
-  <!-- ALT MENÜ -->
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="switchNavTab('feed', this)">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -327,11 +367,10 @@
     </button>
   </nav>
 
-  <!-- ÇİZİM TUVALİ -->
   <div class="canvas-modal" id="canvasModal">
     <div class="canvas-nav">
       <button onclick="closeBoard()" style="background:none; border:none; color:#fff; font-weight:700; cursor:pointer;">✕ Kapat</button>
-      <input type="color" id="penColor" value="#a855f7" style="border:none; width:30px; height:30px; border-radius:50%; background:none;">
+      <input type="color" id="penColor" value="#a855f7" style="border:none; width:28px; height:28px; border-radius:50%; background:none;">
       <button onclick="clearCanvas()" style="background:none; border:none; color:var(--danger); font-weight:700; cursor:pointer;">Temizle</button>
     </div>
     <div class="canvas-box" id="canvasBox">
@@ -346,50 +385,46 @@ const CURRICULUM_DATA = {
     "Geometri": ["Doğruda ve Üçgende Açılar", "Özel Üçgenler", "Açıortay-Kenarortay", "Benzerlik", "Çokgenler", "Dörtgenler", "Çember ve Daire", "Katı Cisimler"],
     "Türkçe": ["Sözcükte Anlam", "Cümlede Anlam", "Paragrafta Anlam", "Yazım Kuralları", "Noktalama İşaretleri", "Dil Bilgisi"],
     "Fizik": ["Fizik Bilimine Giriş", "Madde ve Özellikleri", "Hareket ve Kuvvet", "İş, Güç ve Enerji", "Isı ve Sıcaklık", "Elektrostatik", "Optik", "Dalgalar"],
-    "Kimya": ["Kimya Bilimi", "Atom ve Periyodik Sistem", "Kimyasal Türler Arası Etkileşimler", "Maddenin Halleri", "Asitler, Bazlar ve Tuzlar", "Karışımlar"],
-    "Biyoloji": ["Canlıların Ortak Özellikleri", "Hücre ve Organelleri", "Canlılar Dünyası", "Hücre Bölünmeleri", "Kalıtım", "Ekosistem Ekolojisi"],
-    "Tarih": ["Tarih ve Zaman", "İlk Türk Devletleri", "İslam Tarihi", "Türk-İslam Devletleri", "Osmanlı Tarihi"],
-    "Coğrafya": ["Doğa ve İnsan", "Harita Bilgisi", "İklim Tipleri", "Yeryüzü Şekilleri", "Nüfus ve Yerleşme"],
-    "Felsefe": ["Bilgi Felsefesi", "Varlık Felsefesi", "Ahlak Felsefesi", "Sanat Felsefesi", "Din Felsefesi"],
-    "Din Kültürü": ["İnanç", "İbadet", "Ahlak ve Değerler", "Din ve Hayat"]
+    "Kimya": ["Kimya Bilimi", "Atom ve Periyodik Sistem", "Maddenin Halleri", "Asitler ve Bazlar", "Karışımlar"],
+    "Biyoloji": ["Canlıların Ortak Özellikleri", "Hücre ve Organelleri", "Canlılar Dünyası", "Kalıtım", "Ekosistem Ekolojisi"],
+    "Tarih": ["Tarih ve Zaman", "İlk Türk Devletleri", "İslam Tarihi", "Osmanlı Tarihi"],
+    "Coğrafya": ["Doğa ve İnsan", "Harita Bilgisi", "İklim Tipleri", "Nüfus ve Yerleşme"],
+    "Felsefe": ["Bilgi Felsefesi", "Varlık Felsefesi", "Ahlak Felsefesi"],
+    "Din Kültürü": ["İnanç", "İbadet", "Ahlak ve Değerler"]
   },
   "YKS-AYT": {
-    "Matematik": ["Polinomlar", "2. Dereceden Denklemler", "Eşitsizlikler", "Parabol", "Trigonometri", "Logaritma", "Diziler", "Limit ve Süreklilik", "Türev", "İntegral"],
+    "Matematik": ["Polinomlar", "2. Dereceden Denklemler", "Eşitsizlikler", "Parabol", "Trigonometri", "Logaritma", "Diziler", "Limit", "Türev", "İntegral"],
     "Geometri": ["Analitik Geometri", "Çemberin Analitiği", "Dönüşümler", "Katı Cisimler"],
     "Fizik": ["Vektörler", "Newton Yasaları", "Atışlar", "Momentum", "Elektrik ve Manyetizma", "Dalga Mekaniği", "Modern Fizik"],
-    "Kimya": ["Modern Atom Teorisi", "Gazlar", "Sıvı Çözeltiler", "Entalpi", "Kimyasal Denge", "Elektrokimya", "Organik Kimya"],
-    "Biyoloji": ["Sinir Sistemi", "Endokrin Sistem", "Dolaşım", "Solunum", "Fotosentez", "Genden Proteine", "Bitki Biyolojisi"],
-    "Edebiyat": ["Şiir Bilgisi", "Halk Edebiyatı", "Divan Edebiyatı", "Tanzimat", "Milli Edebiyat", "Cumhuriyet Dönemi"],
-    "Tarih": ["Osmanlı Dağılma", "Kurtuluş Savaşı", "Cumhuriyet Tarihi"],
-    "Coğrafya": ["Ekosistem", "Türkiye Ekonomisi", "Küresel Örgütler"]
+    "Kimya": ["Modern Atom", "Gazlar", "Sıvı Çözeltiler", "Kimyasal Denge", "Elektrokimya", "Organik Kimya"],
+    "Biyoloji": ["Sinir Sistemi", "Dolaşım", "Solunum", "Fotosentez", "Genden Proteine", "Bitki Biyolojisi"],
+    "Edebiyat": ["Şiir Bilgisi", "Divan Edebiyatı", "Tanzimat", "Milli Edebiyat", "Cumhuriyet Dönemi"],
+    "Tarih": ["Osmanlı Dağılma", "Kurtuluş Savaşı"],
+    "Coğrafya": ["Ekosistem", "Türkiye Ekonomisi"]
   },
   "LGS": {
     "Matematik": ["Çarpanlar ve Katlar", "Üslü İfadeler", "Kareköklü İfadeler", "Veri Analizi", "Olasılık", "Cebirsel İfadeler", "Doğrusal Denklemler", "Eşitsizlikler", "Üçgenler"],
     "Fen Bilimleri": ["Mevsimler ve İklim", "DNA ve Genetik Kod", "Basınç", "Madde ve Endüstri", "Basit Makineler", "Elektrik Yükleri"],
-    "Türkçe": ["Fiilimsiler", "Cümlenin Ögeleri", "Söz Sanatları", "Metin Türleri", "Paragraf"],
-    "İnkılap Tarihi": ["Bir Kahraman Doğuyor", "Milli Uyanış", "Ya İstiklal Ya Ölüm", "Atatürkçülük"],
-    "Din Kültürü": ["Kader İnancı", "Zekat ve Sadaka", "Din ve Hayat"],
-    "İngilizce": ["Friendship", "Teen Life", "In The Kitchen", "The Internet"]
+    "Türkçe": ["Fiilimsiler", "Cümlenin Ögeleri", "Söz Sanatları", "Paragraf"],
+    "İnkılap Tarihi": ["Bir Kahraman Doğuyor", "Milli Uyanış", "Ya İstiklal Ya Ölüm"],
+    "Din Kültürü": ["Kader İnancı", "Zekat ve Sadaka"],
+    "İngilizce": ["Friendship", "Teen Life", "In The Kitchen"]
   },
   "KPSS": {
     "Genel Yetenek": ["Sözel Mantık", "Sayısal Mantık", "Matematik", "Problemler", "Türkçe"],
-    "Genel Kültür": ["Tarih", "Coğrafya", "Anayasa", "Güncel Bilgiler"]
+    "Genel Kültür": ["Tarih", "Coğrafya", "Vatandaşlık", "Güncel Bilgiler"]
   },
   "ALES": {
     "Sayısal": ["Temel Matematik", "Cebir", "Sayısal Mantık", "Geometri"],
     "Sözel": ["Sözcük ve Cümlede Anlam", "Paragraf", "Sözel Mantık"]
   },
-  "DGS": {
-    "Sayısal": ["Temel Matematik", "Sayı Problemleri", "Rasyonel Sayılar", "Geometri"],
-    "Sözel": ["Sözcükte Anlam", "Paragraf", "Sözel Mantık"]
-  },
+  "DGS": { "Sayısal": ["Temel Matematik", "Problemler", "Geometri"], "Sözel": ["Sözel Mantık", "Paragraf"] },
   "ÖABT": { "Alan Bilgisi": ["Alan Konuları", "Öğretim Teknikleri"] },
-  "AGS": { "Genel Yetenek": ["Sözel Mantık", "Sayısal Mantık"], "Genel Kültür": ["Tarih", "Coğrafya"] },
-  "TUS": { "Temel Bilimler": ["Anatomi", "Fizyoloji", "Biyokimya"], "Klinik Bilimler": ["Dahiliye", "Pediatri", "Cerrahi"] },
-  "DUS": { "Temel Bilimler": ["Anatomi", "Histoloji"], "Klinik Bilimler": ["Ortodonti", "Endodonti", "Cerrahi"] }
+  "AGS": { "Genel Yetenek": ["Sözel ve Sayısal"], "Genel Kültür": ["Tarih ve Coğrafya"] },
+  "TUS": { "Temel Bilimler": ["Anatomi", "Fizyoloji"], "Klinik Bilimler": ["Dahiliye", "Pediatri"] },
+  "DUS": { "Temel Bilimler": ["Anatomi", "Histoloji"], "Klinik Bilimler": ["Ortodonti", "Endodonti"] }
 };
 
-/* ORİJİNAL VERİTABANI İSMİ KORUNDU */
 const DB_NAME = "SoruTekrariDB_YildirayHoca";
 const STORE_NAME = "questions";
 let db;
@@ -397,7 +432,7 @@ let allQuestions = [];
 let activeExam = "";
 
 function initDB() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const req = indexedDB.open(DB_NAME, 1);
     req.onupgradeneeded = (e) => {
       const d = e.target.result;
@@ -406,7 +441,6 @@ function initDB() {
       }
     };
     req.onsuccess = (e) => { db = e.target.result; resolve(); };
-    req.onerror = (e) => reject(e);
   });
 }
 
@@ -455,7 +489,6 @@ function compressImg(file) {
   });
 }
 
-/* STREAK (SERİ) YÖNETİMİ */
 function updateStreakDisplay() {
   const today = new Date().toISOString().slice(0, 10);
   const lastActive = localStorage.getItem("streak_last_date");
@@ -463,18 +496,14 @@ function updateStreakDisplay() {
 
   if (lastActive && lastActive !== today) {
     const diffDays = Math.round((new Date(today) - new Date(lastActive)) / (1000 * 60 * 60 * 24));
-    if (diffDays === 1) {
-      count++;
-    } else if (diffDays > 1) {
-      count = 1;
-    }
+    if (diffDays === 1) count++;
+    else if (diffDays > 1) count = 1;
   }
   localStorage.setItem("streak_last_date", today);
   localStorage.setItem("streak_count", count);
   document.getElementById("streakCountText").innerText = `${count} Günlük Seri`;
 }
 
-/* SEKME DEĞİŞTİRME */
 function switchNavTab(tabId, btn) {
   document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
@@ -487,7 +516,6 @@ function switchNavTab(tabId, btn) {
   if (tabId === 'analytics') renderAnalytics();
 }
 
-/* ÜST KAYAR PİLL FİLTRE */
 function buildExamPills() {
   const container = document.getElementById("examPillContainer");
   container.innerHTML = `<div class="pill-chip active" onclick="filterByExam('', this)">Tümü</div>`;
@@ -503,7 +531,6 @@ function filterByExam(exam, el) {
   renderFeed();
 }
 
-/* AKIŞ KARTLARI */
 function renderFeed() {
   const container = document.getElementById("feedList");
   container.innerHTML = "";
@@ -530,8 +557,8 @@ function renderFeed() {
         <div class="topic-title">${q.topic}</div>
         ${q.notes ? `<div class="note-text">${q.notes}</div>` : ''}
         ${q.audioData ? `
-          <div style="margin-top:8px;">
-            <audio controls src="${q.audioData}" style="width:100%; height:32px;"></audio>
+          <div style="margin-top:6px;">
+            <audio controls src="${q.audioData}" style="width:100%; height:28px;"></audio>
           </div>
         ` : ''}
       </div>
@@ -552,17 +579,15 @@ async function deleteQuestion(id) {
   }
 }
 
-/* GERÇEK TINDER / SWIPE JEST MOTORU */
+/* JEST TABANLI TINDER SWIPE MOTORU (MOBİL OPTİMİZE) */
 let tinderQueue = [];
-let activeDragCard = null;
-let startX = 0, currentX = 0;
 
 function initTinderMode() {
   const stage = document.getElementById("tinderStage");
   stage.innerHTML = "";
 
   if (allQuestions.length === 0) {
-    stage.innerHTML = `<div style="color:var(--text-muted); padding:30px;">Pratik yapılacak kayıtlı soru bulunmuyor.</div>`;
+    stage.innerHTML = `<div style="color:var(--text-muted); padding:20px; font-size:0.85rem;">Pratik yapılacak soru bulunmuyor.</div>`;
     return;
   }
 
@@ -575,7 +600,7 @@ function renderTopTinderCard() {
   stage.innerHTML = "";
 
   if (tinderQueue.length === 0) {
-    stage.innerHTML = `<div style="text-align:center; padding:40px;"><h3 style="font-size:1.4rem; margin-bottom:8px;">Harika İş! 🎉</h3><p style="color:var(--text-muted); font-size:0.85rem;">Pratik havuzundaki tüm soruları tamamladın.</p></div>`;
+    stage.innerHTML = `<div style="text-align:center; padding:30px;"><h3 style="font-size:1.3rem; margin-bottom:6px;">Tebrikler! 🎉</h3><p style="color:var(--text-muted); font-size:0.85rem;">Tüm pratik sorularını tamamladın.</p></div>`;
     return;
   }
 
@@ -588,71 +613,84 @@ function renderTopTinderCard() {
     <div class="stamp-badge stamp-dislike">TEKRAR</div>
     <div class="card-flipper" id="currentFlipper">
       <div class="flip-front">
-        <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:6px;">${q.exam} • ${q.subject} - ${q.topic}</div>
-        <div style="flex:1; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-          <img src="${q.questionImg}" style="max-width:100%; max-height:100%; object-fit:contain;">
+        <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:4px; flex-shrink:0;">${q.exam} • ${q.subject} - ${q.topic}</div>
+        <div style="flex:1; min-height:0; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+          <img src="${q.questionImg}" style="width:100%; height:100%; object-fit:contain; pointer-events:none;">
         </div>
-        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:8px;">Dokun: Çözümü Gör 🔄 | Kaydır: Karar Ver ↔️</div>
       </div>
       <div class="flip-back">
-        <div style="font-size:0.75rem; font-weight:700; color:#34d399; margin-bottom:6px;">ÇÖZÜM & BİLGİ</div>
-        <div style="flex:1; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-          <img src="${q.solutionImg || q.questionImg}" style="max-width:100%; max-height:100%; object-fit:contain;">
+        <div style="font-size:0.75rem; font-weight:700; color:#34d399; margin-bottom:4px; flex-shrink:0;">ÇÖZÜM & NOT</div>
+        <div style="flex:1; min-height:0; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+          <img src="${q.solutionImg || q.questionImg}" style="width:100%; height:100%; object-fit:contain; pointer-events:none;">
         </div>
-        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;"><strong>Hata:</strong> ${q.reason}</div>
-        ${q.notes ? `<div style="font-size:0.75rem; color:var(--text); margin-top:4px;">${q.notes}</div>` : ''}
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:4px; flex-shrink:0;"><strong>Hata:</strong> ${q.reason}</div>
+        ${q.notes ? `<div style="font-size:0.72rem; color:var(--text); margin-top:2px; flex-shrink:0;">${q.notes}</div>` : ''}
       </div>
     </div>
   `;
 
   stage.appendChild(card);
-  attachSwipeEvents(card);
+  attachMobileSwipeEvents(card);
 }
 
-function attachSwipeEvents(el) {
+function attachMobileSwipeEvents(el) {
   let isDragging = false;
-  let hasMoved = false;
+  let startX = 0, currentDeltaX = 0;
+  let startY = 0;
+  let startTime = 0;
 
-  const onStart = (clientX) => {
+  const onTouchStart = (e) => {
     isDragging = true;
-    hasMoved = false;
-    startX = clientX;
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    currentDeltaX = 0;
+    startTime = Date.now();
     el.classList.add("dragging");
   };
 
-  const onMove = (clientX) => {
+  const onTouchMove = (e) => {
     if (!isDragging) return;
-    currentX = clientX - startX;
-    if (Math.abs(currentX) > 5) hasMoved = true;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    currentDeltaX = clientX - startX;
+    const deltaY = clientY - startY;
 
-    const rot = currentX * 0.08;
-    el.style.transform = `translateX(${currentX}px) rotate(${rot}deg)`;
+    // Yatay sürükleme baskınsa sayfa kaydırmasını engelle
+    if (Math.abs(currentDeltaX) > Math.abs(deltaY) && e.cancelable) {
+      e.preventDefault();
+    }
+
+    const rot = currentDeltaX * 0.07;
+    el.style.transform = `translateX(${currentDeltaX}px) rotate(${rot}deg)`;
 
     const likeStamp = el.querySelector(".stamp-like");
     const dislikeStamp = el.querySelector(".stamp-dislike");
-    if (currentX > 0) {
-      likeStamp.style.opacity = Math.min(currentX / 80, 1);
+    if (currentDeltaX > 0) {
+      likeStamp.style.opacity = Math.min(currentDeltaX / 70, 1);
       dislikeStamp.style.opacity = 0;
     } else {
-      dislikeStamp.style.opacity = Math.min(Math.abs(currentX) / 80, 1);
+      dislikeStamp.style.opacity = Math.min(Math.abs(currentDeltaX) / 70, 1);
       likeStamp.style.opacity = 0;
     }
   };
 
-  const onEnd = () => {
+  const onTouchEnd = () => {
     if (!isDragging) return;
     isDragging = false;
     el.classList.remove("dragging");
 
-    if (!hasMoved) {
-      // Sadece tıklandıysa: Çözümü çevir (Flip)
+    const timeDiff = Date.now() - startTime;
+    // Hızlı dokunuş (tap) algılama -> Çözümü Çevir
+    if (Math.abs(currentDeltaX) < 10 && timeDiff < 250) {
       document.getElementById("currentFlipper").classList.toggle("flipped");
       return;
     }
 
-    if (currentX > 90) {
+    // Sağa / Sola Fırlatma eşiği
+    if (currentDeltaX > 80) {
       finalizeSwipe("right");
-    } else if (currentX < -90) {
+    } else if (currentDeltaX < -80) {
       finalizeSwipe("left");
     } else {
       el.style.transform = "translateX(0px) rotate(0deg)";
@@ -661,23 +699,21 @@ function attachSwipeEvents(el) {
     }
   };
 
-  // Touch
-  el.addEventListener("touchstart", e => onStart(e.touches[0].clientX), { passive: true });
-  el.addEventListener("touchmove", e => onMove(e.touches[0].clientX), { passive: true });
-  el.addEventListener("touchend", onEnd);
+  el.addEventListener("touchstart", onTouchStart, { passive: false });
+  el.addEventListener("touchmove", onTouchMove, { passive: false });
+  el.addEventListener("touchend", onTouchEnd);
 
-  // Mouse
-  el.addEventListener("mousedown", e => onStart(e.clientX));
-  window.addEventListener("mousemove", e => { if(isDragging) onMove(e.clientX); });
-  window.addEventListener("mouseup", () => { if(isDragging) onEnd(); });
+  el.addEventListener("mousedown", onTouchStart);
+  window.addEventListener("mousemove", (e) => { if(isDragging) onTouchMove(e); });
+  window.addEventListener("mouseup", () => { if(isDragging) onTouchEnd(); });
 }
 
 function finalizeSwipe(dir) {
   const card = document.getElementById("currentTinderCard");
   if (!card) return;
 
-  const moveOut = dir === "right" ? window.innerWidth + 100 : -window.innerWidth - 100;
-  card.style.transform = `translateX(${moveOut}px) rotate(${dir === "right" ? 25 : -25}deg)`;
+  const moveOut = dir === "right" ? window.innerWidth + 120 : -window.innerWidth - 120;
+  card.style.transform = `translateX(${moveOut}px) rotate(${dir === "right" ? 22 : -22}deg)`;
   card.style.opacity = "0";
 
   setTimeout(() => {
@@ -687,7 +723,7 @@ function finalizeSwipe(dir) {
     }
     tinderQueue.shift();
     renderTopTinderCard();
-  }, 180);
+  }, 160);
 }
 
 function triggerCardSwipe(dir) {
@@ -711,12 +747,12 @@ function renderAnalytics() {
   for (const [r, c] of Object.entries(reasons)) {
     const pct = (c / maxR) * 100;
     rBox.innerHTML += `
-      <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;">
-        <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${r}</span>
-        <div style="flex:1; background:rgba(255,255,255,0.06); height:8px; border-radius:4px; overflow:hidden;">
+      <div style="display:flex; align-items:center; gap:8px; font-size:0.72rem;">
+        <span style="width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${r}</span>
+        <div style="flex:1; background:rgba(255,255,255,0.06); height:6px; border-radius:3px; overflow:hidden;">
           <div style="width:${pct}%; background:var(--accent-purple); height:100%;"></div>
         </div>
-        <span style="font-weight:700; width:20px; text-align:right;">${c}</span>
+        <span style="font-weight:700; width:18px; text-align:right;">${c}</span>
       </div>
     `;
   }
@@ -727,18 +763,18 @@ function renderAnalytics() {
   for (const [s, c] of Object.entries(subjects)) {
     const pct = (c / maxS) * 100;
     sBox.innerHTML += `
-      <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;">
-        <span style="width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${s}</span>
-        <div style="flex:1; background:rgba(255,255,255,0.06); height:8px; border-radius:4px; overflow:hidden;">
+      <div style="display:flex; align-items:center; gap:8px; font-size:0.72rem;">
+        <span style="width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${s}</span>
+        <div style="flex:1; background:rgba(255,255,255,0.06); height:6px; border-radius:3px; overflow:hidden;">
           <div style="width:${pct}%; background:var(--accent-cyan); height:100%;"></div>
         </div>
-        <span style="font-weight:700; width:20px; text-align:right;">${c}</span>
+        <span style="font-weight:700; width:18px; text-align:right;">${c}</span>
       </div>
     `;
   }
 }
 
-/* FORM DROPDOWNLARI */
+/* FORM İŞLEMLERİ */
 function initFormSelects() {
   const ex = document.getElementById("formExamSelect");
   ex.innerHTML = "";
@@ -772,7 +808,6 @@ function renderTopicDropdown() {
   }
 }
 
-/* SES KAYDI */
 let mediaRec, audioBlobBase64 = null, audioChunks = [];
 function toggleAudio() {
   const btn = document.getElementById("audioRecBtn");
@@ -806,7 +841,6 @@ function toggleAudio() {
   }
 }
 
-/* YENİ SORU KAYDI */
 async function handleQuestionSubmit(e) {
   e.preventDefault();
   const qF = document.getElementById("formQImg").files[0];
@@ -839,7 +873,7 @@ async function handleQuestionSubmit(e) {
   switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
 }
 
-/* ÇİZİM TUVALİ */
+/* ÇİZİM */
 let canvasCtx, isPainting = false, cachedBg = null;
 function initCanvasEvents() {
   const c = document.getElementById("drawCanvas");
