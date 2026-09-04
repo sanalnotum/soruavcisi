@@ -13,6 +13,9 @@
   <link rel="apple-touch-icon" href="logo.png">
   <link rel="icon" type="image/png" href="logo.png">
 
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <style>
     :root {
       --bg: #09090b;
@@ -137,7 +140,9 @@
     .tag-exam { font-weight: 700; color: var(--accent-primary); }
     .tag-reason { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; }
     .tag-mood { background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.65rem; margin-left: 4px; }
-    .star-btn { background: none; border: none; font-size: 1rem; cursor: pointer; padding: 0 4px; }
+    
+    .star-btn { background: none; border: none; font-size: 1.15rem; cursor: pointer; padding: 0 4px; line-height: 1; vertical-align: middle; }
+    .star-btn.active { filter: drop-shadow(0 0 6px #fbbf24); }
 
     .card-image-wrap { width: 100%; height: 210px; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; position: relative; }
     .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
@@ -263,14 +268,28 @@
       width: 100%; padding: 12px; margin-top: 8px; border-radius: 12px; border: 1px solid var(--card-border);
       background: rgba(255,255,255,0.05); color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: left;
     }
-    .pdf-opt-btn:active { background: rgba(255,255,255,0.15); }
+
+    /* P2P AirDrop Modalı */
+    .airdrop-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
+      z-index: 160; display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    .airdrop-modal.active { display: flex; }
+    .airdrop-card {
+      background: #18181b; border: 1px solid var(--card-border); border-radius: 24px; padding: 20px; width: 100%; max-width: 380px; text-align: center;
+    }
+    #qrcodeBox {
+      background: #fff; padding: 12px; border-radius: 16px; display: inline-block; margin: 14px 0;
+    }
 
     /* Rapor & Yedekleme */
     .backup-box {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; margin-bottom: 12px;
-      display: flex; gap: 8px;
+      display: flex; flex-direction: column; gap: 8px;
     }
+    .backup-btn-row { display: flex; gap: 8px; }
     .btn-backup { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+    .btn-airdrop { background: var(--accent-gradient); border: none; color: #fff; padding: 11px; border-radius: 10px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
 
     .badge-shelf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
     .trophy-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
@@ -341,11 +360,11 @@
     .canvas-box { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top:0; left:0; }
 
-    /* PDF / BASKI ÇIKTI DÜZENİ */
+    /* PDF BASKI ÇIKTI DÜZENİ */
     .print-header { display: none; }
     @media print {
       body { background:#fff !important; color:#000 !important; padding:0 !important; }
-      header, nav, .clutch-bar, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal, .lightbox-modal, .pdf-modal { display: none !important; }
+      header, nav, .clutch-bar, .action-sub-bar, .pills-scroll, .card-actions, .canvas-modal, .lightbox-modal, .pdf-modal, .airdrop-modal { display: none !important; }
       .print-header {
         display: block !important;
         border-bottom: 2px solid #000;
@@ -362,7 +381,6 @@
       .card-image-wrap { background:#fff !important; height:230px !important; }
       .card-image-wrap img { object-fit: contain !important; }
       
-      /* Baskı Seçenekleri */
       body.print-mode-solutions .card-image-wrap { display: none !important; }
       body.print-mode-questions .card-solution-box, body.print-mode-questions .note-text { display: none !important; }
       
@@ -463,11 +481,15 @@
 
   <div id="tab-analytics" class="tab-view">
     
-    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Cihaz Değişimi & Yedekleme</div>
+    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Cihaz Değişimi & Aktarım</div>
     <div class="backup-box">
-      <button class="btn-backup" onclick="exportDataBackup()">📦 Cihaza Yedekle (Aktar)</button>
-      <button class="btn-backup" onclick="document.getElementById('importFile').click()">📥 Yedekten Yükle</button>
-      <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataBackup(event)">
+      <button class="btn-airdrop" onclick="openAirDropSender()">📲➡️💻 QR / AirDrop ile Tablete Aktar</button>
+      <div class="backup-btn-row">
+        <button class="btn-backup" onclick="openAirDropReceiver()">📥 Tabletten Al (Eşleş)</button>
+        <button class="btn-backup" onclick="exportDataBackup()">📦 JSON İndir</button>
+        <button class="btn-backup" onclick="document.getElementById('importFile').click()">📂 JSON Yükle</button>
+        <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataBackup(event)">
+      </div>
     </div>
 
     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Uygulama Teması</div>
@@ -616,6 +638,28 @@
     </div>
   </div>
 
+  <div class="airdrop-modal" id="airdropModal">
+    <div class="airdrop-card">
+      <h3 style="font-size:1.1rem; font-weight:800;" id="airdropTitle">AirDrop Cihaz Eşleme</h3>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" id="airdropStatus">Bağlantı kuruluyor...</div>
+      
+      <div id="airdropSenderView">
+        <div id="qrcodeBox"></div>
+        <div style="font-size:0.8rem; font-weight:700; margin-top:4px;">Eşleşme Kodu: <span id="airdropCode" style="color:var(--accent-primary); font-size:1.1rem;">----</span></div>
+        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">Tabletin kamerasıyla QR kodu okutun veya kodu tablete yazın.</div>
+      </div>
+
+      <div id="airdropReceiverView" style="display:none; margin-top:14px;">
+        <input type="text" id="joinPeerInput" placeholder="Telefonda yazan 4 haneli kodu girin" style="text-align:center; font-weight:800; letter-spacing:2px; font-size:1.1rem;">
+        <button onclick="connectAndFetchData()" style="width:100%; padding:12px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:800; margin-top:10px; cursor:pointer;">
+          Verileri Çek & Yükle 🚀
+        </button>
+      </div>
+
+      <button style="width:100%; padding:10px; margin-top:14px; background:none; border:none; color:var(--text-muted); font-size:0.78rem; font-weight:700; cursor:pointer;" onclick="closeAirDropModal()">✕ Kapat</button>
+    </div>
+  </div>
+
   <div class="canvas-modal" id="canvasModal">
     <div class="canvas-nav">
       <button onclick="closeBoard()" style="background:none; border:none; color:#fff; font-weight:700; cursor:pointer;">✕ Kapat</button>
@@ -739,7 +783,6 @@ function compressImg(file) {
   });
 }
 
-/* OTOMATİK CİHAZA İNDİRME GÜVENCESİ */
 function autoDownloadToGallery(base64Data, filename) {
   try {
     const a = document.createElement("a");
@@ -751,7 +794,6 @@ function autoDownloadToGallery(base64Data, filename) {
   } catch(e) {}
 }
 
-/* CİHAZ AKTARIM / YEDEKLEME */
 async function exportDataBackup() {
   const data = await dbGetAll();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -784,6 +826,92 @@ function importDataBackup(e) {
   r.readAsText(file);
 }
 
+/* PEERJS İLE P2P AIRDROP / QR MOTORU */
+let peer = null;
+let currentPeerConn = null;
+
+function generateShortId() {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+}
+
+function openAirDropSender() {
+  document.getElementById("airdropModal").classList.add("active");
+  document.getElementById("airdropSenderView").style.display = "block";
+  document.getElementById("airdropReceiverView").style.display = "none";
+  document.getElementById("airdropTitle").innerText = "📲 Tablete Aktar";
+  document.getElementById("airdropStatus").innerText = "Eşleşme bekleniyor...";
+
+  const randomCode = generateShortId();
+  const fullPeerId = "st-yildiray-" + randomCode;
+  document.getElementById("airdropCode").innerText = randomCode;
+
+  if (peer) peer.destroy();
+  peer = new Peer(fullPeerId);
+
+  peer.on('open', () => {
+    const qrContainer = document.getElementById("qrcodeBox");
+    qrContainer.innerHTML = "";
+    new QRCode(qrContainer, {
+      text: window.location.origin + window.location.pathname + "?pair=" + randomCode,
+      width: 140,
+      height: 140
+    });
+  });
+
+  peer.on('connection', (conn) => {
+    currentPeerConn = conn;
+    document.getElementById("airdropStatus").innerText = "Tablete bağlanıldı, veriler aktarılıyor... 🚀";
+    conn.on('open', async () => {
+      const data = await dbGetAll();
+      conn.send({ type: "SYNC_DATA", questions: data });
+      setTimeout(() => {
+        document.getElementById("airdropStatus").innerText = "Aktarım tamamlandı! 🎉";
+      }, 800);
+    });
+  });
+}
+
+function openAirDropReceiver() {
+  document.getElementById("airdropModal").classList.add("active");
+  document.getElementById("airdropSenderView").style.display = "none";
+  document.getElementById("airdropReceiverView").style.display = "block";
+  document.getElementById("airdropTitle").innerText = "📥 Tablete Al";
+  document.getElementById("airdropStatus").innerText = "Telefonda üretilen 4 haneli kodu girin:";
+}
+
+function connectAndFetchData(pairParam) {
+  const code = pairParam || document.getElementById("joinPeerInput").value.trim();
+  if (!code) return alert("Lütfen eşleşme kodunu girin.");
+
+  document.getElementById("airdropStatus").innerText = "Telefona bağlanılıyor...";
+  if (peer) peer.destroy();
+  peer = new Peer();
+
+  peer.on('open', () => {
+    const conn = peer.connect("st-yildiray-" + code);
+    conn.on('open', () => {
+      document.getElementById("airdropStatus").innerText = "Bağlandı! Veriler indiriliyor...";
+    });
+    conn.on('data', async (data) => {
+      if (data.type === "SYNC_DATA" && Array.isArray(data.questions)) {
+        for (const q of data.questions) {
+          await dbPut(q);
+        }
+        document.getElementById("airdropStatus").innerText = "Tüm sorular tablete aktarıldı! 🎉";
+        await refreshAll();
+        setTimeout(() => {
+          closeAirDropModal();
+        }, 1200);
+      }
+    });
+  });
+}
+
+function closeAirDropModal() {
+  document.getElementById("airdropModal").classList.remove("active");
+  if (peer) { peer.destroy(); peer = null; }
+}
+
 /* LIGHTBOX */
 function openLightbox(src) {
   if (!src) return;
@@ -794,7 +922,7 @@ function closeLightbox() {
   document.getElementById("lightboxModal").classList.remove("active");
 }
 
-/* PDF MODAL & YAZDIRMA SEÇENEKLERİ */
+/* PDF MODAL & YAZDIRMA */
 function openPdfModal() { document.getElementById("pdfModal").classList.add("active"); }
 function closePdfModal() { document.getElementById("pdfModal").classList.remove("active"); }
 
@@ -817,7 +945,6 @@ function executePrintMode(mode) {
   window.print();
 }
 
-/* GERİ SAYIM & PANİK */
 function updateExamCountdown() {
   const targetExamDate = new Date("2027-06-20T10:15:00");
   const now = new Date();
@@ -875,14 +1002,15 @@ function switchNavTab(tabId, btn) {
   if (tabId === 'analytics') renderAnalytics();
 }
 
+/* ⭐ YILDIZLI SORU FİLTRESİ */
 function buildExamPills() {
   const container = document.getElementById("examPillContainer");
   container.innerHTML = `
     <div class="pill-chip ${activeExam==='' && !onlyStarred ? 'active':''}" onclick="filterByExam('', false, this)">Tümü</div>
-    <div class="pill-chip ${onlyStarred ? 'active':''}" onclick="filterByExam('', true, this)">⭐ Yıldızlılar</div>
+    <div class="pill-chip ${onlyStarred ? 'active':''}" onclick="filterByExam('', true, this)" style="color:#fbbf24; border-color:rgba(251, 191, 36, 0.4);">⭐ Yıldızlılar</div>
   `;
   Object.keys(CURRICULUM_DATA).forEach(exam => {
-    container.innerHTML += `<div class="pill-chip ${activeExam===exam ? 'active':''}" onclick="filterByExam('${exam}', false, this)">${exam}</div>`;
+    container.innerHTML += `<div class="pill-chip ${activeExam===exam && !onlyStarred ? 'active':''}" onclick="filterByExam('${exam}', false, this)">${exam}</div>`;
   });
 }
 
@@ -908,8 +1036,11 @@ function renderFeed() {
   container.innerHTML = "";
 
   let items = allQuestions;
-  if (activeExam) items = items.filter(q => q.exam === activeExam);
-  if (onlyStarred) items = items.filter(q => q.starred);
+  if (onlyStarred) {
+    items = items.filter(q => q.starred);
+  } else if (activeExam) {
+    items = items.filter(q => q.exam === activeExam);
+  }
 
   if (items.length === 0) {
     container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:var(--text-muted); font-size:0.85rem;">Soru bulunamadı.</div>`;
@@ -923,7 +1054,7 @@ function renderFeed() {
       <div class="card-top">
         <span class="tag-exam">${q.exam} • ${q.subject}</span>
         <div>
-          <button class="star-btn" onclick="toggleStar('${q.id}')">${q.starred ? '⭐' : '☆'}</button>
+          <button class="star-btn ${q.starred ? 'active' : ''}" onclick="toggleStar('${q.id}')" title="Yıldızla">${q.starred ? '⭐' : '☆'}</button>
           <span class="tag-reason">${q.reason}</span>
           ${q.mood ? `<span class="tag-mood">${q.mood}</span>` : ''}
         </div>
@@ -984,7 +1115,6 @@ async function deleteQuestion(id) {
   }
 }
 
-/* PRATİK & SÜRE SAYACI */
 let practiceList = [];
 let currentPracticeIdx = 0;
 let practiceTimerInterval = null;
@@ -1203,7 +1333,7 @@ async function handleQuestionSubmit(e) {
   const compressedQ = await compressImg(qF);
   const compressedS = sF ? await compressImg(sF) : null;
 
-  // Cihaz Galerisine Otomatik İndir / Kopya Sakla
+  // Cihaz Galerisine Otomatik İndirme
   autoDownloadToGallery(compressedQ, `Soru_${Date.now()}.jpg`);
 
   const item = {
@@ -1231,7 +1361,6 @@ async function handleQuestionSubmit(e) {
   switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
 }
 
-/* ÇİZİM */
 let canvasCtx, isPainting = false, cachedBg = null;
 function initCanvasEvents() {
   const c = document.getElementById("drawCanvas");
@@ -1275,18 +1404,26 @@ function closeBoard() { document.getElementById("canvasModal").classList.remove(
 
 async function refreshAll() {
   allQuestions = await dbGetAll();
+  buildExamPills();
   renderFeed();
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
   await initDB();
   initCanvasEvents();
-  buildExamPills();
   initFormSelects();
   updateStreakDisplay();
   updateExamCountdown();
   loadSavedTheme();
   await refreshAll();
+
+  // QR ile otomatik eşleşme parametresi varsa (?pair=XXXX)
+  const urlParams = new URLSearchParams(window.location.search);
+  const pairParam = urlParams.get('pair');
+  if (pairParam) {
+    openAirDropReceiver();
+    connectAndFetchData(pairParam);
+  }
 });
 </script>
 </body>
