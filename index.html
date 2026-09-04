@@ -6,6 +6,11 @@
   <title>SORU TEKRARI | Yıldıray Hoca</title>
   <meta name="theme-color" content="#09090b">
   
+  <!-- iOS ve PWA Tam Ekran / İkon Tanımlamaları -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Soru Tekrarı">
   <link rel="apple-touch-icon" href="logo.png">
   <link rel="icon" type="image/png" href="logo.png">
   
@@ -120,7 +125,7 @@
 
     .question-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1.25rem;
     }
     .q-card {
@@ -148,9 +153,10 @@
 
     .q-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     
+    /* Mobil/Tablet Uyumlu Minimal ve Zarif Görsel Önizleme Alanı */
     .q-image-wrap {
       width: 100%;
-      max-height: 350px;
+      height: 200px; /* Telefonlarda devasa durmayı önleyen kompakt ve şık yükseklik */
       border-radius: 0.5rem;
       overflow: hidden;
       background: #000;
@@ -158,12 +164,12 @@
       justify-content: center;
       align-items: center;
       cursor: zoom-in;
+      border: 1px solid var(--border);
     }
     .q-image-wrap img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      max-height: 320px;
     }
 
     .solution-box { border: 1px dashed var(--border); border-radius: 0.5rem; overflow: hidden; display: none; background: rgba(0,0,0,0.02); }
@@ -216,7 +222,7 @@
 
       .q-card { border: 1px solid #999 !important; box-shadow: none !important; break-inside: avoid !important; background: #fff !important; color: #000 !important; margin-bottom: 15px; }
       .q-header { background: #eee !important; color: #000 !important; border-bottom: 1px solid #ccc !important; }
-      .q-image-wrap { background: #fff !important; max-height: 250px !important; }
+      .q-image-wrap { background: #fff !important; max-height: 250px !important; height: auto !important; }
       .q-image-wrap img { object-fit: contain !important; max-height: 230px !important; }
       .solution-box { border: 1px solid #999 !important; background: #fff !important; }
       
@@ -384,7 +390,7 @@ const CURRICULUM_DATA = {
     "Kimya": ["Kimya Bilimi", "Atom ve Periyodik Sistem", "Kimyasal Türler Arası Etkileşimler", "Maddenin Halleri", "Asitler, Bazlar ve Tuzlar", "Karışımlar", "Kimya Kanunları"],
     "Biyoloji": ["Canlıların Ortak Özellikleri", "Hücre ve Organelleri", "Canlılar Dünyası", "Hücre Bölünmeleri", "Kalıtım", "Ekosistem Ekolojisi"],
     "Tarih": ["Tarih ve Zaman", "İnsanlığın İlk Dönemleri", "Orta Çağ'da Dünya", "İlk Türk Devletleri", "İslam Tarihi ve Uygarlığı", "Türk-İslam Devletleri", "Türkiye Tarihi", "Beylikten Devlete", "Dünya Gücü Osmanlı", "Osmanlı Kültür ve Medeniyeti"],
-    "Coğrafya": ["Doğa ve İnsan", "Dünya'nın Şekli ve Hareketleri", "Coğrafi Konum", "Harita Bilgisi", "Atkmosfer ve İklim", "Sıcaklık", "Basınç ve Rüzgarlar", "Nem ve Yağış", "İklim Tipleri", "Yeryüzünün Şekillenmesi", "İç Kuvvetler", "Dış Kuvvetler", "Su Kaynakları"],
+    "Coğrafya": ["Doğa ve İnsan", "Dünya'nın Şekli ve Hareketleri", "Coğrafi Konum", "Harita Bilgisi", "Atmosfer ve İklim", "Sıcaklık", "Basınç ve Rüzgarlar", "Nem ve Yağış", "İklim Tipleri", "Yeryüzünün Şekillenmesi", "İç Kuvvetler", "Dış Kuvvetler", "Su Kaynakları"],
     "Felsefe": ["Felsefenin Konusu", "Bilgi Felsefesi", "Varlık Felsefesi", "Ahlak Felsefesi", "Sanat Felsefesi", "Din Felsefesi", "Siyaset Felsefesi", "Bilim Felsefesi"],
     "Din Kültürü": ["İnanç", "İbadet", "Ahlak ve Değerler", "Din ve Hayat", "İslam ve Bilim"]
   },
@@ -416,7 +422,7 @@ const CURRICULUM_DATA = {
   },
   "ALES": {
     "Sayısal": ["Temel Matematik", "Cebir", "Sayı Problemleri", "Sayısal Mantık", "Geometri"],
-    "Sözel": ["Sözcük ve Cümlede Anlam", "Paragraf Çözümleme", "Sözel Mantık Bulmacaları"]
+    "Sözel": ["Sözcükte ve Cümlede Anlam", "Paragraf Çözümleme", "Sözel Mantık Bulmacaları"]
   },
   "DGS": {
     "Sayısal": ["Temel Matematik", "Cebirsel İşlemler", "Sayı Problemleri", "Rasyonel Sayılar", "Geometri"],
@@ -682,7 +688,7 @@ function renderQuestions(items) {
       <div class="q-body">
         <div style="font-size:0.85rem; font-weight:700;">${q.topic}</div>
         <div class="q-image-wrap q-main-img">
-          <img src="${q.questionImg}" alt="Soru">
+          <img src="${q.questionImg}" alt="Soru" onclick="openScratchpad('${q.questionImg}')">
         </div>
         ${hasSolution ? `
           <button class="btn btn-sm" onclick="toggleSolution('${q.id}')" style="align-self: flex-start;">💡 Çözümü Göster/Gizle</button>
