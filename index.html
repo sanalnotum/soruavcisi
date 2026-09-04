@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SORU TEKRARI | Yıldıray Hoca</title>
   <meta name="theme-color" content="#09090b">
+  
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
+  
   <style>
     :root {
       --bg: #f8fafc;
@@ -76,7 +80,6 @@
 
     .container { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
 
-    /* İstatistik Paneli */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -94,7 +97,6 @@
     .stat-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
     .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
 
-    /* Filtre Alanı */
     .filter-bar {
       background: var(--card-bg);
       padding: 1rem;
@@ -116,7 +118,6 @@
       color: var(--text);
     }
 
-    /* Soru Listesi */
     .question-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -147,7 +148,6 @@
 
     .q-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     
-    /* Esnek Görsel Yapısı */
     .q-image-wrap {
       width: 100%;
       max-height: 350px;
@@ -178,7 +178,6 @@
       gap: 6px;
     }
 
-    /* Modaller */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
       display: none; align-items: center; justify-content: center; z-index: 100; padding: 10px;
@@ -195,7 +194,6 @@
       font-size: 0.9rem; background: var(--bg); color: var(--text);
     }
 
-    /* Dijital Karalama Tuvali */
     .canvas-modal {
       position: fixed; inset: 0; background: #09090b; z-index: 200; display: none; flex-direction: column;
     }
@@ -204,19 +202,16 @@
     .canvas-workspace { flex: 1; position: relative; overflow: hidden; touch-action: none; }
     #drawCanvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
 
-    /* Baskı Seçenekleri */
     .print-options-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; }
     .print-option-btn { padding: 1rem; text-align: left; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg); color: var(--text); cursor: pointer; font-weight: 600; }
     .print-option-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* Geliştirilmiş Kusursuz A4 & PDF Baskı Stilleri */
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
       header, .stats-grid, .filter-bar, .nav-actions, .q-footer, .modal-backdrop, .canvas-modal { display: none !important; }
       .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
       .question-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
       
-      /* Sadece Çözüm modunda çözümü olmayan kartları tamamen gizle */
       body.print-solutions-only .q-card:has(.no-solution) { display: none !important; }
 
       .q-card { border: 1px solid #999 !important; box-shadow: none !important; break-inside: avoid !important; background: #fff !important; color: #000 !important; margin-bottom: 15px; }
@@ -317,8 +312,10 @@
       </div>
       <div class="form-group">
         <label>Konu (Listeden seçin veya kendiniz yazın)</label>
-        <input type="text" id="formTopic" list="topicList" required placeholder="Konu seçin veya elle yazın">
-        <datalist id="topicList"></datalist>
+        <select id="formTopicSelect" class="form-control" style="margin-bottom:6px;" onchange="document.getElementById('formTopic').value=this.value;">
+          <option value="">Önce ders seçin veya alttan yazın...</option>
+        </select>
+        <input type="text" id="formTopic" required placeholder="Veya elle konu yazın">
       </div>
       <div class="form-group">
         <label>Hata Nedeni</label>
@@ -385,20 +382,32 @@ const CURRICULUM_DATA = {
     "Türkçe": ["Sözcükte Anlam", "Cümlede Anlam", "Paragrafta Anlam", "Yazım Kuralları", "Noktalama İşaretleri", "Dil Bilgisi"],
     "Fizik": ["Fizik Bilimine Giriş", "Madde ve Özellikleri", "Hareket ve Kuvvet", "İş, Güç ve Enerji", "Isı ve Sıcaklık", "Elektrostatik", "Optik", "Dalgalar"],
     "Kimya": ["Kimya Bilimi", "Atom ve Periyodik Sistem", "Kimyasal Türler Arası Etkileşimler", "Maddenin Halleri", "Asitler, Bazlar ve Tuzlar", "Karışımlar", "Kimya Kanunları"],
-    "Biyoloji": ["Canlıların Ortak Özellikleri", "Hücre ve Organelleri", "Canlılar Dünyası", "Hücre Bölünmeleri", "Kalıtım", "Ekosistem Ekolojisi"]
+    "Biyoloji": ["Canlıların Ortak Özellikleri", "Hücre ve Organelleri", "Canlılar Dünyası", "Hücre Bölünmeleri", "Kalıtım", "Ekosistem Ekolojisi"],
+    "Tarih": ["Tarih ve Zaman", "İnsanlığın İlk Dönemleri", "Orta Çağ'da Dünya", "İlk Türk Devletleri", "İslam Tarihi ve Uygarlığı", "Türk-İslam Devletleri", "Türkiye Tarihi", "Beylikten Devlete", "Dünya Gücü Osmanlı", "Osmanlı Kültür ve Medeniyeti"],
+    "Coğrafya": ["Doğa ve İnsan", "Dünya'nın Şekli ve Hareketleri", "Coğrafi Konum", "Harita Bilgisi", "Atkmosfer ve İklim", "Sıcaklık", "Basınç ve Rüzgarlar", "Nem ve Yağış", "İklim Tipleri", "Yeryüzünün Şekillenmesi", "İç Kuvvetler", "Dış Kuvvetler", "Su Kaynakları"],
+    "Felsefe": ["Felsefenin Konusu", "Bilgi Felsefesi", "Varlık Felsefesi", "Ahlak Felsefesi", "Sanat Felsefesi", "Din Felsefesi", "Siyaset Felsefesi", "Bilim Felsefesi"],
+    "Din Kültürü": ["İnanç", "İbadet", "Ahlak ve Değerler", "Din ve Hayat", "İslam ve Bilim"]
   },
   "YKS-AYT": {
     "Matematik": ["Polinomlar", "2. Dereceden Denklemler", "Eşitsizlikler", "Parabol", "Trigonometri", "Logaritma", "Diziler", "Limit ve Süreklilik", "Türev", "İntegral"],
     "Geometri": ["Analitik Geometri", "Çemberin Analitiği", "Dönüşümler", "Katı Cisimler"],
     "Fizik": ["Vektörler", "Newton Yasaları", "Atışlar", "Momentum", "Denge", "Elektrik Alan ve Potansiyel", "Manyetizma", "İndüksiyon", "Çembersel Hareket", "Basit Harmonik Hareket", "Dalga Mekaniği", "Modern Fizik"],
     "Kimya": ["Modern Atom Teorisi", "Gazlar", "Sıvı Çözeltiler", "Entalpi", "Hız ve Denge", "Asit-Baz Dengesi", "Elektrokimya", "Organik Kimya"],
-    "Biyoloji": ["Sinir Sistemi", "Endokrin Sistem", "Destek ve Hareket", "Sindirim", "Dolaşım", "Solunum", "Üriner Sistem", "Genden Proteine", "Fotosentez", "Hücresel Solunum", "Bitki Biyolojisi"]
+    "Biyoloji": ["Sinir Sistemi", "Endokrin Sistem", "Destek ve Hareket", "Sindirim", "Dolaşım", "Solunum", "Üriner Sistem", "Genden Proteine", "Fotosentez", "Hücresel Solunum", "Bitki Biyolojisi"],
+    "Edebiyat": ["Anlam Bilgisi", "Şiir Bilgisi", "İslamiyet Öncesi Türk Edebiyatı", "Geçiş Dönemi", "Halk Edebiyatı", "Divan Edebiyatı", "Tanzimat Edebiyatı", "Servet-i Fünun", "Fecr-i Ati", "Millî Edebiyat", "Cumhuriyet Dönemi Türk Edebiyatı"],
+    "Tarih-1": ["Osmanlı Devleti Dağılma Dönemi", "XX. Yüzyıl Başlarında Osmanlı", "Milli Mücadele Hazırlık Dönemi", "I. TBMM Dönemi", "Kurtuluş Savaşı", "Atatürk İlkeleri ve İnkılapları"],
+    "Coğrafya-1": ["Ekosistem", "Biyomlar", "Nüfus Politikaları", "Göçler ve Şehirler", "Ekonomik Faaliyetler", "Türkiye Ekonomisi", "Jeopolitik Konum", "Küresel ve Bölgesel Örgütler", "Çevre ve Toplum"],
+    "Tarih-2": ["Dünya Tarihi", "Osmanlı Diplomasi", "İnkılap Tarihi Derinlemesine"],
+    "Coğrafya-2": ["Türkiye'nin Yer şekilleri", "Türkiye'nin İklimi", "Bölgesel Kalkınma Projeleri", "Ulaşım Ağları", "Doğal Afetler"],
+    "Felsefe Grubu": ["Sosyoloji", "Psikoloji", "Mantık"]
   },
   "LGS": {
     "Matematik": ["Çarpanlar ve Katlar", "Üslü İfadeler", "Kareköklü İfadeler", "Veri Analizi", "Olasılık", "Cebirsel İfadeler", "Doğrusal Denklemler", "Eşitsizlikler", "Üçgenler", "Dönüşüm Geometrisi", "Geometrik Cisimler"],
     "Fen Bilimleri": ["Mevsimler ve İklim", "DNA ve Genetik Kod", "Basınç", "Madde ve Endüstri", "Basit Makineler", "Enerji Dönüşümleri", "Elektrik Yükleri"],
     "Türkçe": ["Fiilimsiler", "Cümlenin Ögeleri", "Söz Sanatları", "Metin Türleri", "Yazım-Noktalama", "Paragraf"],
-    "T.C. İnkılap Tarihi": ["Bir Kahraman Doğuyor", "Milli Uyanış", "Ya İstiklal Ya Ölüm", "Atatürkçülük", "Demokratikleşme", "Dış Politika"]
+    "T.C. İnkılap Tarihi": ["Bir Kahraman Doğuyor", "Milli Uyanış", "Ya İstiklal Ya Ölüm", "Atatürkçülük", "Demokratikleşme", "Dış Politika"],
+    "Din Kültürü": ["Kader İnancım", "Zekat ve Sadaka", "Din ve Hayat", "Hz. Muhammed'in Örnekliği", "Kur'an-ı Kerim ve Özellikleri"],
+    "İngilizce": ["Friendship", "Teen Life", "In The Kitchen", "On The Phone", "The Internet", "Adventures", "Tourism", "Chores", "Science", "Natural Forces"]
   },
   "KPSS": {
     "Genel Yetenek": ["Sözel Akıl Yürütme", "Sayısal Mantık", "Matematik", "Problemler", "Türkçe Dil Bilgisi"],
@@ -575,11 +584,12 @@ function populateFormSubjects() {
 function populateFormTopics() {
   const exam = document.getElementById("formExam").value;
   const subject = document.getElementById("formSubject").value;
-  const dl = document.getElementById("topicList");
-  dl.innerHTML = "";
+  const topSelect = document.getElementById("formTopicSelect");
+  topSelect.innerHTML = '<option value="">-- Listeden Konu Seçin --</option>';
+  
   if (exam && subject && CURRICULUM_DATA[exam][subject]) {
     CURRICULUM_DATA[exam][subject].forEach(topic => {
-      dl.innerHTML += `<option value="${topic}"></option>`;
+      topSelect.innerHTML += `<option value="${topic}">${topic}</option>`;
     });
   }
 }
@@ -588,14 +598,17 @@ function openAddModal() { document.getElementById("addModal").classList.add("act
 function closeAddModal() {
   document.getElementById("addModal").classList.remove("active");
   document.getElementById("addQuestionForm").reset();
+  document.getElementById("formTopicSelect").innerHTML = '<option value="">-- Önce ders seçin --</option>';
 }
 
 async function saveQuestion(e) {
   e.preventDefault();
   const qFileInput = document.getElementById("inputQuestionImg").files[0];
   const sFileInput = document.getElementById("inputSolutionImg").files[0];
+  const topicVal = document.getElementById("formTopic").value.trim();
 
   if (!qFileInput) { alert("Lütfen soru görseli seçin."); return; }
+  if (!topicVal) { alert("Lütfen konu seçin veya yazın."); return; }
 
   const questionImgBase64 = await compressImage(qFileInput);
   const solutionImgBase64 = sFileInput ? await compressImage(sFileInput) : null;
@@ -604,7 +617,7 @@ async function saveQuestion(e) {
     id: "q_" + Date.now(),
     exam: document.getElementById("formExam").value,
     subject: document.getElementById("formSubject").value,
-    topic: document.getElementById("formTopic").value,
+    topic: topicVal,
     reason: document.getElementById("formReason").value,
     notes: document.getElementById("formNotes").value,
     questionImg: questionImgBase64,
