@@ -47,9 +47,26 @@
     .brand-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
     .brand-name { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .header-actions { display: flex; align-items: center; gap: 6px; }
-    .btn-icon-head { background: #292524; border: 1px solid var(--card-border); color: var(--text); padding: 7px 9px; border-radius: 10px; font-size: 0.74rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .header-actions { display: flex; align-items: center; gap: 8px; position: relative; }
+    .btn-icon-head { background: #292524; border: 1px solid var(--card-border); color: var(--text); padding: 8px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 5px; }
     .btn-icon-head.coach-btn { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
+
+    /* AÇILIR MENÜ (ACTION MENU DROPDOWN) */
+    .dropdown-menu {
+      position: absolute; top: calc(100% + 8px); right: 0; width: 220px;
+      background: rgba(41, 37, 36, 0.98); backdrop-filter: blur(20px);
+      border: 1px solid var(--accent-primary); border-radius: 16px;
+      padding: 6px; display: none; flex-direction: column; gap: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 100;
+      animation: fadeIn 0.15s ease-out;
+    }
+    .dropdown-menu.active { display: flex; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px;
+      border: none; background: none; color: #fafaf9; font-size: 0.82rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: left; transition: 0.2s;
+    }
+    .dropdown-item:hover, .dropdown-item:active { background: rgba(249, 115, 22, 0.2); color: var(--accent-primary); }
 
     .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
@@ -230,7 +247,7 @@
     .story-badge { background: var(--accent-gradient); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 900; }
     .story-content { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; width: 100%; height: 100%; }
     .story-content img { max-width: 96vw; max-height: 82vh; object-fit: contain; }
-    .story-nav-btn { position: absolute; top: 0; bottom: 0; width: 35%; z-index: 505; cursor: pointer; }
+    .story-nav-btn { position: absolute; top: 0; bottom: 0; width: 45%; z-index: 505; cursor: pointer; }
     .story-nav-left { left: 0; }
     .story-nav-right { right: 0; }
 
@@ -291,6 +308,7 @@
     </div>
   </div>
 
+  <!-- SADE VE FERAH ÜST BAR (APPLE MİMARİSİ) -->
   <header onclick="event.stopPropagation()">
     <div class="brand">
       <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
@@ -300,11 +318,16 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn-icon-head" onclick="openHelpModal()" title="Kullanım Kılavuzu">📖 Kılavuz</button>
       <button class="btn-icon-head coach-btn" onclick="openTeacherDeskModal()" title="Hoca Masası">👨‍🏫 Hoca Masası</button>
-      <button class="btn-icon-head" onclick="openBulletinModal()" title="Haftalık Bülten">📊 Bülten</button>
-      <button class="btn-icon-head" onclick="openPdfModal()" title="PDF Çıktı">🖨️ PDF</button>
-      <button class="btn-icon-head" onclick="resetExamSelection()" title="Alan Değiştir">⚙️ Alan</button>
+      <button class="btn-icon-head" onclick="toggleQuickMenu(event)" title="Menü">☰ Araçlar</button>
+
+      <!-- SAĞ ÜST AÇILIR KONTROL MASASI -->
+      <div class="dropdown-menu" id="quickMenu">
+        <button class="dropdown-item" onclick="closeQuickMenu(); openHelpModal();">📖 Kullanım Kılavuzu</button>
+        <button class="dropdown-item" onclick="closeQuickMenu(); openPdfModal();">🖨️ PDF Kitapçık Bas</button>
+        <button class="dropdown-item" onclick="closeQuickMenu(); openBulletinModal();">📊 Haftalık Bülten</button>
+        <button class="dropdown-item" onclick="closeQuickMenu(); resetExamSelection();" style="color:#fdba74;">⚙️ Sınav Alanı Değiştir</button>
+      </div>
     </div>
   </header>
 
@@ -621,33 +644,33 @@
       <div style="font-size:0.8rem; line-height:1.55; color:#d6d3d1; display:flex; flex-direction:column; gap:12px;">
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-weight:900; color:var(--accent-primary); margin-bottom:3px;">1. 📸 Hızlı & Seri Soru Arşivleme</div>
-          <div>Ortadaki <b>(+)</b> butonuyla yapamadığınız veya kaçırdığınız soruları tek tek ya da <b>Seri Yükleme Modu</b> ile çoklu olarak ekleyebilirsiniz. Görselleri kırpıp döndürürken orijinal netlik tamamen korunur.</div>
+          <div>Ortadaki <b>(+)</b> butonuyla yapamadığınız veya kaçırdığınız soruları tek tek ya da <b>Seri Yükleme Modu</b> ile çoklu olarak ekleyebilirsiniz[cite: 1]. Görselleri kırpıp döndürürken orijinal netlik tamamen korunur[cite: 1].</div>
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-weight:900; color:#38bdf8; margin-bottom:3px;">2. 🎯 Teşhis, Deneme & Tuzak Etiketleri</div>
-          <div>Her soruya hata nedeni (dikkat, formül, yorum vb.) tanımlanır. Denemeleri yayın adıyla etiketleyebilir, kritik kelime oyunlarını <b>⚠️ Tuzak Soru</b> olarak kaydedebilirsiniz.</div>
+          <div>Her soruya hata nedeni (dikkat, formül, yorum vb.) tanımlanır[cite: 1]. Denemeleri yayın adıyla etiketleyebilir, kritik kelime oyunlarını <b>⚠️ Tuzak Soru</b> olarak kaydedebilirsiniz[cite: 1].</div>
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-weight:900; color:#34d399; margin-bottom:3px;">3. ⚡ Antrenman Masası & 3 Kademeli Karar</div>
-          <div>Soruları çözerken tek dokunuşla çözümü ve sesli notu dinleyebilir, ardından:
+          <div>Soruları çözerken tek dokunuşla çözümü ve sesli notu dinleyebilir, ardından[cite: 1]:
             <ul style="margin-left:18px; margin-top:4px; font-size:0.75rem;">
-              <li><b>👑 Tam Oturdu (Avlandı):</b> Zihne yerleşen soruları arşive kaldırır.</li>
-              <li><b>⏳ Şüpheliyim (48s Tekrar):</b> Periyodik tekrar havuzuna alır.</li>
-              <li><b>🚨 Tıkalıyım:</b> Soruyu doğrudan <b>Hoca Masası</b>'na yönlendirir.</li>
+              <li><b>👑 Tam Oturdu (Avlandı):</b> Zihne yerleşen soruları arşive kaldırır[cite: 1].</li>
+              <li><b>⏳ Şüpheliyim (48s Tekrar):</b> Periyodik tekrar havuzuna alır[cite: 1].</li>
+              <li><b>🚨 Tıkalıyım:</b> Soruyu doğrudan <b>Hoca Masası</b>'na yönlendirir[cite: 1].</li>
             </ul>
           </div>
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-weight:900; color:#f87171; margin-bottom:3px;">4. 👨‍🏫 Hoca Masası, Hikayeler & Çizim</div>
-          <div>Üstteki ders dairelerine dokunarak <b>Instagram Hikayeleri</b> modunda sırasıyla soru, çözüm ve sesli ipuçlarını izleyin. Herhangi bir soruya dokunarak devasa ekranda açıp üzerinde serbestçe <b>karalama & çizim</b> yapabilirsiniz.</div>
+          <div>Üstteki ders dairelerine dokunarak <b>Instagram Hikayeleri</b> modunda sırasıyla soru, çözüm ve sesli ipuçlarını izleyin[cite: 1]. Ekrana dokunarak manuel olarak sonraki/önceki adıma geçebilirsiniz. Herhangi bir soruya dokunarak devasa ekranda açıp üzerinde serbestçe <b>karalama & çizim</b> yapabilirsiniz[cite: 1].</div>
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-weight:900; color:#fbbf24; margin-bottom:3px;">5. 📊 Bülten, 🖨️ PDF & 📲 QR Aktarım</div>
-          <div>Haftalık en çok hata yapılan konuları bültenle izleyebilir, istediğiniz filtreye göre A4 PDF deneme kitapçığı basabilir veya AirDrop/QR ile telefon-tablet arası veri aktarabilirsiniz.</div>
+          <div>Haftalık en çok hata yapılan konuları bültenle izleyebilir, istediğiniz filtreye göre A4 PDF deneme kitapçığı basabilir veya AirDrop/QR ile telefon-tablet arası veri aktarabilirsiniz[cite: 1].</div>
         </div>
 
         <!-- İLETİŞİM ALANI -->
@@ -664,7 +687,7 @@
     </div>
   </div>
 
-  <!-- INSTAGRAM HİKAYELERİ (STORY VIEWER) MODALI -->
+  <!-- INSTAGRAM HİKAYELERİ (STORY VIEWER - MANUEL TIKLAMALI) -->
   <div class="story-modal" id="storyModal" onclick="event.stopPropagation()">
     <div class="story-progress-bar" id="storyProgressContainer"></div>
     <div class="story-head">
@@ -675,8 +698,8 @@
       <button onclick="closeStoryViewer()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">✕</button>
     </div>
     <div class="story-content">
-      <div class="story-nav-btn story-nav-left" onclick="prevStory()"></div>
-      <div class="story-nav-btn story-nav-right" onclick="nextStory()"></div>
+      <div class="story-nav-btn story-nav-left" onclick="prevStory()" title="Önceki Slayt"></div>
+      <div class="story-nav-btn story-nav-right" onclick="nextStory()" title="Sonraki Slayt"></div>
       <img id="storyImg" alt="Story İçerik">
     </div>
     <div style="padding: 14px; text-align: center; color: #fff; font-size: 0.8rem; background: rgba(0,0,0,0.75); z-index: 510;">
@@ -1537,7 +1560,17 @@ function generateWeeklyBulletin() {
   }
 }
 
-// KULLANIM KILAVUZU MODALI FONKSİYONLARI
+// KULLANIM KILAVUZU & SAĞ ÜST AÇILIR MENÜ MOTORU
+function toggleQuickMenu(e) {
+  if (e) e.stopPropagation();
+  const m = document.getElementById("quickMenu");
+  m.classList.toggle("active");
+}
+
+function closeQuickMenu() {
+  document.getElementById("quickMenu").classList.remove("active");
+}
+
 function openHelpModal() {
   document.getElementById("helpModal").classList.add("active");
 }
@@ -1546,10 +1579,9 @@ function closeHelpModal() {
   document.getElementById("helpModal").classList.remove("active");
 }
 
-// INSTAGRAM HİKAYE MOTORU (SORU + ÇÖZÜM + SES ZİNCİRİ)
+// INSTAGRAM HİKAYE MOTORU (MANUEL DOKUNMATİK - ACELE ETMEYEN AKIŞ)
 let storySlides = [];
 let currentStoryIdx = 0;
-let storyTimer = null;
 
 function openStoryViewer(subject) {
   const filtered = allQuestions.filter(q => q.exam === activeExam && q.subject === subject);
@@ -1587,7 +1619,6 @@ function openStoryViewer(subject) {
 }
 
 function closeStoryViewer() {
-  clearTimeout(storyTimer);
   const p = document.getElementById("storyAudioPlayer");
   p.pause();
   p.src = "";
@@ -1595,7 +1626,6 @@ function closeStoryViewer() {
 }
 
 function loadStory() {
-  clearTimeout(storyTimer);
   if (currentStoryIdx >= storySlides.length) {
     closeStoryViewer();
     return;
@@ -1623,16 +1653,10 @@ function loadStory() {
     const seg = document.createElement("div");
     seg.className = "story-progress-segment";
     let fillWidth = "0%";
-    if (idx < currentStoryIdx) fillWidth = "100%";
-    else if (idx === currentStoryIdx) fillWidth = "100%";
-
-    seg.innerHTML = `<div class="story-progress-fill" style="width: ${fillWidth}; transition: ${idx === currentStoryIdx ? 'width 5s linear' : 'none'};"></div>`;
+    if (idx <= currentStoryIdx) fillWidth = "100%";
+    seg.innerHTML = `<div class="story-progress-fill" style="width: ${fillWidth};"></div>`;
     progContainer.appendChild(seg);
   });
-
-  storyTimer = setTimeout(() => {
-    nextStory();
-  }, 5000);
 }
 
 function nextStory() {
@@ -2143,7 +2167,8 @@ window.addEventListener("resize", () => {
 });
 
 function handleBodyBackgroundClick(e) {
-  if (e.target.closest("button") || e.target.closest("input") || e.target.closest("select") || e.target.closest(".modal-card") || e.target.closest(".feed-card") || e.target.closest(".setup-card")) {
+  closeQuickMenu();
+  if (e.target.closest("button") || e.target.closest("input") || e.target.closest("select") || e.target.closest(".modal-card") || e.target.closest(".feed-card") || e.target.closest(".setup-card") || e.target.closest(".dropdown-menu")) {
     return;
   }
 }
