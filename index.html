@@ -65,7 +65,7 @@
     }
     .exam-opt-btn:hover { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
 
-    /* Instagram Tarzı Ders Hikayeleri */
+    /* Instagram Tarzı Dinamik Ders Hikayeleri */
     .stories-container {
       display: flex; gap: 12px; overflow-x: auto; padding: 6px 4px 12px 4px; margin-bottom: 12px; scrollbar-width: none;
     }
@@ -217,7 +217,8 @@
     <div class="exam-select-card">
       <img src="logo.png" alt="Logo" style="width:48px; height:48px; object-fit:contain; margin-bottom:8px;" onerror="this.style.display='none'">
       <h2 style="font-size:1.2rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">SORU AVCISI</h2>
-      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Hazırlandığın ana sınav grubunu seç:</div>
+      <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">HAZIRLAYAN: YILDIRAY HOCA</div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">Hazırlandığın ana sınav grubunu seç:</div>
       <div class="exam-grid" id="examGridOptions"></div>
     </div>
   </div>
@@ -225,10 +226,13 @@
   <header onclick="event.stopPropagation()">
     <div class="brand">
       <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-      <div class="brand-name">SORU AVCISI</div>
+      <div>
+        <div class="brand-name">SORU AVCISI</div>
+        <div style="font-size:0.58rem; color:var(--text-muted); font-weight:800; letter-spacing:0.5px;">HAZIRLAYAN: YILDIRAY HOCA</div>
+      </div>
     </div>
     <div class="header-actions">
-      <button class="btn-icon-head" onclick="openManualModal()" title="Kullanım Kılavuzu">📖 Kılavuz</button>
+      <button class="btn-icon-head" onclick="openManualModal()" title="Kılavuz">📖 Kılavuz</button>
       <button class="btn-icon-head" onclick="openPdfModal()" title="PDF Çıktı">🖨️ PDF</button>
       <button class="btn-icon-head" onclick="resetExamSelection()" title="Alan Değiştir">⚙️ Alan</button>
     </div>
@@ -237,7 +241,7 @@
   <!-- TAB 1: AKIŞ -->
   <div id="tab-feed" class="tab-view active" onclick="event.stopPropagation()">
     
-    <!-- Instagram Hikayeleri (Dersler) -->
+    <!-- Dinamik Instagram Hikayeleri (En son eklenen ders en başta) -->
     <div class="stories-container" id="storiesContainer"></div>
 
     <div class="clutch-bar">
@@ -250,7 +254,7 @@
 
     <div class="action-sub-bar">
       <button class="btn-sub-action" onclick="startRandomFiveQuiz()">🎲 Rastgele 5 Soru</button>
-      <button class="btn-sub-action" onclick="switchNavTab('add', null)">➕ Yeni Soru Ekle</button>
+      <button class="btn-sub-action" onclick="filterTrapQuestions()">⚠️ Tuzak Sorular</button>
     </div>
 
     <div class="pills-scroll" id="examPillContainer"></div>
@@ -335,7 +339,7 @@
     </div>
   </div>
 
-  <!-- TAB 4: HIZLI SORU EKLE (Boşluğa tıklama engelli) -->
+  <!-- TAB 4: HIZLI SORU EKLE (Liseli Eklentileri: Tuzak Soru Şalteri) -->
   <div id="tab-add" class="tab-view" onclick="event.stopPropagation()">
     <h3 style="font-size:1.2rem; font-weight:900; margin-bottom:14px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
     <form id="addForm" onsubmit="handleQuestionSubmit(event)">
@@ -372,8 +376,17 @@
           <option value="Ön Yargı / Psikolojik Blok">Ön Yargı / Psikolojik Blok</option>
         </select>
       </div>
+
+      <!-- LİSELİ BEYİN FIRTINASI: TUZAK SORU ŞALTERİ -->
+      <div class="input-group" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); padding:10px; border-radius:12px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fca5a5; margin:0;">
+          <input type="checkbox" id="formIsTrap" style="width:18px; height:18px; accent-var:var(--danger); cursor:pointer;">
+          <span>⚠️ <b>Tuzak Soru / ÖSYM Kelime Oyunu (Alarm Modu)</b></span>
+        </label>
+      </div>
+
       <div class="input-group">
-        <label>🎙️ Sesli Not (İsteğe Bağlı)</label>
+        <label>🎙️ Sesli Not / Hoca İpucu (İsteğe Bağlı)</label>
         <div style="display:flex; gap:8px; align-items:center;">
           <button type="button" id="audioRecBtn" onclick="toggleAudio()" style="padding:8px 14px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-size:0.78rem; font-weight:800; cursor:pointer;">🎙️ Kaydet</button>
           <span id="audioStatus" style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Kayıt yok</span>
@@ -456,15 +469,16 @@
     </div>
   </div>
 
-  <!-- KULLANIM KILAVUZU MODALI -->
+  <!-- KULLANIM KILAVUZU & İLETİŞİM MODALI -->
   <div class="modal-overlay" id="manualModal" onclick="event.stopPropagation()">
     <div class="modal-card">
-      <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary); margin-bottom:8px;">📖 Soru Avcısı Kullanım Kılavuzu</h3>
+      <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary); margin-bottom:8px;">📖 Soru Avcısı Kılavuz & İletişim</h3>
       <div style="font-size:0.78rem; line-height:1.5; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
         <p>🎯 <b>Alan Seçimi:</b> İlk açılışta seçtiğin sınav grubu ana akışını ve müfredatını belirler.</p>
-        <p>📱 <b>Instagram Hikayeleri:</b> Üst kısımdaki dairelere dokunarak o derse ait soruları en yeni tarihliden eskiye doğru dikey hikaye formatında tararsın.</p>
-        <p>🖨️ <b>Profesyonel Test Kitabı Çıktısı:</b> Gerçek matbu deneme sınavı formatında kompakt, şık ve sayfayı verimli kullanan A4 çıktı motoru.</p>
-        <p>🪄 <b>Boşluğa Tıklama:</b> Form ekranları hariç, ekranda boş bir yere tıkladığın an direkt ana akışa dönersin.</p>
+        <p>📱 <b>Dinamik Hikayeler:</b> En son soru eklediğin ders her zaman hikaye çubuğunun en başında yer alır.</p>
+        <p>⚠️ <b>Tuzak Sorular:</b> ÖSYM'nin kelime oyunlu gıcık sorularını özel şalterle işaretleyip tek tuşla filtreleyebilirsin.</p>
+        <p>✉️ <b>İletişim & Destek:</b> Her türlü soru ve öneri için: <a href="mailto:sanalnotum@gmail.com" style="color:var(--accent-primary); font-weight:800;">sanalnotum@gmail.com</a></p>
+        <p style="text-align:center; font-weight:900; color:var(--text); margin-top:4px;">HAZIRLAYAN: YILDIRAY HOCA</p>
       </div>
       <button style="width:100%; padding:12px; margin-top:14px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; cursor:pointer;" onclick="closeManualModal()">Anladım, Kapat 🚀</button>
     </div>
@@ -550,7 +564,7 @@ const MASTER_CURRICULUM = {
   }
 };
 
-const DB_NAME = "SoruAvcisiDB_YildirayHoca_v5";
+const DB_NAME = "SoruAvcisiDB_YildirayHoca_v6";
 const STORE_NAME = "questions";
 let db;
 let allQuestions = [];
@@ -687,20 +701,38 @@ function updateExamCountdown() {
   document.getElementById("daysUntilExam").innerText = diff;
 }
 
+/* DİNAMİK HİKAYE ÇUBUĞU (En son soru eklenen ders en başta) */
 function buildStoriesBar() {
   const container = document.getElementById("storiesContainer");
   container.innerHTML = "";
   const subjects = MASTER_CURRICULUM[activeExam] || {};
   
-  Object.keys(subjects).forEach(sub => {
+  // Tüm dersleri ve son eklenme tarihlerini bul
+  const subLastAdded = {};
+  Object.keys(subjects).forEach(sub => { subLastAdded[sub] = 0; });
+
+  allQuestions.forEach(q => {
+    if (q.exam === activeExam && q.subject) {
+      const t = new Date(q.createdAt).getTime();
+      if (t > (subLastAdded[q.subject] || 0)) {
+        subLastAdded[q.subject] = t;
+      }
+    }
+  });
+
+  // En son soru eklenene göre azalan sıralama
+  const sortedSubjects = Object.keys(subjects).sort((a, b) => subLastAdded[b] - subLastAdded[a]);
+
+  sortedSubjects.forEach(sub => {
     const emojis = { "Matematik": "📐", "Türkçe": "📚", "Fizik": "⚡", "Kimya": "🧪", "Biyoloji": "🧬", "Tarih": "📜", "Coğrafya": "🌍", "Geometri": "🔺", "Edebiyat": "✒️" };
     let em = "🎯";
     for (const [k, v] of Object.entries(emojis)) {
       if (sub.includes(k)) { em = v; break; }
     }
+    const isLatest = subLastAdded[sub] > 0;
     container.innerHTML += `
       <div class="story-item" onclick="openStoryViewer('${sub}')">
-        <div class="story-ring"><div class="story-inner">${em}</div></div>
+        <div class="story-ring" style="${isLatest && sortedSubjects[0]===sub ? 'background:linear-gradient(135deg, #f97316, #10b981);':''}"><div class="story-inner">${em}</div></div>
         <div class="story-title">${sub}</div>
       </div>
     `;
@@ -789,17 +821,25 @@ function filterBySubject(sub, el) {
   renderFeed();
 }
 
+function filterTrapQuestions() {
+  selectedSubjectFilter = "TRAP";
+  document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
+  renderFeed();
+}
+
 function renderFeed() {
   const container = document.getElementById("feedList");
   container.innerHTML = "";
 
   let items = allQuestions.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-  if (selectedSubjectFilter) {
+  if (selectedSubjectFilter === "TRAP") {
+    items = items.filter(q => q.isTrap === true);
+  } else if (selectedSubjectFilter) {
     items = items.filter(q => q.subject === selectedSubjectFilter);
   }
 
   if (items.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:0.85rem; font-weight:700;">Bu kategoride henüz soru avlanmadı.</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:0.85rem; font-weight:700;">${selectedSubjectFilter==="TRAP" ? "Henüz tuzak soru işaretlenmemiş 🎯" : "Bu kategoride henüz soru avlanmadı."}</div>`;
     return;
   }
 
@@ -808,7 +848,7 @@ function renderFeed() {
     card.className = "feed-card";
     card.innerHTML = `
       <div class="card-top">
-        <span class="tag-exam">${activeExam} • ${q.subject}</span>
+        <span class="tag-exam">${activeExam} • ${q.subject} ${q.isTrap ? '⚠️ [TUZAK]' : ''}</span>
         <div class="card-reactions-row">
           <span class="react-pill ${q.reactions?.heart ? 'active':''}" onclick="toggleCardReaction('${q.id}', 'heart')">❤️ ${q.reactions?.heart? '1':''}</span>
           <span class="react-pill ${q.reactions?.star ? 'active':''}" onclick="toggleCardReaction('${q.id}', 'star')">⭐ ${q.reactions?.star? '1':''}</span>
@@ -906,7 +946,7 @@ function loadCurrentPracticeCard() {
   startTimer();
   const q = practiceList[currentPracticeIdx];
   document.getElementById("pCardCount").innerText = `Soru ${currentPracticeIdx + 1} / ${practiceList.length}`;
-  document.getElementById("pMetaText").innerText = `${q.subject} - ${q.topic}`;
+  document.getElementById("pMetaText").innerText = `${q.subject} - ${q.topic} ${q.isTrap ? '⚠️[TUZAK]' : ''}`;
   document.getElementById("pQuestionImg").src = q.questionImg;
   document.getElementById("pSolutionImg").src = q.solutionImg || q.questionImg;
   document.getElementById("pReasonText").innerText = `Teşhis: ${q.reason}`;
@@ -1015,6 +1055,7 @@ async function handleQuestionSubmit(e) {
     subject: document.getElementById("formSubjectSelect").value,
     topic: topic,
     reason: document.getElementById("formReasonSelect").value,
+    isTrap: document.getElementById("formIsTrap").checked,
     notes: document.getElementById("formNotes").value,
     reactions: { heart: false, star: false, excl: false },
     audioData: audioBlobBase64,
@@ -1113,11 +1154,13 @@ function handleBodyBackgroundClick(e) {
   switchNavTab('feed', document.querySelector('.bottom-nav .nav-item'));
 }
 
-/* PROFESYONEL TEST KİTABI A4 MATBU YAZDIRMA MOTORU */
+/* PROFESYONEL TEST KİTABI A4 MATBU YAZDIRMA MOTORU & MOBİL DONMA (BEYAZ EKRAN) FIX'İ */
 function executePrintMode(mode) {
   closePdfModal();
   let items = allQuestions.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-  if (selectedSubjectFilter) {
+  if (selectedSubjectFilter === "TRAP") {
+    items = items.filter(q => q.isTrap === true);
+  } else if (selectedSubjectFilter) {
     items = items.filter(q => q.subject === selectedSubjectFilter);
   }
 
@@ -1154,7 +1197,7 @@ function executePrintMode(mode) {
       <div class="header">
         <div class="brand">SORU AVCISI</div>
         <div class="sub">${titleText} (${activeExam})</div>
-        <div style="font-size: 0.7rem; margin-top: 2px;">Tarih: ${new Date().toLocaleDateString('tr-TR')}</div>
+        <div style="font-size: 0.7rem; margin-top: 2px;">Tarih: ${new Date().toLocaleDateString('tr-TR')} • HAZIRLAYAN: YILDIRAY HOCA</div>
       </div>
 
       <div class="test-container">
@@ -1164,7 +1207,7 @@ function executePrintMode(mode) {
     htmlContent += `
       <div class="question-block">
         <div class="q-meta">
-          <span>Soru #${idx+1} • ${q.subject}</span>
+          <span>Soru #${idx+1} • ${q.subject} ${q.isTrap ? '⚠️[TUZAK]' : ''}</span>
           <span>Teşhis: ${q.reason}</span>
         </div>
         <div class="q-topic">Konu: ${q.topic}</div>
@@ -1193,13 +1236,22 @@ function executePrintMode(mode) {
   htmlContent += `</div></body></html>`;
 
   const printWindow = window.open('', '_blank');
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
-  setTimeout(() => {
-    printWindow.focus();
-    printWindow.print();
-  }, 500);
+  if (printWindow) {
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    setTimeout(() => {
+      printWindow.focus();
+      printWindow.print();
+    }, 500);
+  }
 }
+
+// Mobil tarayıcılar için yazdırma sonrası odak ve beyaz ekran emniyet kilidi
+window.addEventListener('focus', () => {
+  document.body.style.display = 'none';
+  document.body.offsetHeight; // reflow tetikle
+  document.body.style.display = '';
+});
 
 let peer = null;
 function openAirDropSender() {
