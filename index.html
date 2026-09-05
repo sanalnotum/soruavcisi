@@ -217,6 +217,66 @@
     }
     #cropperCanvas { max-width: 100%; max-height: 100%; touch-action: none; cursor: crosshair; }
     .crop-btn-bar { display: flex; gap: 8px; justify-content: center; }
+
+    /* INSTAGRAM HİKAYELERİ (STORY) CSS */
+    .story-modal {
+      position: fixed; inset: 0; background: #000; z-index: 500;
+      display: none; flex-direction: column; justify-content: space-between;
+    }
+    .story-modal.active { display: flex; }
+    .story-progress-bar { display: flex; gap: 4px; padding: 12px 16px; position: absolute; top: 0; left: 0; right: 0; z-index: 510; }
+    .story-progress-segment { flex: 1; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden; }
+    .story-progress-fill { width: 0%; height: 100%; background: #fff; }
+    .story-head { position: absolute; top: 22px; left: 16px; right: 16px; z-index: 510; display: flex; justify-content: space-between; align-items: center; }
+    .story-badge { background: var(--accent-gradient); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 900; }
+    .story-content { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; width: 100%; height: 100%; }
+    .story-content img { max-width: 96vw; max-height: 82vh; object-fit: contain; }
+    .story-nav-btn { position: absolute; top: 0; bottom: 0; width: 35%; z-index: 505; cursor: pointer; }
+    .story-nav-left { left: 0; }
+    .story-nav-right { right: 0; }
+
+    /* DEVASA VE TAM EKRAN AÇILAN LIGHTBOX */
+    #lightboxModal {
+      background: rgba(0, 0, 0, 0.98);
+      padding: 0;
+      overflow: hidden;
+    }
+    .lightbox-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightboxImg {
+      width: 96vw !important;
+      height: 88vh !important;
+      max-width: 96vw !important;
+      max-height: 88vh !important;
+      object-fit: contain !important;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      border-radius: 8px;
+    }
+    #lightboxCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      touch-action: none;
+      cursor: crosshair;
+      z-index: 310;
+    }
+    .lightbox-bar {
+      position: absolute;
+      top: calc(env(safe-area-inset-top, 0px) + 12px);
+      right: 16px;
+      z-index: 350;
+      display: flex;
+      gap: 8px;
+    }
   </style>
 </head>
 <body onclick="handleBodyBackgroundClick(event)">
@@ -241,6 +301,7 @@
       </div>
     </div>
     <div class="header-actions">
+      <button class="btn-icon-head" onclick="openHelpModal()" title="Kullanım Kılavuzu">📖 Kılavuz</button>
       <button class="btn-icon-head coach-btn" onclick="openTeacherDeskModal()" title="Hoca Masası">👨‍🏫 Hoca Masası</button>
       <button class="btn-icon-head" onclick="openBulletinModal()" title="Haftalık Bülten">📊 Bülten</button>
       <button class="btn-icon-head" onclick="openPdfModal()" title="PDF Çıktı">🖨️ PDF</button>
@@ -546,6 +607,81 @@
     </button>
   </nav>
 
+  <!-- KULLANIM KILAVUZU MODALI -->
+  <div class="modal-overlay" id="helpModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:520px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.3rem;">📖</span>
+          <h3 style="font-size:1.15rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Soru Avcısı Kullanım Kılavuzu</h3>
+        </div>
+        <button onclick="closeHelpModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="font-size:0.8rem; line-height:1.55; color:#d6d3d1; display:flex; flex-direction:column; gap:12px;">
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:var(--accent-primary); margin-bottom:3px;">1. 📸 Hızlı & Seri Soru Arşivleme</div>
+          <div>Ortadaki <b>(+)</b> butonuyla yapamadığınız veya kaçırdığınız soruları tek tek ya da <b>Seri Yükleme Modu</b> ile çoklu olarak ekleyebilirsiniz. Görselleri kırpıp döndürürken orijinal netlik tamamen korunur.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#38bdf8; margin-bottom:3px;">2. 🎯 Teşhis, Deneme & Tuzak Etiketleri</div>
+          <div>Her soruya hata nedeni (dikkat, formül, yorum vb.) tanımlanır. Denemeleri yayın adıyla etiketleyebilir, kritik kelime oyunlarını <b>⚠️ Tuzak Soru</b> olarak kaydedebilirsiniz.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#34d399; margin-bottom:3px;">3. ⚡ Antrenman Masası & 3 Kademeli Karar</div>
+          <div>Soruları çözerken tek dokunuşla çözümü açabilir, ardından:
+            <ul style="margin-left:18px; margin-top:4px; font-size:0.75rem;">
+              <li><b>👑 Tam Oturdu (Avlandı):</b> Zihne yerleşen soruları arşive kaldırır.</li>
+              <li><b>⏳ Şüpheliyim (48s Tekrar):</b> Periyodik tekrar havuzuna alır.</li>
+              <li><b>🚨 Tıkalıyım:</b> Soruyu doğrudan <b>Hoca Masası</b>'na yönlendirir.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#f87171; margin-bottom:3px;">4. 👨‍🏫 Hoca Masası, Hikayeler & Çizim</div>
+          <div>Üstteki ders dairelerine dokunarak <b>Instagram Hikayeleri</b> modunda sırasıyla soru ve çözümleri izleyin. Herhangi bir soruya dokunarak devasa ekranda açıp üzerinde serbestçe <b>karalama & çizim</b> yapabilirsiniz.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#fbbf24; margin-bottom:3px;">5. 📊 Bülten, 🖨️ PDF & 📲 QR Aktarım</div>
+          <div>Haftalık en çok hata yapılan konuları bültenle izleyebilir, istediğiniz filtreye göre A4 PDF deneme kitapçığı basabilir veya AirDrop/QR ile telefon-tablet arası veri aktarabilirsiniz.</div>
+        </div>
+
+        <!-- İLETİŞİM ALANI -->
+        <div style="background:rgba(249, 115, 22, 0.12); border:1px solid rgba(249, 115, 22, 0.4); border-radius:14px; padding:12px; text-align:center; margin-top:4px;">
+          <div style="font-size:0.75rem; font-weight:900; color:var(--accent-primary); letter-spacing:0.8px; margin-bottom:4px;">İLETİŞİM</div>
+          <div style="font-size:0.85rem; font-weight:900; color:#fff;">HAZIRLAYAN: YILDIRAY HOCA (MATEMATİK ÖĞRETMENİ)</div>
+          <div style="font-size:0.8rem; font-weight:700; color:#fed7aa; margin-top:3px;">
+            MAİL: <a href="mailto:sanalnotum@gmail.com" style="color:#fdba74; text-decoration:underline;">sanalnotum@gmail.com</a>
+          </div>
+        </div>
+      </div>
+
+      <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:14px; cursor:pointer;" onclick="closeHelpModal()">Anladım, Kapat ✔️</button>
+    </div>
+  </div>
+
+  <!-- INSTAGRAM HİKAYELERİ (STORY VIEWER) MODALI -->
+  <div class="story-modal" id="storyModal" onclick="event.stopPropagation()">
+    <div class="story-progress-bar" id="storyProgressContainer"></div>
+    <div class="story-head">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="story-badge" id="storyTypeBadge">SORU</span>
+        <span style="font-weight:900; font-size:0.9rem; color:#fff;" id="storySubTitle">Ders Adı</span>
+      </div>
+      <button onclick="closeStoryViewer()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">✕</button>
+    </div>
+    <div class="story-content">
+      <div class="story-nav-btn story-nav-left" onclick="prevStory()"></div>
+      <div class="story-nav-btn story-nav-right" onclick="nextStory()"></div>
+      <img id="storyImg" alt="Story İçerik">
+    </div>
+    <div style="padding: 16px; text-align: center; color: #fff; font-size: 0.8rem; background: rgba(0,0,0,0.7); z-index: 510;" id="storyTopicDesc"></div>
+  </div>
+
   <!-- HOCA MASASI MODAL (ÖZEL DERS / BİREBİR SLAYT MODU) -->
   <div class="modal-overlay" id="teacherDeskModal" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:580px;">
@@ -658,16 +794,16 @@
     </div>
   </div>
 
-  <!-- LIGHTBOX & CANVAS ÇİZİM TAHTASI -->
-  <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()" style="background:rgba(0,0,0,0.96); flex-direction:column;">
-    <div style="position:absolute; top:calc(env(safe-area-inset-top, 0px) + 12px); right:16px; z-index:300; display:flex; gap:8px;" onclick="event.stopPropagation()">
-      <button class="btn-icon-head" onclick="toggleCanvasMode()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff;">✏️ Çiz / Karala</button>
-      <button class="btn-icon-head" onclick="clearCanvas()" id="canvasClearBtn" style="display:none; background:#ef4444; border:none; color:#fff;">Sil</button>
-      <button class="btn-icon-head" onclick="closeLightbox()">✕ Kapat</button>
+  <!-- LIGHTBOX & CANVAS ÇİZİM TAHTASI (DEVASA TAM EKRAN BÜYÜTÜCÜ) -->
+  <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
+    <div class="lightbox-bar" onclick="event.stopPropagation()">
+      <button class="btn-icon-head" onclick="toggleCanvasMode()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.8rem; padding:8px 12px;">✏️ Çiz / Karala</button>
+      <button class="btn-icon-head" onclick="clearCanvas()" id="canvasClearBtn" style="display:none; background:#ef4444; border:none; color:#fff; font-size:0.8rem; padding:8px 12px;">🗑️ Sil</button>
+      <button class="btn-icon-head" onclick="closeLightbox()" style="font-size:0.8rem; padding:8px 12px;">✕ Kapat</button>
     </div>
-    <div style="position:relative; max-width:94vw; max-height:85vh; display:flex; align-items:center; justify-content:center;" onclick="event.stopPropagation()">
-      <img id="lightboxImg" alt="Lightbox Soru" style="max-width:100%; max-height:85vh; object-fit:contain; display:block;">
-      <canvas id="lightboxCanvas" style="position:absolute; inset:0; width:100%; height:100%; display:none; cursor:crosshair;"></canvas>
+    <div class="lightbox-stage" onclick="event.stopPropagation()">
+      <img id="lightboxImg" alt="Büyütülmüş Soru" onload="positionLightboxCanvas()">
+      <canvas id="lightboxCanvas" style="display:none;"></canvas>
     </div>
   </div>
 
@@ -1238,7 +1374,7 @@ function toggleSolutionDrawer() { document.getElementById("solutionDrawer").clas
 async function handleThreeLevelChoice(level) {
   if (practiceList.length === 0) return;
   const currentQ = practiceList[currentPracticeIdx];
-  currentQ.status = level; // "mastered" | "doubt" | "stuck"
+  currentQ.status = level;
   currentQ.lastReviewedAt = new Date().toISOString();
 
   if (level === "mastered") {
@@ -1362,6 +1498,104 @@ function generateWeeklyBulletin() {
   }
 }
 
+// KULLANIM KILAVUZU MODALI FONKSİYONLARI
+function openHelpModal() {
+  document.getElementById("helpModal").classList.add("active");
+}
+
+function closeHelpModal() {
+  document.getElementById("helpModal").classList.remove("active");
+}
+
+// INSTAGRAM HİKAYE MOTORU (SORU + ÇÖZÜM ZİNCİRİ)
+let storySlides = [];
+let currentStoryIdx = 0;
+let storyTimer = null;
+
+function openStoryViewer(subject) {
+  const filtered = allQuestions.filter(q => q.exam === activeExam && q.subject === subject);
+  if (filtered.length === 0) {
+    alert(`${subject} dersine ait henüz kayıtlı soru yok!`);
+    return;
+  }
+
+  storySlides = [];
+  filtered.forEach(q => {
+    storySlides.push({
+      img: q.questionImg,
+      type: "SORU",
+      topic: q.topic,
+      reason: q.reason,
+      notes: q.notes
+    });
+    if (q.solutionImg) {
+      storySlides.push({
+        img: q.solutionImg,
+        type: "💡 ÇÖZÜM & ANALİZ",
+        topic: q.topic,
+        reason: q.reason,
+        notes: q.notes
+      });
+    }
+  });
+
+  currentStoryIdx = 0;
+  document.getElementById("storySubTitle").innerText = subject;
+  document.getElementById("storyModal").classList.add("active");
+  loadStory();
+}
+
+function closeStoryViewer() {
+  clearTimeout(storyTimer);
+  document.getElementById("storyModal").classList.remove("active");
+}
+
+function loadStory() {
+  clearTimeout(storyTimer);
+  if (currentStoryIdx >= storySlides.length) {
+    closeStoryViewer();
+    return;
+  }
+
+  const slide = storySlides[currentStoryIdx];
+  document.getElementById("storyTypeBadge").innerText = slide.type;
+  document.getElementById("storyImg").src = slide.img;
+  document.getElementById("storyTopicDesc").innerText = `${slide.topic} • ${slide.reason} ${slide.notes ? '• ' + slide.notes : ''}`;
+
+  const progContainer = document.getElementById("storyProgressContainer");
+  progContainer.innerHTML = "";
+  storySlides.forEach((_, idx) => {
+    const seg = document.createElement("div");
+    seg.className = "story-progress-segment";
+    let fillWidth = "0%";
+    if (idx < currentStoryIdx) fillWidth = "100%";
+    else if (idx === currentStoryIdx) fillWidth = "100%";
+
+    seg.innerHTML = `<div class="story-progress-fill" style="width: ${fillWidth}; transition: ${idx === currentStoryIdx ? 'width 5s linear' : 'none'};"></div>`;
+    progContainer.appendChild(seg);
+  });
+
+  storyTimer = setTimeout(() => {
+    nextStory();
+  }, 5000);
+}
+
+function nextStory() {
+  if (currentStoryIdx < storySlides.length - 1) {
+    currentStoryIdx++;
+    loadStory();
+  } else {
+    closeStoryViewer();
+  }
+}
+
+function prevStory() {
+  if (currentStoryIdx > 0) {
+    currentStoryIdx--;
+    loadStory();
+  }
+}
+
 // SERİ YÜKLEME (BATCH UPLOAD)
 let batchFilesQueue = [];
 let currentBatchIdx = 0;
@@ -1398,7 +1632,7 @@ async function loadBatchItemIntoForm() {
   document.getElementById("btnCropQ").style.display = "inline-block";
 }
 
-// DAHİLİ GÖRSEL KIRPMA & DÖNDÜRME MOTORU (CANVAS)
+// DAHİLİ GÖRSEL KIRPMA & DÖNDÜRME MOTORU (ORİJİNAL ÇÖZÜNÜRLÜK KORUMALI)
 let curCropTarget = 'q';
 let workingRawImg = null;
 let processedImages = { q: null, s: null };
@@ -1458,8 +1692,8 @@ function setupCropperDimensions() {
   const cW = container.clientWidth;
   const cH = container.clientHeight;
 
-  let imgW = cropImageObj.width;
-  let imgH = cropImageObj.height;
+  let imgW = cropImageObj.naturalWidth || cropImageObj.width;
+  let imgH = cropImageObj.naturalHeight || cropImageObj.height;
   if (rotationAngle === 90 || rotationAngle === 270) {
     const tmp = imgW; imgW = imgH; imgH = tmp;
   }
@@ -1498,7 +1732,6 @@ function drawCropper() {
   cropCtx.drawImage(cropImageObj, -drawW / 2, -drawH / 2, drawW, drawH);
   cropCtx.restore();
 
-  // Kırpma çerçevesi ve yarı saydam maske
   cropCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
   cropCtx.fillRect(0, 0, cropCanvas.width, cropRect.y);
   cropCtx.fillRect(0, cropRect.y + cropRect.h, cropCanvas.width, cropCanvas.height - (cropRect.y + cropRect.h));
@@ -1549,18 +1782,43 @@ function applyCropAndClose() {
     resetCropSelection();
   }
 
+  let rawW = cropImageObj.naturalWidth || cropImageObj.width;
+  let rawH = cropImageObj.naturalHeight || cropImageObj.height;
+  if (rotationAngle === 90 || rotationAngle === 270) {
+    const tmp = rawW; rawW = rawH; rawH = tmp;
+  }
+
+  const scaleRatioX = rawW / cropCanvas.width;
+  const scaleRatioY = rawH / cropCanvas.height;
+
+  const realCropX = cropRect.x * scaleRatioX;
+  const realCropY = cropRect.y * scaleRatioY;
+  const realCropW = cropRect.w * scaleRatioX;
+  const realCropH = cropRect.h * scaleRatioY;
+
   const finalCanvas = document.createElement("canvas");
-  finalCanvas.width = cropRect.w;
-  finalCanvas.height = cropRect.h;
+  finalCanvas.width = realCropW;
+  finalCanvas.height = realCropH;
   const fCtx = finalCanvas.getContext("2d");
 
-  fCtx.drawImage(
-    cropCanvas,
-    cropRect.x, cropRect.y, cropRect.w, cropRect.h,
-    0, 0, cropRect.w, cropRect.h
-  );
+  fCtx.save();
+  fCtx.translate(finalCanvas.width / 2, finalCanvas.height / 2);
+  fCtx.rotate((rotationAngle * Math.PI) / 180);
 
-  const croppedBase64 = finalCanvas.toDataURL("image/jpeg", 0.85);
+  let drawW = (rotationAngle === 90 || rotationAngle === 270) ? realCropH : realCropW;
+  let drawH = (rotationAngle === 90 || rotationAngle === 270) ? realCropW : realCropH;
+
+  fCtx.drawImage(
+    cropImageObj,
+    (cropRect.x / cropCanvas.width) * (cropImageObj.naturalWidth || cropImageObj.width),
+    (cropRect.y / cropCanvas.height) * (cropImageObj.naturalHeight || cropImageObj.height),
+    (cropRect.w / cropCanvas.width) * (cropImageObj.naturalWidth || cropImageObj.width),
+    (cropRect.h / cropCanvas.height) * (cropImageObj.naturalHeight || cropImageObj.height),
+    -drawW / 2, -drawH / 2, drawW, drawH
+  );
+  fCtx.restore();
+
+  const croppedBase64 = finalCanvas.toDataURL("image/jpeg", 0.95);
   processedImages[curCropTarget] = croppedBase64;
 
   const prev = document.getElementById(curCropTarget === 'q' ? "previewQImg" : "previewSImg");
@@ -1590,7 +1848,7 @@ async function handleQuestionSubmit(e) {
     isTrial: isTrial,
     trialName: trialName,
     notes: document.getElementById("formNotes").value,
-    status: "doubt", // Varsayılan durum: şüpheli
+    status: "doubt",
     reactions: { heart: false, star: false, excl: false },
     audioData: audioBlobBase64,
     questionImg: qBase64,
@@ -1600,7 +1858,6 @@ async function handleQuestionSubmit(e) {
 
   await dbPut(item);
 
-  // Seri yükleme kuyruğu varsa sıradakine geç
   if (batchFilesQueue.length > 0) {
     currentBatchIdx++;
     processedImages = { q: null, s: null };
@@ -1613,7 +1870,6 @@ async function handleQuestionSubmit(e) {
     return;
   }
 
-  // Tekil yükleme temizliği
   document.getElementById("addForm").reset();
   processedImages = { q: null, s: null };
   document.getElementById("previewQImg").style.display = "none";
@@ -1700,7 +1956,7 @@ function toggleAudio() {
   }
 }
 
-// LIGHTBOX & CANVAS
+// DEVASA TAM EKRAN LIGHTBOX & CANVAS MOTORU
 let isCanvasActive = false;
 let canvasCtx = null;
 let drawing = false;
@@ -1716,28 +1972,44 @@ function openLightbox(src) {
   document.getElementById("canvasClearBtn").style.display = "none";
 }
 
+function positionLightboxCanvas() {
+  const img = document.getElementById("lightboxImg");
+  const canvas = document.getElementById("lightboxCanvas");
+  if (!img || !canvas) return;
+
+  const rect = img.getBoundingClientRect();
+  canvas.style.left = rect.left + "px";
+  canvas.style.top = rect.top + "px";
+  canvas.style.width = rect.width + "px";
+  canvas.style.height = rect.height + "px";
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+
+  canvasCtx = canvas.getContext("2d");
+  canvasCtx.strokeStyle = "#f97316";
+  canvasCtx.lineWidth = 4;
+  canvasCtx.lineCap = "round";
+  canvasCtx.lineJoin = "round";
+}
+
 function closeLightbox() {
   document.getElementById("lightboxModal").classList.remove("active");
   isCanvasActive = false;
+  const canvas = document.getElementById("lightboxCanvas");
+  if (canvasCtx) canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function toggleCanvasMode() {
   isCanvasActive = !isCanvasActive;
   const canvas = document.getElementById("lightboxCanvas");
-  const img = document.getElementById("lightboxImg");
   const btn = document.getElementById("canvasToggleBtn");
   const clearBtn = document.getElementById("canvasClearBtn");
 
   if (isCanvasActive) {
+    positionLightboxCanvas();
     canvas.style.display = "block";
-    btn.innerText = "👁️ Resmi Gör";
-    clearBtn.style.display = "block";
-    canvas.width = img.clientWidth;
-    canvas.height = img.clientHeight;
-    canvasCtx = canvas.getContext("2d");
-    canvasCtx.strokeStyle = "#f97316";
-    canvasCtx.lineWidth = 4;
-    canvasCtx.lineCap = "round";
+    btn.innerText = "👁️ Karalamayı Koru";
+    clearBtn.style.display = "inline-block";
 
     canvas.onmousedown = startDraw;
     canvas.onmousemove = draw;
@@ -1754,22 +2026,29 @@ function toggleCanvasMode() {
 
 function startDraw(e) {
   drawing = true;
-  const rect = e.target.getBoundingClientRect();
+  const rect = document.getElementById("lightboxCanvas").getBoundingClientRect();
   canvasCtx.beginPath();
   canvasCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
 }
 
 function draw(e) {
   if (!drawing) return;
-  const rect = e.target.getBoundingClientRect();
+  const rect = document.getElementById("lightboxCanvas").getBoundingClientRect();
   canvasCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
   canvasCtx.stroke();
 }
 
 function stopDraw() { drawing = false; }
 function clearCanvas() {
-  if (canvasCtx) canvasCtx.clearRect(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height);
+  const canvas = document.getElementById("lightboxCanvas");
+  if (canvasCtx) canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 }
+
+window.addEventListener("resize", () => {
+  if (document.getElementById("lightboxModal").classList.contains("active") && isCanvasActive) {
+    positionLightboxCanvas();
+  }
+});
 
 function handleBodyBackgroundClick(e) {
   if (e.target.closest("button") || e.target.closest("input") || e.target.closest("select") || e.target.closest(".modal-card") || e.target.closest(".feed-card") || e.target.closest(".setup-card")) {
@@ -1992,7 +2271,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   checkExamSelection();
   await refreshAll();
 
-  // Pazar günü kontrolü: Pazar ise haftalık bülteni otomatik anımsat
   const today = new Date();
   if (today.getDay() === 0 && !sessionStorage.getItem("bulletin_shown")) {
     sessionStorage.setItem("bulletin_shown", "true");
