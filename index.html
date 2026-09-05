@@ -117,8 +117,7 @@
     .note-text { font-size: 0.78rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 8px; margin-top: 6px; }
 
     .card-status-badge {
-      display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; margin-top: 6px;
-    }
+      display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; margin-top: 6px; }
     .status-mastered { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
     .status-doubt { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
     .status-stuck { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
@@ -428,6 +427,7 @@
           </div>
           <div id="pReasonText" style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;"></div>
           <div id="pNotesText" style="font-size:0.78rem; color:var(--text); margin-top:2px;"></div>
+          <div id="pAudioContainer" style="margin-top:8px;"></div>
         </div>
       </div>
 
@@ -631,7 +631,7 @@
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-weight:900; color:#34d399; margin-bottom:3px;">3. ⚡ Antrenman Masası & 3 Kademeli Karar</div>
-          <div>Soruları çözerken tek dokunuşla çözümü açabilir, ardından:
+          <div>Soruları çözerken tek dokunuşla çözümü ve sesli notu dinleyebilir, ardından:
             <ul style="margin-left:18px; margin-top:4px; font-size:0.75rem;">
               <li><b>👑 Tam Oturdu (Avlandı):</b> Zihne yerleşen soruları arşive kaldırır.</li>
               <li><b>⏳ Şüpheliyim (48s Tekrar):</b> Periyodik tekrar havuzuna alır.</li>
@@ -642,7 +642,7 @@
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-weight:900; color:#f87171; margin-bottom:3px;">4. 👨‍🏫 Hoca Masası, Hikayeler & Çizim</div>
-          <div>Üstteki ders dairelerine dokunarak <b>Instagram Hikayeleri</b> modunda sırasıyla soru ve çözümleri izleyin. Herhangi bir soruya dokunarak devasa ekranda açıp üzerinde serbestçe <b>karalama & çizim</b> yapabilirsiniz.</div>
+          <div>Üstteki ders dairelerine dokunarak <b>Instagram Hikayeleri</b> modunda sırasıyla soru, çözüm ve sesli ipuçlarını izleyin. Herhangi bir soruya dokunarak devasa ekranda açıp üzerinde serbestçe <b>karalama & çizim</b> yapabilirsiniz.</div>
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
@@ -679,7 +679,12 @@
       <div class="story-nav-btn story-nav-right" onclick="nextStory()"></div>
       <img id="storyImg" alt="Story İçerik">
     </div>
-    <div style="padding: 16px; text-align: center; color: #fff; font-size: 0.8rem; background: rgba(0,0,0,0.7); z-index: 510;" id="storyTopicDesc"></div>
+    <div style="padding: 14px; text-align: center; color: #fff; font-size: 0.8rem; background: rgba(0,0,0,0.75); z-index: 510;">
+      <div id="storyTopicDesc" style="margin-bottom:6px;"></div>
+      <div id="storyAudioWrap" style="display:none; max-width:400px; margin:0 auto;">
+        <audio id="storyAudioPlayer" controls style="width:100%; height:30px;"></audio>
+      </div>
+    </div>
   </div>
 
   <!-- HOCA MASASI MODAL (ÖZEL DERS / BİREBİR SLAYT MODU) -->
@@ -703,6 +708,10 @@
           </div>
           <div id="tdReason" style="font-size:0.75rem; color:#f87171; font-weight:800;"></div>
           <div id="tdNotes" style="font-size:0.75rem; color:var(--text-muted);"></div>
+          
+          <div id="tdAudioArea" style="display:none; margin-top:4px;">
+            <audio id="tdAudioPlayer" controls style="width:100%; height:32px; border-radius:8px;"></audio>
+          </div>
 
           <div style="display:flex; gap:8px; margin-top:8px;">
             <button style="flex:1; padding:12px; background:#10b981; border:none; border-radius:12px; color:#fff; font-weight:900; font-size:0.8rem; cursor:pointer;" onclick="resolveTeacherDeskQuestion(true)">✔️ Hoca Çözdü & Anlaşıldı</button>
@@ -1285,6 +1294,12 @@ function renderFeed() {
         <div class="topic-title">${q.topic}</div>
         ${statusBadge}
         ${q.notes ? `<div class="note-text">${q.notes}</div>` : ''}
+        ${q.audioData ? `
+          <div style="margin-top:8px; background:#1c1917; padding:6px; border-radius:10px; border:1px solid var(--card-border);">
+            <div style="font-size:0.68rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🎙️ Sesli Hoca Notu / İpucu:</div>
+            <audio controls src="${q.audioData}" style="width:100%; height:32px; border-radius:8px;"></audio>
+          </div>
+        ` : ''}
       </div>
       ${q.solutionImg ? `
         <button class="solution-accordion-btn" onclick="toggleAccordion(this)">
@@ -1367,6 +1382,20 @@ function loadCurrentPracticeCard() {
   document.getElementById("pSolutionImg").src = q.solutionImg || q.questionImg;
   document.getElementById("pReasonText").innerText = `Teşhis: ${q.reason}`;
   document.getElementById("pNotesText").innerText = q.notes ? `Not: ${q.notes}` : "";
+
+  const audioBox = document.getElementById("pAudioContainer");
+  if (q.audioData) {
+    audioBox.innerHTML = `
+      <div style="margin-top:6px; background:#1c1917; padding:6px; border-radius:8px; border:1px solid var(--card-border);">
+        <div style="font-size:0.68rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🎙️ Sesli İpucu:</div>
+        <audio controls src="${q.audioData}" style="width:100%; height:32px; border-radius:6px;"></audio>
+      </div>
+    `;
+    audioBox.style.display = "block";
+  } else {
+    audioBox.innerHTML = "";
+    audioBox.style.display = "none";
+  }
 }
 
 function toggleSolutionDrawer() { document.getElementById("solutionDrawer").classList.toggle("open"); }
@@ -1432,6 +1461,16 @@ function renderTeacherDeskCard() {
   document.getElementById("tdImg").src = q.questionImg;
   document.getElementById("tdReason").innerText = `Hata: ${q.reason}`;
   document.getElementById("tdNotes").innerText = q.notes ? `Öğrenci Notu: ${q.notes}` : "";
+
+  const tdAudioArea = document.getElementById("tdAudioArea");
+  const tdAudioPlayer = document.getElementById("tdAudioPlayer");
+  if (q.audioData) {
+    tdAudioPlayer.src = q.audioData;
+    tdAudioArea.style.display = "block";
+  } else {
+    tdAudioPlayer.src = "";
+    tdAudioArea.style.display = "none";
+  }
 }
 
 async function resolveTeacherDeskQuestion(isResolved) {
@@ -1507,7 +1546,7 @@ function closeHelpModal() {
   document.getElementById("helpModal").classList.remove("active");
 }
 
-// INSTAGRAM HİKAYE MOTORU (SORU + ÇÖZÜM ZİNCİRİ)
+// INSTAGRAM HİKAYE MOTORU (SORU + ÇÖZÜM + SES ZİNCİRİ)
 let storySlides = [];
 let currentStoryIdx = 0;
 let storyTimer = null;
@@ -1526,7 +1565,8 @@ function openStoryViewer(subject) {
       type: "SORU",
       topic: q.topic,
       reason: q.reason,
-      notes: q.notes
+      notes: q.notes,
+      audio: q.audioData
     });
     if (q.solutionImg) {
       storySlides.push({
@@ -1534,7 +1574,8 @@ function openStoryViewer(subject) {
         type: "💡 ÇÖZÜM & ANALİZ",
         topic: q.topic,
         reason: q.reason,
-        notes: q.notes
+        notes: q.notes,
+        audio: q.audioData
       });
     }
   });
@@ -1547,6 +1588,9 @@ function openStoryViewer(subject) {
 
 function closeStoryViewer() {
   clearTimeout(storyTimer);
+  const p = document.getElementById("storyAudioPlayer");
+  p.pause();
+  p.src = "";
   document.getElementById("storyModal").classList.remove("active");
 }
 
@@ -1561,6 +1605,17 @@ function loadStory() {
   document.getElementById("storyTypeBadge").innerText = slide.type;
   document.getElementById("storyImg").src = slide.img;
   document.getElementById("storyTopicDesc").innerText = `${slide.topic} • ${slide.reason} ${slide.notes ? '• ' + slide.notes : ''}`;
+
+  const audioWrap = document.getElementById("storyAudioWrap");
+  const audioPlayer = document.getElementById("storyAudioPlayer");
+  if (slide.audio) {
+    audioPlayer.src = slide.audio;
+    audioWrap.style.display = "block";
+  } else {
+    audioPlayer.pause();
+    audioPlayer.src = "";
+    audioWrap.style.display = "none";
+  }
 
   const progContainer = document.getElementById("storyProgressContainer");
   progContainer.innerHTML = "";
