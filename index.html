@@ -1978,22 +1978,57 @@ function renderAnalytics() {
   }
 }
 
-// SES KAYDI
+// SES KAYDI (iOS SAFARI & ANDROID/CHROME DİNAMİK UYUMLU)
 let mediaRec, audioBlobBase64 = null, audioChunks = [];
+let recordedMimeType = "audio/webm";
+
+function getSupportedAudioMimeType() {
+  const types = [
+    'audio/mp4',
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/aac'
+  ];
+  for (const t of types) {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) {
+      return t;
+    }
+  }
+  return '';
+}
+
 function toggleAudio() {
   const btn = document.getElementById("audioRecBtn");
   const status = document.getElementById("audioStatus");
   const player = document.getElementById("audioPreview");
+
   if (!mediaRec || mediaRec.state === "inactive") {
     audioChunks = [];
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      mediaRec = new MediaRecorder(stream);
+      recordedMimeType = getSupportedAudioMimeType();
+      const options = recordedMimeType ? { mimeType: recordedMimeType } : {};
+      
+      try {
+        mediaRec = new MediaRecorder(stream, options);
+      } catch (err) {
+        mediaRec = new MediaRecorder(stream);
+        recordedMimeType = mediaRec.mimeType || 'audio/mp4';
+      }
+
       mediaRec.start();
       btn.innerText = "⏹️ Bitir";
       status.innerText = "Kayıtta...";
-      mediaRec.ondataavailable = e => audioChunks.push(e.data);
+
+      mediaRec.ondataavailable = e => {
+        if (e.data && e.data.size > 0) {
+          audioChunks.push(e.data);
+        }
+      };
+
       mediaRec.onstop = () => {
-        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const finalType = recordedMimeType || (audioChunks[0] ? audioChunks[0].type : 'audio/mp4');
+        const blob = new Blob(audioChunks, { type: finalType });
         const reader = new FileReader();
         reader.readAsDataURL(blob);
         reader.onloadend = () => {
@@ -2003,7 +2038,9 @@ function toggleAudio() {
           status.innerText = "Hazır!";
         };
       };
-    }).catch(() => alert("Mikrofon izni verilmedi."));
+    }).catch(err => {
+      alert("Mikrofon izni verilmedi veya erişilemedi: " + err.message);
+    });
   } else {
     mediaRec.stop();
     mediaRec.stream.getTracks().forEach(t => t.stop());
