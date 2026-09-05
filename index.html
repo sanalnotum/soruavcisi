@@ -27,6 +27,7 @@
       --text: #fafaf9;
       --text-muted: #a8a29e;
       --success: #10b981;
+      --warning: #f59e0b;
       --danger: #ef4444;
       --nav-height: 68px;
     }
@@ -35,29 +36,20 @@
     body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 16px); min-height: 100vh; min-height: 100dvh; overflow-x: hidden; user-select: none; }
 
     header {
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  /* Üst çentik / saat payını dinamik olarak ekler */
-  padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
-  padding-bottom: 10px;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: sticky; 
-  top: 0; 
-  z-index: 30; 
-  backdrop-filter: blur(16px);
-  background: rgba(28, 25, 23, 0.95); 
-  border-bottom: 2px solid var(--accent-primary); 
-  /* Yüksekliği de bu paya göre esnetir */
-  height: calc(60px + env(safe-area-inset-top, 0px));
-}
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+      padding-bottom: 10px; padding-left: 16px; padding-right: 16px;
+      position: sticky; top: 0; z-index: 30; backdrop-filter: blur(16px);
+      background: rgba(28, 25, 23, 0.95); border-bottom: 2px solid var(--accent-primary);
+      height: calc(60px + env(safe-area-inset-top, 0px));
+    }
     .brand { display: flex; align-items: center; gap: 8px; }
     .brand-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
     .brand-name { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .header-actions { display: flex; align-items: center; gap: 8px; }
-    .btn-icon-head { background: #292524; border: 1px solid var(--card-border); color: var(--text); padding: 7px 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .header-actions { display: flex; align-items: center; gap: 6px; }
+    .btn-icon-head { background: #292524; border: 1px solid var(--card-border); color: var(--text); padding: 7px 9px; border-radius: 10px; font-size: 0.74rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .btn-icon-head.coach-btn { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
 
     .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
@@ -89,21 +81,6 @@
     }
     .story-title { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-align: center; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    .story-viewer-modal {
-      position: fixed; inset: 0; background: #000; z-index: 250; display: none; flex-direction: column; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
-    }
-    .story-viewer-modal.active { display: flex; }
-    .story-progress-bar { display: flex; gap: 4px; padding: 10px 14px; }
-    .story-prog-segment { flex: 1; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden; }
-    .story-prog-fill { width: 0%; height: 100%; background: #fff; transition: width 0.1s linear; }
-    .story-viewer-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 16px; }
-    .story-viewer-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; position: relative; overflow-y: auto; cursor: pointer; }
-    .story-img-box { max-width: 100%; max-height: 58vh; background: #000; display: flex; align-items: center; justify-content: center; border-radius: 12px; overflow: hidden; }
-    .story-img-box img { width: 100%; height: 100%; object-fit: contain; }
-    .story-actions-bar { display: flex; justify-content: center; gap: 14px; padding: 16px; background: rgba(0,0,0,0.9); }
-    .story-react-btn { background: #292524; border: 1px solid var(--card-border); color: #fff; padding: 10px 14px; border-radius: 999px; font-weight: 800; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-    .story-react-btn.active { background: var(--accent-primary); border-color: var(--accent-primary); }
-
     .clutch-bar {
       display: flex; justify-content: space-between; align-items: center;
       background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(239, 68, 68, 0.15));
@@ -116,7 +93,7 @@
 
     .action-sub-bar { display: flex; gap: 8px; margin-bottom: 12px; }
     .btn-sub-action {
-      flex: 1; padding: 10px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text); font-size: 0.82rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      flex: 1; padding: 10px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text); font-size: 0.78rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 
     .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
@@ -139,6 +116,13 @@
     .topic-title { font-size: 0.95rem; font-weight: 900; margin-bottom: 4px; }
     .note-text { font-size: 0.78rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 8px; margin-top: 6px; }
 
+    .card-status-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; margin-top: 6px;
+    }
+    .status-mastered { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .status-doubt { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .status-stuck { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+
     .solution-accordion-btn {
       width: 100%; padding: 10px 14px; background: #292524; border: none; border-top: 1px solid var(--card-border); color: #34d399; font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
     }
@@ -148,7 +132,7 @@
     .card-actions { padding: 10px 14px 12px; display: flex; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
     .btn-action { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--card-border); background: #292524; color: var(--text); font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
 
-    /* PRATİK ALANI & ANTRENMAN MASASI */
+    /* PRATİK & ANTRENMAN MASASI */
     #tab-practice.active {
       display: flex; flex-direction: column; min-height: calc(100dvh - 60px - var(--nav-height) - 12px); padding: 6px 14px;
     }
@@ -176,19 +160,27 @@
     }
     .solution-drawer.open { display: block; }
 
-    .sweet-choice-bar { display: flex; gap: 12px; width: 100%; max-width: 440px; margin: 12px auto 0 auto; flex-shrink: 0; }
-    .btn-sweet {
-      flex: 1; padding: 14px; border-radius: 16px; border: none; font-weight: 900; font-size: 0.92rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    /* 3 KADEMELİ İKNA BARI */
+    .sweet-choice-bar-triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; width: 100%; max-width: 500px; margin: 12px auto 0 auto; flex-shrink: 0; }
+    .btn-choice {
+      padding: 12px 6px; border-radius: 14px; border: none; font-weight: 900; font-size: 0.78rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-align: center;
     }
-    .btn-sweet-repeat { background: rgba(239, 68, 68, 0.2); color: #fda4af; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .btn-sweet-master { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .btn-choice-stuck { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .btn-choice-doubt { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .btn-choice-master { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    .coach-alarm-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(249, 115, 22, 0.25));
+      border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; display: none; align-items: center; gap: 10px; animation: pulseGlow 3s infinite;
+    }
+    .coach-alarm-banner.active { display: flex; }
 
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(12px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-overlay.active { display: flex; }
     .modal-card {
-      background: #292524; border: 1px solid var(--card-border); border-radius: 22px; padding: 20px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto;
+      background: #292524; border: 1px solid var(--card-border); border-radius: 22px; padding: 20px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto;
     }
 
     .input-group { margin-bottom: 12px; }
@@ -218,6 +210,13 @@
       70% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
       100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
     }
+
+    /* KIRPMA MODALI */
+    #cropperContainer {
+      width: 100%; height: 320px; background: #000; position: relative; overflow: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+    }
+    #cropperCanvas { max-width: 100%; max-height: 100%; touch-action: none; cursor: crosshair; }
+    .crop-btn-bar { display: flex; gap: 8px; justify-content: center; }
   </style>
 </head>
 <body onclick="handleBodyBackgroundClick(event)">
@@ -242,7 +241,8 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn-icon-head" onclick="openManualModal()" title="Kılavuz">📖 Kılavuz</button>
+      <button class="btn-icon-head coach-btn" onclick="openTeacherDeskModal()" title="Hoca Masası">👨‍🏫 Hoca Masası</button>
+      <button class="btn-icon-head" onclick="openBulletinModal()" title="Haftalık Bülten">📊 Bülten</button>
       <button class="btn-icon-head" onclick="openPdfModal()" title="PDF Çıktı">🖨️ PDF</button>
       <button class="btn-icon-head" onclick="resetExamSelection()" title="Alan Değiştir">⚙️ Alan</button>
     </div>
@@ -251,6 +251,16 @@
   <!-- TAB 1: AKIŞ -->
   <div id="tab-feed" class="tab-view active" onclick="event.stopPropagation()">
     <div class="stories-container" id="storiesContainer"></div>
+
+    <!-- KOÇ ALARMI: AYNI HATA İKİZLERİ BANNERI -->
+    <div class="coach-alarm-banner" id="coachTwinAlarmBanner">
+      <span style="font-size:1.4rem;">🚨</span>
+      <div style="flex:1;">
+        <div style="font-size:0.8rem; font-weight:900; color:#fca5a5;" id="coachAlarmTitle">Hata İkizi Alarmı!</div>
+        <div style="font-size:0.7rem; color:#fecdd3;" id="coachAlarmDesc">Bu konuda peş peşe aynı hataya düşüldü.</div>
+      </div>
+      <button style="padding:6px 10px; background:#ef4444; border:none; border-radius:8px; color:#fff; font-size:0.72rem; font-weight:900; cursor:pointer;" onclick="launchTwinPractice()">Çöz ⚡</button>
+    </div>
 
     <div class="clutch-bar">
       <div>
@@ -273,7 +283,7 @@
   <!-- TAB 2: PRATİK -->
   <div id="tab-practice" class="tab-view" onclick="event.stopPropagation()">
     
-    <!-- SEÇENEK A: ÖZEL ANTRENMAN MASASI KURULUM PANELİ -->
+    <!-- ÖZEL ANTRENMAN MASASI KURULUM PANELİ -->
     <div id="practiceSetupView" class="setup-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary);">⚡ Antrenman Masası</h3>
@@ -300,7 +310,8 @@
           <option value="all">Tüm Soru Havuzu</option>
           <option value="trials">🎯 Sadece Deneme Hataları</option>
           <option value="traps">⚠️ Sadece Tuzak Sorular</option>
-          <option value="unmastered">👎 Tekrar Çözülecekler</option>
+          <option value="stuck">🚨 Sadece Tıkalı / Hoca Masası Soruları</option>
+          <option value="doubt">⏳ Şüpheli / 48 Saatlik Tekrarlar</option>
         </select>
       </div>
 
@@ -359,16 +370,33 @@
         </div>
       </div>
 
-      <div class="sweet-choice-bar">
-        <button class="btn-sweet btn-sweet-repeat" onclick="handleSweetChoice(false)">👎 Tekrar Çöz</button>
-        <button class="btn-sweet btn-sweet-master" onclick="handleSweetChoice(true)">👍 Anladım</button>
+      <!-- 3 KADEMELİ İKNA SEÇİM BARI -->
+      <div class="sweet-choice-bar-triple">
+        <button class="btn-choice btn-choice-stuck" onclick="handleThreeLevelChoice('stuck')">
+          <span style="font-size:1.1rem;">🚨</span>
+          <span>Tıkalıyım</span>
+          <span style="font-size:0.62rem; opacity:0.8;">Hoca Masasına</span>
+        </button>
+        <button class="btn-choice btn-choice-doubt" onclick="handleThreeLevelChoice('doubt')">
+          <span style="font-size:1.1rem;">⏳</span>
+          <span>Şüpheliyim</span>
+          <span style="font-size:0.62rem; opacity:0.8;">48s Sonra Tekrar</span>
+        </button>
+        <button class="btn-choice btn-choice-master" onclick="handleThreeLevelChoice('mastered')">
+          <span style="font-size:1.1rem;">👑</span>
+          <span>Tam Oturdu</span>
+          <span style="font-size:0.62rem; opacity:0.8;">Avlandı</span>
+        </button>
       </div>
     </div>
   </div>
 
   <!-- TAB 3: RAPOR -->
   <div id="tab-analytics" class="tab-view" onclick="event.stopPropagation()">
-    <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); margin-bottom:10px; text-transform:uppercase;">Genel Hata Analizi & Performans</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); text-transform:uppercase;">Genel Hata Analizi & Performans</div>
+      <button onclick="openBulletinModal()" style="background:#292524; border:1px solid var(--accent-primary); color:var(--accent-primary); padding:4px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; cursor:pointer;">📊 Haftalık Bülten</button>
+    </div>
     
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px; display:flex; flex-direction:column; gap:8px;">
       <button style="background:var(--accent-gradient); border:none; color:#fff; padding:12px; border-radius:12px; font-weight:900; font-size:0.85rem; cursor:pointer;" onclick="openAirDropSender()">📲➡️💻 QR / AirDrop ile Tablete Aktar</button>
@@ -393,14 +421,18 @@
       </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
-      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px;">
-        <div style="font-size:1.8rem; font-weight:900; color:var(--accent-primary);" id="statTotalCount">0</div>
-        <div style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">Toplam Yanlış Soru</div>
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:14px;">
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;">
+        <div style="font-size:1.5rem; font-weight:900; color:var(--accent-primary);" id="statTotalCount">0</div>
+        <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Toplam Soru</div>
       </div>
-      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px;">
-        <div style="font-size:1.8rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div>
-        <div style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">Kavranan / Öğrenilen</div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;">
+        <div style="font-size:1.5rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div>
+        <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Tam Oturan</div>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;">
+        <div style="font-size:1.5rem; font-weight:900; color:#ef4444;" id="statStuckCount">0</div>
+        <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Hoca Masası</div>
       </div>
     </div>
 
@@ -410,18 +442,38 @@
     </div>
   </div>
 
-  <!-- TAB 4: HIZLI SORU EKLE -->
+  <!-- TAB 4: HIZLI & SERİ SORU EKLE -->
   <div id="tab-add" class="tab-view" onclick="event.stopPropagation()">
-    <h3 style="font-size:1.2rem; font-weight:900; margin-bottom:14px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Hızlı Soru Ekle</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="font-size:1.2rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Soru Arşivle</h3>
+      <span id="batchQueueStatus" style="font-size:0.75rem; font-weight:800; color:var(--accent-primary); display:none;">Kuyruk: 1/3</span>
+    </div>
+
+    <div class="input-group" style="background:#292524; padding:10px; border-radius:12px; border:1px dashed var(--accent-primary); margin-bottom:12px;">
+      <label style="color:#fdba74;">📸 Seri Yükleme Modu (Çoklu Seçim Yapabilirsiniz)</label>
+      <input type="file" id="batchInputFiles" accept="image/*" multiple onchange="handleBatchFileSelect(event)">
+      <div style="font-size:0.68rem; color:var(--text-muted); margin-top:4px;">Birden fazla soru fotoğrafı seçip art arda etiketleyerek kaydedebilirsiniz.</div>
+    </div>
+
     <form id="addForm" onsubmit="handleQuestionSubmit(event)">
       <div class="input-group">
         <label>📸 Soru Görseli (Zorunlu)</label>
-        <input type="file" id="formQImg" accept="image/*" required>
+        <div style="display:flex; gap:6px;">
+          <input type="file" id="formQImg" accept="image/*" onchange="triggerImageCrop(this, 'q')">
+          <button type="button" id="btnCropQ" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="reopenCropper('q')">✂️ Kırp</button>
+        </div>
+        <img id="previewQImg" style="display:none; max-height:120px; border-radius:8px; margin-top:6px; object-fit:contain; background:#000;">
       </div>
+
       <div class="input-group">
         <label>💡 Çözüm Görseli (İsteğe Bağlı)</label>
-        <input type="file" id="formSImg" accept="image/*">
+        <div style="display:flex; gap:6px;">
+          <input type="file" id="formSImg" accept="image/*" onchange="triggerImageCrop(this, 's')">
+          <button type="button" id="btnCropS" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="reopenCropper('s')">✂️ Kırp</button>
+        </div>
+        <img id="previewSImg" style="display:none; max-height:120px; border-radius:8px; margin-top:6px; object-fit:contain; background:#000;">
       </div>
+
       <div class="input-group">
         <label>Ders & Konu</label>
         <div style="display:flex; gap:6px; margin-bottom:6px;">
@@ -463,11 +515,13 @@
         </div>
         <audio id="audioPreview" controls style="width:100%; margin-top:6px; display:none; height:32px;"></audio>
       </div>
+
       <div class="input-group">
         <label>Not / Kaynak</label>
         <input type="text" id="formNotes" placeholder="Örn: 3D Yayınları Deneme 2">
       </div>
-      <button type="submit" style="width:100%; padding:14px; border-radius:14px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.95rem; cursor:pointer; margin-top:6px;">
+
+      <button type="submit" id="addFormSubmitBtn" style="width:100%; padding:14px; border-radius:14px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.95rem; cursor:pointer; margin-top:6px;">
         Arşive Ekle ve Avla 🚀
       </button>
     </form>
@@ -492,25 +546,85 @@
     </button>
   </nav>
 
-  <!-- HİKAYE GÖRÜNTÜLEYİCİ -->
-  <div class="story-viewer-modal" id="storyViewerModal" onclick="event.stopPropagation()">
-    <div class="story-progress-bar" id="storyProgBars"></div>
-    <div class="story-viewer-header">
-      <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary);" id="storyModalTitle">Ders Adı</div>
-      <button onclick="closeStoryViewer()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">✕</button>
-    </div>
-    <div class="story-viewer-content" id="storyViewerContent" onclick="advanceStoryStep()">
-      <div class="story-img-box">
-        <img id="storyMainImg" alt="Hikaye Görseli">
+  <!-- HOCA MASASI MODAL (ÖZEL DERS / BİREBİR SLAYT MODU) -->
+  <div class="modal-overlay" id="teacherDeskModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:580px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="font-size:1.15rem; font-weight:900; color:#f87171;">👨‍🏫 Birebir Hoca Masası</h3>
+        <button onclick="closeTeacherDeskModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
       </div>
-      <div id="storyStepLabel" style="font-size:0.72rem; font-weight:800; color:#34d399; margin-top:8px; text-transform:uppercase;"></div>
-      <div id="storyTopicText" style="font-size:0.85rem; font-weight:800; margin-top:4px; text-align:center;"></div>
-      <div id="storyNoteText" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; text-align:center;"></div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Öğrencinin "Tıkalıyım" dediği ve hoca desteği bekleyen sorular listesi:</div>
+      
+      <div id="teacherDeskBody">
+        <div id="teacherDeskEmpty" style="display:none; text-align:center; padding:30px; color:var(--text-muted); font-weight:800;">Şu an hoca masasında bekleyen tıkalı soru yok! 🎉</div>
+        <div id="teacherDeskContent" style="display:none; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:800; color:var(--accent-primary);">
+            <span id="tdMeta">Ders - Konu</span>
+            <span id="tdCounter">1 / 4</span>
+          </div>
+          <div style="background:#000; border-radius:12px; height:260px; display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:zoom-in;" onclick="openLightbox(document.getElementById('tdImg').src)">
+            <img id="tdImg" style="max-width:100%; max-height:100%; object-fit:contain;">
+          </div>
+          <div id="tdReason" style="font-size:0.75rem; color:#f87171; font-weight:800;"></div>
+          <div id="tdNotes" style="font-size:0.75rem; color:var(--text-muted);"></div>
+
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button style="flex:1; padding:12px; background:#10b981; border:none; border-radius:12px; color:#fff; font-weight:900; font-size:0.8rem; cursor:pointer;" onclick="resolveTeacherDeskQuestion(true)">✔️ Hoca Çözdü & Anlaşıldı</button>
+            <button style="padding:12px 14px; background:#292524; border:1px solid var(--card-border); border-radius:12px; color:#fff; font-weight:800; font-size:0.8rem; cursor:pointer;" onclick="nextTeacherDeskQuestion()">Sonraki ⏭️</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="story-actions-bar" onclick="event.stopPropagation()">
-      <button class="story-react-btn" id="storyBtnHeart" onclick="toggleStoryReaction('heart')">❤️ Kalp</button>
-      <button class="story-react-btn" id="storyBtnStar" onclick="toggleStoryReaction('star')">⭐ Yıldız</button>
-      <button class="story-react-btn" id="storyBtnExcl" onclick="toggleStoryReaction('excl')">❗ Ünlem</button>
+  </div>
+
+  <!-- HAFTALIK HATA BÜLTENİ MODALI -->
+  <div class="modal-overlay" id="bulletinModal" onclick="event.stopPropagation()">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="font-size:1.15rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">📊 Haftalık Hata Bülteni</h3>
+        <button onclick="closeBulletinModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:12px;" id="bulletinDateRange">Son 7 Günlük Bilanço</div>
+
+      <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center;">
+          <div>
+            <div style="font-size:1.4rem; font-weight:900; color:var(--accent-primary);" id="bWeeklyTotal">0</div>
+            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Eklenen Yanlış</div>
+          </div>
+          <div>
+            <div style="font-size:1.4rem; font-weight:900; color:#34d399;" id="bWeeklyMastered">0</div>
+            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Kurtarılan Soru</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#1c1917; border:1px solid rgba(239,68,68,0.3); border-radius:14px; padding:12px; margin-bottom:12px;">
+        <div style="font-size:0.75rem; font-weight:900; color:#f87171; margin-bottom:4px;">🔥 Haftanın En Çok Can Yakan Konusu:</div>
+        <div style="font-size:0.95rem; font-weight:900;" id="bTopPainTopic">Henüz yeterli veri yok</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;" id="bTopPainReason">--</div>
+      </div>
+
+      <div style="background:rgba(249, 115, 22, 0.1); border:1px solid rgba(249,115,22,0.3); border-radius:14px; padding:12px; font-size:0.75rem; line-height:1.4; color:#fed7aa;" id="bCoachAdvice">
+        Koç Tavsiyesi yükleniyor...
+      </div>
+
+      <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:14px; cursor:pointer;" onclick="closeBulletinModal()">Tamam, Odaklanıyorum 🎯</button>
+    </div>
+  </div>
+
+  <!-- KIRPMA & DÖNDÜRME MODALI -->
+  <div class="modal-overlay" id="cropperModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:500px; text-align:center;">
+      <h3 style="font-size:1.05rem; font-weight:900; margin-bottom:10px;">✂️ Görseli Ayarla</h3>
+      <div id="cropperContainer">
+        <canvas id="cropperCanvas"></canvas>
+      </div>
+      <div class="crop-btn-bar">
+        <button class="btn-sub-action" onclick="rotateCropper(90)">🔄 90° Döndür</button>
+        <button class="btn-sub-action" onclick="resetCropSelection()">🔄 Sıfırla</button>
+        <button class="btn-sub-action" style="background:var(--accent-primary); border-color:var(--accent-primary); color:#fff;" onclick="applyCropAndClose()">Tamamla ✔️</button>
+      </div>
     </div>
   </div>
 
@@ -524,6 +638,7 @@
           <option value="all">Tüm Soru Havuzu</option>
           <option value="traps">Sadece Tuzak Sorular (⚠️)</option>
           <option value="trials">Sadece Deneme Hataları (🎯)</option>
+          <option value="stuck">Sadece Hoca Masası / Tıkalı Sorular (🚨)</option>
         </select>
       </div>
       <div class="input-group">
@@ -545,7 +660,7 @@
 
   <!-- LIGHTBOX & CANVAS ÇİZİM TAHTASI -->
   <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()" style="background:rgba(0,0,0,0.96); flex-direction:column;">
-    <div style="position:absolute; top:16px; right:20px; z-index:300; display:flex; gap:10px;" onclick="event.stopPropagation()">
+    <div style="position:absolute; top:calc(env(safe-area-inset-top, 0px) + 12px); right:16px; z-index:300; display:flex; gap:8px;" onclick="event.stopPropagation()">
       <button class="btn-icon-head" onclick="toggleCanvasMode()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff;">✏️ Çiz / Karala</button>
       <button class="btn-icon-head" onclick="clearCanvas()" id="canvasClearBtn" style="display:none; background:#ef4444; border:none; color:#fff;">Sil</button>
       <button class="btn-icon-head" onclick="closeLightbox()">✕ Kapat</button>
@@ -553,23 +668,6 @@
     <div style="position:relative; max-width:94vw; max-height:85vh; display:flex; align-items:center; justify-content:center;" onclick="event.stopPropagation()">
       <img id="lightboxImg" alt="Lightbox Soru" style="max-width:100%; max-height:85vh; object-fit:contain; display:block;">
       <canvas id="lightboxCanvas" style="position:absolute; inset:0; width:100%; height:100%; display:none; cursor:crosshair;"></canvas>
-    </div>
-  </div>
-
-  <!-- KILAVUZ MODALI -->
-  <div class="modal-overlay" id="manualModal" onclick="event.stopPropagation()">
-    <div class="modal-card">
-      <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary); margin-bottom:8px;">📖 Soru Avcısı Kılavuz & İletişim</h3>
-      <div style="font-size:0.78rem; line-height:1.5; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
-        <p>🎯 <b>Alan Seçimi:</b> İlk açılışta seçtiğin sınav grubu ana akışını ve müfredatını belirler.</p>
-        <p>⚡ <b>Antrenman Masası:</b> Pratik sekmesinde istediğin ders, konu ve hata tipini seçerek nokta atışı telafi antrenmanı yapabilirsin.</p>
-        <p>📱 <b>Dinamik Hikayeler & Otomatik Akış:</b> Bir dersin hikayeleri bittiğinde sıradaki derse akıcı bir şekilde geçer.</p>
-        <p>🎯 <b>Deneme Sınavı Takibi:</b> Soruları eklerken deneme yayınını girerek tek tuşla deneme hatalarınızı süzebilirsiniz.</p>
-        <p>⚠️ <b>Tuzak Sorular:</b> ÖSYM çeldirmeli soruları işaretleyip özel antrenman yapabilirsiniz.</p>
-        <p>✉️ <b>İletişim & Destek:</b> <a href="mailto:sanalnotum@gmail.com" style="color:var(--accent-primary); font-weight:800;">sanalnotum@gmail.com</a></p>
-        <p style="text-align:center; font-weight:900; color:var(--text); margin-top:4px;">HAZIRLAYAN: YILDIRAY HOCA</p>
-      </div>
-      <button style="width:100%; padding:12px; margin-top:14px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; cursor:pointer;" onclick="closeManualModal()">Anladım, Kapat 🚀</button>
     </div>
   </div>
 
@@ -591,7 +689,7 @@
   </div>
 
 <script>
-// MERKEZİ HATA TEŞHİS HAVUZU
+// MERKEZİ HATA TEŞHİS LİSTESİ
 const ERROR_REASONS = [
   "Bilgi / Konu Eksikliği",
   "Dikkat / İşlem Hatası",
@@ -688,7 +786,7 @@ const MASTER_CURRICULUM = {
   }
 };
 
-const DB_NAME = "SoruAvcisiDB_YildirayHoca_v10";
+const DB_NAME = "SoruAvcisiDB_YildirayHoca_v11";
 const STORE_NAME = "questions";
 let db;
 let allQuestions = [];
@@ -732,28 +830,6 @@ function dbDelete(id) {
   });
 }
 
-function compressImg(file) {
-  return new Promise((resolve) => {
-    if (!file) return resolve(null);
-    const r = new FileReader();
-    r.readAsDataURL(file);
-    r.onload = (e) => {
-      const img = new Image();
-      img.src = e.target.result;
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const maxW = 1000;
-        let w = img.width, h = img.height;
-        if (w > maxW) { h = (h * maxW) / w; w = maxW; }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", 0.75));
-      };
-    };
-  });
-}
-
-// Hata sebeplerini tüm açılır menülere tek merkezden basan motor
 function populateErrorReasonDropdowns() {
   const selects = [
     { id: "formReasonSelect", placeholder: null },
@@ -808,13 +884,11 @@ function resetExamSelection() {
 function initAppForExam() {
   const subjects = MASTER_CURRICULUM[activeExam] || {};
   
-  // Soru ekleme ders seçici
   const subSelect = document.getElementById("formSubjectSelect");
   subSelect.innerHTML = "";
   Object.keys(subjects).forEach(s => { subSelect.innerHTML += `<option value="${s}">${s}</option>`; });
   renderTopicDropdown();
 
-  // Pratik masası ders seçici
   const pSetupSub = document.getElementById("pSetupSubject");
   pSetupSub.innerHTML = '<option value="all">Tüm Dersler</option>';
   Object.keys(subjects).forEach(s => { pSetupSub.innerHTML += `<option value="${s}">${s}</option>`; });
@@ -868,19 +942,17 @@ function getFilteredPracticeQuestions() {
     if (reason !== "all" && q.reason !== reason) return false;
     if (scope === "trials" && !q.isTrial) return false;
     if (scope === "traps" && !q.isTrap) return false;
-    if (scope === "unmastered" && q.isMastered) return false;
+    if (scope === "stuck" && q.status !== "stuck") return false;
+    if (scope === "doubt" && q.status !== "doubt") return false;
     return true;
   });
 }
 
 function launchTargetedPractice() {
   let targetQuestions = getFilteredPracticeQuestions();
-  if (targetQuestions.length === 0) {
-    return alert("Seçtiğin kriterlere uygun soru bulunamadı!");
-  }
+  if (targetQuestions.length === 0) return alert("Seçtiğin kriterlere uygun soru bulunamadı!");
 
   const limitVal = document.getElementById("pSetupLimit").value;
-  // Soruları karıştırarak zihni şaşırt
   targetQuestions = targetQuestions.sort(() => 0.5 - Math.random());
 
   if (limitVal !== "all") {
@@ -890,7 +962,6 @@ function launchTargetedPractice() {
 
   document.getElementById("practiceSetupView").style.display = "none";
   document.getElementById("practiceCardView").style.display = "flex";
-
   setupPracticeSession(targetQuestions);
 }
 
@@ -932,6 +1003,47 @@ function updateExamCountdown() {
   document.getElementById("daysUntilExam").innerText = diff;
 }
 
+// AYNI HATA İKİZLERİ TESPİTİ (KOÇ ALARMI)
+let twinPracticeTopic = null;
+function checkTwinErrorAlarms() {
+  const examPool = allQuestions.filter(q => q.exam === activeExam);
+  const map = {};
+  examPool.forEach(q => {
+    const key = `${q.subject}___${q.topic}___${q.reason}`;
+    map[key] = (map[key] || 0) + 1;
+  });
+
+  const banner = document.getElementById("coachTwinAlarmBanner");
+  let foundTwin = null;
+
+  for (const [k, count] of Object.entries(map)) {
+    if (count >= 2) {
+      const parts = k.split("___");
+      foundTwin = { subject: parts[0], topic: parts[1], reason: parts[2], count: count };
+      break;
+    }
+  }
+
+  if (foundTwin) {
+    twinPracticeTopic = foundTwin;
+    document.getElementById("coachAlarmTitle").innerText = `🚨 ${foundTwin.topic} Konusunda İkiz Hata!`;
+    document.getElementById("coachAlarmDesc").innerText = `"${foundTwin.reason}" sebebiyle ${foundTwin.count} soru kaçırıldı. Telafi şart.`;
+    banner.classList.add("active");
+  } else {
+    twinPracticeTopic = null;
+    banner.classList.remove("active");
+  }
+}
+
+function launchTwinPractice() {
+  if (!twinPracticeTopic) return;
+  const filtered = allQuestions.filter(q => q.exam === activeExam && q.topic === twinPracticeTopic.topic && q.reason === twinPracticeTopic.reason);
+  switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
+  document.getElementById("practiceSetupView").style.display = "none";
+  document.getElementById("practiceCardView").style.display = "flex";
+  setupPracticeSession(filtered);
+}
+
 function buildStoriesBar() {
   const container = document.getElementById("storiesContainer");
   container.innerHTML = "";
@@ -943,9 +1055,7 @@ function buildStoriesBar() {
   allQuestions.forEach(q => {
     if (q.exam === activeExam && q.subject) {
       const t = new Date(q.createdAt).getTime();
-      if (t > (subLastAdded[q.subject] || 0)) {
-        subLastAdded[q.subject] = t;
-      }
+      if (t > (subLastAdded[q.subject] || 0)) subLastAdded[q.subject] = t;
     }
   });
 
@@ -965,99 +1075,6 @@ function buildStoriesBar() {
       </div>
     `;
   });
-}
-
-let storyQueue = [];
-let currentStoryStep = 0;
-let currentStorySubjectIndex = 0;
-let activeSortedSubjects = [];
-
-function openStoryViewer(subject) {
-  const subjects = Object.keys(MASTER_CURRICULUM[activeExam] || {});
-  activeSortedSubjects = subjects;
-  currentStorySubjectIndex = activeSortedSubjects.indexOf(subject);
-  if (currentStorySubjectIndex === -1) currentStorySubjectIndex = 0;
-  loadSubjectStories(activeSortedSubjects[currentStorySubjectIndex]);
-}
-
-function loadSubjectStories(subject) {
-  const qList = allQuestions.filter(q => q.exam === activeExam && q.subject === subject).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
-  if (qList.length === 0) {
-    currentStorySubjectIndex++;
-    if (currentStorySubjectIndex < activeSortedSubjects.length) {
-      loadSubjectStories(activeSortedSubjects[currentStorySubjectIndex]);
-      return;
-    } else {
-      closeStoryViewer();
-      alert("Bu ders grubu için hikaye akışı tamamlandı! 🎉");
-      return;
-    }
-  }
-
-  storyQueue = [];
-  qList.forEach(q => {
-    storyQueue.push({ img: q.questionImg, type: 'q', qObj: q, label: 'Soru (Güncel Akış)' });
-    if (q.solutionImg) {
-      storyQueue.push({ img: q.solutionImg, type: 's', qObj: q, label: 'Çözüm' });
-    }
-  });
-
-  currentStoryStep = 0;
-  document.getElementById("storyModalTitle").innerText = subject;
-  document.getElementById("storyViewerModal").classList.add("active");
-  renderStoryStep();
-}
-
-function renderStoryStep() {
-  if (currentStoryStep >= storyQueue.length) {
-    currentStorySubjectIndex++;
-    if (currentStorySubjectIndex < activeSortedSubjects.length) {
-      loadSubjectStories(activeSortedSubjects[currentStorySubjectIndex]);
-      return;
-    } else {
-      closeStoryViewer();
-      return;
-    }
-  }
-  const step = storyQueue[currentStoryStep];
-  const q = step.qObj;
-
-  document.getElementById("storyMainImg").src = step.img;
-  document.getElementById("storyStepLabel").innerText = step.label;
-  document.getElementById("storyTopicText").innerText = q.topic;
-  document.getElementById("storyNoteText").innerText = q.notes ? `Not: ${q.notes}` : `Hata: ${q.reason}`;
-  
-  document.getElementById("storyBtnHeart").className = `story-react-btn ${q.reactions?.heart ? 'active' : ''}`;
-  document.getElementById("storyBtnStar").className = `story-react-btn ${q.reactions?.star ? 'active' : ''}`;
-  document.getElementById("storyBtnExcl").className = `story-react-btn ${q.reactions?.excl ? 'active' : ''}`;
-
-  const barContainer = document.getElementById("storyProgBars");
-  barContainer.innerHTML = "";
-  storyQueue.forEach((_, i) => {
-    barContainer.innerHTML += `<div class="story-prog-segment"><div class="story-prog-fill" style="width:${i < currentStoryStep ? '100%' : (i === currentStoryStep ? '100%':'0%')}"></div></div>`;
-  });
-}
-
-function advanceStoryStep() {
-  currentStoryStep++;
-  renderStoryStep();
-}
-
-function toggleStoryReaction(type) {
-  const step = storyQueue[currentStoryStep];
-  if (!step) return;
-  const q = step.qObj;
-  if (!q.reactions) q.reactions = { heart: false, star: false, excl: false };
-  q.reactions[type] = !q.reactions[type];
-  dbPut(q).then(() => {
-    renderStoryStep();
-    renderFeed();
-  });
-}
-
-function closeStoryViewer() {
-  document.getElementById("storyViewerModal").classList.remove("active");
 }
 
 function buildExamPills() {
@@ -1109,6 +1126,12 @@ function renderFeed() {
   items.forEach(q => {
     const card = document.createElement("div");
     card.className = "feed-card";
+    
+    let statusBadge = '';
+    if (q.status === 'mastered') statusBadge = '<span class="card-status-badge status-mastered">👑 Avlandı (Tam Oturdu)</span>';
+    else if (q.status === 'doubt') statusBadge = '<span class="card-status-badge status-doubt">⏳ Şüpheli (48s Sonra)</span>';
+    else if (q.status === 'stuck') statusBadge = '<span class="card-status-badge status-stuck">🚨 Tıkalı (Hoca Masası)</span>';
+
     card.innerHTML = `
       <div class="card-top">
         <span class="tag-exam">${q.subject} ${q.isTrap ? '⚠️[TUZAK]' : ''} ${q.isTrial ? '🎯['+(q.trialName || 'Deneme')+']' : ''}</span>
@@ -1124,6 +1147,7 @@ function renderFeed() {
       </div>
       <div class="card-body">
         <div class="topic-title">${q.topic}</div>
+        ${statusBadge}
         ${q.notes ? `<div class="note-text">${q.notes}</div>` : ''}
       </div>
       ${q.solutionImg ? `
@@ -1168,6 +1192,7 @@ async function deleteQuestion(id) {
   }
 }
 
+// PRATİK VE 3 KADEMELİ İKNA SEÇİMİ
 let practiceList = [];
 let currentPracticeIdx = 0;
 let practiceTimerInterval = null;
@@ -1194,7 +1219,7 @@ function loadCurrentPracticeCard() {
   document.getElementById("solutionDrawer").classList.remove("open");
   if (practiceList.length === 0 || currentPracticeIdx >= practiceList.length) {
     clearInterval(practiceTimerInterval);
-    alert("Tebrikler! Antrenman seansı başarıyla tamamlandı. 🎉");
+    alert("Tebrikler! Antrenman seansı tamamlandı. 🎉");
     returnToPracticeSetup();
     return;
   }
@@ -1210,15 +1235,18 @@ function loadCurrentPracticeCard() {
 
 function toggleSolutionDrawer() { document.getElementById("solutionDrawer").classList.toggle("open"); }
 
-function handleSweetChoice(isMastered) {
+async function handleThreeLevelChoice(level) {
   if (practiceList.length === 0) return;
   const currentQ = practiceList[currentPracticeIdx];
-  if (isMastered) {
-    let mastered = parseInt(localStorage.getItem("avci_mastered") || "0", 10) + 1;
-    localStorage.setItem("avci_mastered", mastered);
-    currentQ.isMastered = true;
-    dbPut(currentQ);
+  currentQ.status = level; // "mastered" | "doubt" | "stuck"
+  currentQ.lastReviewedAt = new Date().toISOString();
+
+  if (level === "mastered") {
+    let mCount = parseInt(localStorage.getItem("avci_mastered") || "0", 10) + 1;
+    localStorage.setItem("avci_mastered", mCount);
   }
+
+  await dbPut(currentQ);
   currentPracticeIdx++;
   loadCurrentPracticeCard();
 }
@@ -1233,12 +1261,383 @@ function triggerPanicMode() {
   setupPracticeSession(chosen);
 }
 
+// BİREBİR / HOCA MASASI MOTORU
+let teacherDeskQuestions = [];
+let tdCurrentIdx = 0;
+
+function openTeacherDeskModal() {
+  teacherDeskQuestions = allQuestions.filter(q => q.exam === activeExam && q.status === "stuck");
+  tdCurrentIdx = 0;
+  document.getElementById("teacherDeskModal").classList.add("active");
+  renderTeacherDeskCard();
+}
+
+function closeTeacherDeskModal() {
+  document.getElementById("teacherDeskModal").classList.remove("active");
+  refreshAll();
+}
+
+function renderTeacherDeskCard() {
+  const emptyEl = document.getElementById("teacherDeskEmpty");
+  const contentEl = document.getElementById("teacherDeskContent");
+
+  if (teacherDeskQuestions.length === 0 || tdCurrentIdx >= teacherDeskQuestions.length) {
+    emptyEl.style.display = "block";
+    contentEl.style.display = "none";
+    return;
+  }
+
+  emptyEl.style.display = "none";
+  contentEl.style.display = "flex";
+
+  const q = teacherDeskQuestions[tdCurrentIdx];
+  document.getElementById("tdMeta").innerText = `${q.subject} - ${q.topic}`;
+  document.getElementById("tdCounter").innerText = `${tdCurrentIdx + 1} / ${teacherDeskQuestions.length}`;
+  document.getElementById("tdImg").src = q.questionImg;
+  document.getElementById("tdReason").innerText = `Hata: ${q.reason}`;
+  document.getElementById("tdNotes").innerText = q.notes ? `Öğrenci Notu: ${q.notes}` : "";
+}
+
+async function resolveTeacherDeskQuestion(isResolved) {
+  if (teacherDeskQuestions.length === 0) return;
+  const q = teacherDeskQuestions[tdCurrentIdx];
+  if (isResolved) {
+    q.status = "mastered";
+    await dbPut(q);
+  }
+  tdCurrentIdx++;
+  renderTeacherDeskCard();
+}
+
+function nextTeacherDeskQuestion() {
+  tdCurrentIdx++;
+  if (tdCurrentIdx >= teacherDeskQuestions.length) tdCurrentIdx = 0;
+  renderTeacherDeskCard();
+}
+
+// HAFTALIK HATA BÜLTENİ
+function openBulletinModal() {
+  document.getElementById("bulletinModal").classList.add("active");
+  generateWeeklyBulletin();
+}
+
+function closeBulletinModal() {
+  document.getElementById("bulletinModal").classList.remove("active");
+}
+
+function generateWeeklyBulletin() {
+  const examPool = allQuestions.filter(q => q.exam === activeExam);
+  const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  const weeklyList = examPool.filter(q => new Date(q.createdAt) >= oneWeekAgo);
+  const masteredThisWeek = weeklyList.filter(q => q.status === "mastered").length;
+
+  document.getElementById("bWeeklyTotal").innerText = weeklyList.length;
+  document.getElementById("bWeeklyMastered").innerText = masteredThisWeek;
+
+  const topicCounts = {};
+  const topicReasons = {};
+  weeklyList.forEach(q => {
+    topicCounts[q.topic] = (topicCounts[q.topic] || 0) + 1;
+    if (!topicReasons[q.topic]) topicReasons[q.topic] = {};
+    topicReasons[q.topic][q.reason] = (topicReasons[q.topic][q.reason] || 0) + 1;
+  });
+
+  let worstTopic = null;
+  let maxC = 0;
+  for (const [t, c] of Object.entries(topicCounts)) {
+    if (c > maxC) { maxC = c; worstTopic = t; }
+  }
+
+  if (worstTopic) {
+    document.getElementById("bTopPainTopic").innerText = `${worstTopic} (${maxC} Hata)`;
+    const rObj = topicReasons[worstTopic] || {};
+    const topReason = Object.keys(rObj).sort((a,b) => rObj[b] - rObj[a])[0];
+    document.getElementById("bTopPainReason").innerText = `En sık sebep: ${topReason}`;
+    document.getElementById("bCoachAdvice").innerHTML = `<b>Koç Notu:</b> Bu hafta özellikle <b>${worstTopic}</b> konusunda yoğunlaşman gerekiyor. "${topReason}" tuzağına dikkat ederek 5 soruluk özel bir telafi testi çöz!`;
+  } else {
+    document.getElementById("bTopPainTopic").innerText = "Henüz son 7 günde eklenen soru yok.";
+    document.getElementById("bTopPainReason").innerText = "--";
+    document.getElementById("bCoachAdvice").innerText = "Tebrikler! Düzenli deneme çözmeye ve kaçırdığın soruları buraya eklemeye devam et.";
+  }
+}
+
+// SERİ YÜKLEME (BATCH UPLOAD)
+let batchFilesQueue = [];
+let currentBatchIdx = 0;
+
+function handleBatchFileSelect(e) {
+  const files = Array.from(e.target.files);
+  if (!files || files.length === 0) return;
+  batchFilesQueue = files;
+  currentBatchIdx = 0;
+  loadBatchItemIntoForm();
+}
+
+async function loadBatchItemIntoForm() {
+  if (currentBatchIdx >= batchFilesQueue.length) {
+    batchFilesQueue = [];
+    currentBatchIdx = 0;
+    document.getElementById("batchQueueStatus").style.display = "none";
+    document.getElementById("addFormSubmitBtn").innerText = "Arşive Ekle ve Avla 🚀";
+    alert("Seri soru yükleme tamamlandı! 🎉");
+    return;
+  }
+
+  document.getElementById("batchQueueStatus").style.display = "block";
+  document.getElementById("batchQueueStatus").innerText = `Kuyruk: ${currentBatchIdx + 1} / ${batchFilesQueue.length}`;
+  document.getElementById("addFormSubmitBtn").innerText = `Kaydet & Sıradakine Geç (${currentBatchIdx + 1}/${batchFilesQueue.length}) ⏭️`;
+
+  const file = batchFilesQueue[currentBatchIdx];
+  const b64 = await readFileAsBase64(file);
+  curCropTarget = 'q';
+  workingRawImg = b64;
+  processedImages.q = b64;
+  document.getElementById("previewQImg").src = b64;
+  document.getElementById("previewQImg").style.display = "block";
+  document.getElementById("btnCropQ").style.display = "inline-block";
+}
+
+// DAHİLİ GÖRSEL KIRPMA & DÖNDÜRME MOTORU (CANVAS)
+let curCropTarget = 'q';
+let workingRawImg = null;
+let processedImages = { q: null, s: null };
+let cropCanvas, cropCtx;
+let cropImageObj = new Image();
+let rotationAngle = 0;
+let cropRect = { x: 0, y: 0, w: 0, h: 0 };
+let isDraggingCrop = false;
+let cropStartX = 0, cropStartY = 0;
+
+function readFileAsBase64(file) {
+  return new Promise((resolve) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.readAsDataURL(file);
+  });
+}
+
+async function triggerImageCrop(input, target) {
+  const file = input.files[0];
+  if (!file) return;
+  const b64 = await readFileAsBase64(file);
+  curCropTarget = target;
+  workingRawImg = b64;
+  processedImages[target] = b64;
+
+  const prev = document.getElementById(target === 'q' ? "previewQImg" : "previewSImg");
+  const btnC = document.getElementById(target === 'q' ? "btnCropQ" : "btnCropS");
+  prev.src = b64;
+  prev.style.display = "block";
+  btnC.style.display = "inline-block";
+
+  openCropperModal();
+}
+
+function reopenCropper(target) {
+  curCropTarget = target;
+  workingRawImg = processedImages[target];
+  if (workingRawImg) openCropperModal();
+}
+
+function openCropperModal() {
+  document.getElementById("cropperModal").classList.add("active");
+  rotationAngle = 0;
+  cropCanvas = document.getElementById("cropperCanvas");
+  cropCtx = cropCanvas.getContext("2d");
+
+  cropImageObj.onload = () => {
+    setupCropperDimensions();
+    attachCropperEvents();
+  };
+  cropImageObj.src = workingRawImg;
+}
+
+function setupCropperDimensions() {
+  const container = document.getElementById("cropperContainer");
+  const cW = container.clientWidth;
+  const cH = container.clientHeight;
+
+  let imgW = cropImageObj.width;
+  let imgH = cropImageObj.height;
+  if (rotationAngle === 90 || rotationAngle === 270) {
+    const tmp = imgW; imgW = imgH; imgH = tmp;
+  }
+
+  const scale = Math.min(cW / imgW, cH / imgH, 1);
+  cropCanvas.width = imgW * scale;
+  cropCanvas.height = imgH * scale;
+
+  resetCropSelection();
+  drawCropper();
+}
+
+function resetCropSelection() {
+  cropRect = { x: 10, y: 10, w: cropCanvas.width - 20, h: cropCanvas.height - 20 };
+  drawCropper();
+}
+
+function rotateCropper(deg) {
+  rotationAngle = (rotationAngle + deg) % 360;
+  setupCropperDimensions();
+}
+
+function drawCropper() {
+  cropCtx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
+  cropCtx.save();
+  cropCtx.translate(cropCanvas.width / 2, cropCanvas.height / 2);
+  cropCtx.rotate((rotationAngle * Math.PI) / 180);
+
+  let drawW = cropCanvas.width;
+  let drawH = cropCanvas.height;
+  if (rotationAngle === 90 || rotationAngle === 270) {
+    drawW = cropCanvas.height;
+    drawH = cropCanvas.width;
+  }
+
+  cropCtx.drawImage(cropImageObj, -drawW / 2, -drawH / 2, drawW, drawH);
+  cropCtx.restore();
+
+  // Kırpma çerçevesi ve yarı saydam maske
+  cropCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
+  cropCtx.fillRect(0, 0, cropCanvas.width, cropRect.y);
+  cropCtx.fillRect(0, cropRect.y + cropRect.h, cropCanvas.width, cropCanvas.height - (cropRect.y + cropRect.h));
+  cropCtx.fillRect(0, cropRect.y, cropRect.x, cropRect.h);
+  cropCtx.fillRect(cropRect.x + cropRect.w, cropRect.y, cropCanvas.width - (cropRect.x + cropRect.w), cropRect.h);
+
+  cropCtx.strokeStyle = "#f97316";
+  cropCtx.lineWidth = 2;
+  cropCtx.strokeRect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
+}
+
+function attachCropperEvents() {
+  cropCanvas.onmousedown = (e) => startCropDrag(e.offsetX, e.offsetY);
+  cropCanvas.onmousemove = (e) => doCropDrag(e.offsetX, e.offsetY);
+  cropCanvas.onmouseup = () => isDraggingCrop = false;
+
+  cropCanvas.ontouchstart = (e) => {
+    const rect = cropCanvas.getBoundingClientRect();
+    startCropDrag(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+    e.preventDefault();
+  };
+  cropCanvas.ontouchmove = (e) => {
+    const rect = cropCanvas.getBoundingClientRect();
+    doCropDrag(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+    e.preventDefault();
+  };
+  cropCanvas.ontouchend = () => isDraggingCrop = false;
+}
+
+function startCropDrag(x, y) {
+  isDraggingCrop = true;
+  cropStartX = x;
+  cropStartY = y;
+  cropRect = { x: x, y: y, w: 0, h: 0 };
+}
+
+function doCropDrag(x, y) {
+  if (!isDraggingCrop) return;
+  cropRect.x = Math.max(0, Math.min(cropStartX, x));
+  cropRect.y = Math.max(0, Math.min(cropStartY, y));
+  cropRect.w = Math.min(cropCanvas.width - cropRect.x, Math.abs(x - cropStartX));
+  cropRect.h = Math.min(cropCanvas.height - cropRect.y, Math.abs(y - cropStartY));
+  drawCropper();
+}
+
+function applyCropAndClose() {
+  if (cropRect.w < 20 || cropRect.h < 20) {
+    resetCropSelection();
+  }
+
+  const finalCanvas = document.createElement("canvas");
+  finalCanvas.width = cropRect.w;
+  finalCanvas.height = cropRect.h;
+  const fCtx = finalCanvas.getContext("2d");
+
+  fCtx.drawImage(
+    cropCanvas,
+    cropRect.x, cropRect.y, cropRect.w, cropRect.h,
+    0, 0, cropRect.w, cropRect.h
+  );
+
+  const croppedBase64 = finalCanvas.toDataURL("image/jpeg", 0.85);
+  processedImages[curCropTarget] = croppedBase64;
+
+  const prev = document.getElementById(curCropTarget === 'q' ? "previewQImg" : "previewSImg");
+  prev.src = croppedBase64;
+
+  document.getElementById("cropperModal").classList.remove("active");
+}
+
+// SORU EKLEME FORMU
+async function handleQuestionSubmit(e) {
+  e.preventDefault();
+  const qBase64 = processedImages.q;
+  const topic = document.getElementById("formTopicManual").value.trim();
+
+  if (!qBase64 || !topic) return alert("Soru görseli ve konu zorunludur.");
+
+  const isTrial = document.getElementById("formIsTrial").checked;
+  const trialName = isTrial ? document.getElementById("formTrialName").value.trim() : "";
+
+  const item = {
+    id: "q_" + Date.now(),
+    exam: activeExam,
+    subject: document.getElementById("formSubjectSelect").value,
+    topic: topic,
+    reason: document.getElementById("formReasonSelect").value,
+    isTrap: document.getElementById("formIsTrap").checked,
+    isTrial: isTrial,
+    trialName: trialName,
+    notes: document.getElementById("formNotes").value,
+    status: "doubt", // Varsayılan durum: şüpheli
+    reactions: { heart: false, star: false, excl: false },
+    audioData: audioBlobBase64,
+    questionImg: qBase64,
+    solutionImg: processedImages.s || null,
+    createdAt: new Date().toISOString()
+  };
+
+  await dbPut(item);
+
+  // Seri yükleme kuyruğu varsa sıradakine geç
+  if (batchFilesQueue.length > 0) {
+    currentBatchIdx++;
+    processedImages = { q: null, s: null };
+    document.getElementById("previewQImg").style.display = "none";
+    document.getElementById("previewSImg").style.display = "none";
+    document.getElementById("btnCropQ").style.display = "none";
+    document.getElementById("btnCropS").style.display = "none";
+    loadBatchItemIntoForm();
+    await refreshAll();
+    return;
+  }
+
+  // Tekil yükleme temizliği
+  document.getElementById("addForm").reset();
+  processedImages = { q: null, s: null };
+  document.getElementById("previewQImg").style.display = "none";
+  document.getElementById("previewSImg").style.display = "none";
+  document.getElementById("btnCropQ").style.display = "none";
+  document.getElementById("btnCropS").style.display = "none";
+  audioBlobBase64 = null;
+  document.getElementById("audioPreview").style.display = "none";
+  document.getElementById("audioStatus").innerText = "Kayıt yok";
+  document.getElementById("trialNameContainer").style.display = "none";
+
+  await refreshAll();
+  switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
+}
+
 function renderAnalytics() {
   const examPool = allQuestions.filter(q => q.exam === activeExam);
   const total = examPool.length;
-  const mastered = parseInt(localStorage.getItem("avci_mastered") || "0", 10);
+  const mastered = examPool.filter(q => q.status === "mastered").length;
+  const stuck = examPool.filter(q => q.status === "stuck").length;
+
   document.getElementById("statTotalCount").innerText = total;
   document.getElementById("statMasteredCount").innerText = mastered;
+  document.getElementById("statStuckCount").innerText = stuck;
 
   let level = 1, title = "Çırak Avcı";
   if (total >= 5) { level = 2; title = "Kıdemli Avcı"; }
@@ -1268,6 +1667,7 @@ function renderAnalytics() {
   }
 }
 
+// SES KAYDI
 let mediaRec, audioBlobBase64 = null, audioChunks = [];
 function toggleAudio() {
   const btn = document.getElementById("audioRecBtn");
@@ -1300,48 +1700,7 @@ function toggleAudio() {
   }
 }
 
-async function handleQuestionSubmit(e) {
-  e.preventDefault();
-  const qF = document.getElementById("formQImg").files[0];
-  const sF = document.getElementById("formSImg").files[0];
-  const topic = document.getElementById("formTopicManual").value.trim();
-
-  if (!qF || !topic) return alert("Soru görseli ve konu zorunludur.");
-
-  const compressedQ = await compressImg(qF);
-  const compressedS = sF ? await compressImg(sF) : null;
-
-  const isTrial = document.getElementById("formIsTrial").checked;
-  const trialName = isTrial ? document.getElementById("formTrialName").value.trim() : "";
-
-  const item = {
-    id: "q_" + Date.now(),
-    exam: activeExam,
-    subject: document.getElementById("formSubjectSelect").value,
-    topic: topic,
-    reason: document.getElementById("formReasonSelect").value,
-    isTrap: document.getElementById("formIsTrap").checked,
-    isTrial: isTrial,
-    trialName: trialName,
-    notes: document.getElementById("formNotes").value,
-    reactions: { heart: false, star: false, excl: false },
-    audioData: audioBlobBase64,
-    questionImg: compressedQ,
-    solutionImg: compressedS,
-    createdAt: new Date().toISOString()
-  };
-
-  await dbPut(item);
-  document.getElementById("addForm").reset();
-  audioBlobBase64 = null;
-  document.getElementById("audioPreview").style.display = "none";
-  document.getElementById("audioStatus").innerText = "Kayıt yok";
-  document.getElementById("trialNameContainer").style.display = "none";
-
-  await refreshAll();
-  switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
-}
-
+// LIGHTBOX & CANVAS
 let isCanvasActive = false;
 let canvasCtx = null;
 let drawing = false;
@@ -1416,9 +1775,6 @@ function handleBodyBackgroundClick(e) {
   if (e.target.closest("button") || e.target.closest("input") || e.target.closest("select") || e.target.closest(".modal-card") || e.target.closest(".feed-card") || e.target.closest(".setup-card")) {
     return;
   }
-  if (document.querySelector(".modal-overlay.active") || document.getElementById("storyViewerModal").classList.contains("active") || document.getElementById("examSelectModal").style.display === "flex") {
-    return;
-  }
 }
 
 function executeFilteredPrint() {
@@ -1429,11 +1785,9 @@ function executeFilteredPrint() {
 
   let items = allQuestions.filter(q => q.exam === activeExam).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
   
-  if (scope === "traps") {
-    items = items.filter(q => q.isTrap === true);
-  } else if (scope === "trials") {
-    items = items.filter(q => q.isTrial === true);
-  }
+  if (scope === "traps") items = items.filter(q => q.isTrap === true);
+  else if (scope === "trials") items = items.filter(q => q.isTrial === true);
+  else if (scope === "stuck") items = items.filter(q => q.status === "stuck");
 
   if (errorFilter !== "all") {
     items = items.filter(q => q.reason === errorFilter);
@@ -1528,6 +1882,7 @@ function executeFilteredPrint() {
   }, 400);
 }
 
+// AIRDROP MOTORU
 let peer = null;
 function openAirDropSender() {
   document.getElementById("airdropModal").classList.add("active");
@@ -1584,8 +1939,6 @@ function connectAndFetchData(pairParam) {
 }
 
 function closeAirDropModal() { document.getElementById("airdropModal").classList.remove("active"); if (peer) { peer.destroy(); peer=null; } }
-function openManualModal() { document.getElementById("manualModal").classList.add("active"); }
-function closeManualModal() { document.getElementById("manualModal").classList.remove("active"); }
 function openPdfModal() { document.getElementById("pdfModal").classList.add("active"); }
 function closePdfModal() { document.getElementById("pdfModal").classList.remove("active"); }
 
@@ -1596,9 +1949,7 @@ function switchNavTab(tabId, btn) {
   if (target) target.classList.add('active');
   if (btn) btn.classList.add('active');
   
-  if (tabId === 'practice') {
-    returnToPracticeSetup();
-  }
+  if (tabId === 'practice') returnToPracticeSetup();
   if (tabId === 'analytics') renderAnalytics();
 }
 
@@ -1631,6 +1982,7 @@ async function refreshAll() {
   buildStoriesBar();
   buildExamPills();
   renderFeed();
+  checkTwinErrorAlarms();
   updatePracticeCounterBadge();
 }
 
@@ -1639,6 +1991,13 @@ window.addEventListener("DOMContentLoaded", async () => {
   populateErrorReasonDropdowns();
   checkExamSelection();
   await refreshAll();
+
+  // Pazar günü kontrolü: Pazar ise haftalık bülteni otomatik anımsat
+  const today = new Date();
+  if (today.getDay() === 0 && !sessionStorage.getItem("bulletin_shown")) {
+    sessionStorage.setItem("bulletin_shown", "true");
+    openBulletinModal();
+  }
 
   const urlParams = new URLSearchParams(window.location.search);
   const pairParam = urlParams.get('pair');
