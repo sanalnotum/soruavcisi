@@ -15,9 +15,7 @@
 
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <!-- SHEETJS KÜTÜPHANESİ (EXCEL'İ %100 KAYIPSIZ OKUMAK İÇİN) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  
   <script src="db.js"></script>
 
   <style>
@@ -899,7 +897,37 @@ function populateErrorReasonDropdowns() {
   });
 }
 
-// EXCEL DOSYASINI DOĞRUDAN OKUYUP MAARİF OBJESİNİ OLUŞTURAN AKILLI MOTOR
+// ÖZEL DERS SIRALAMA ÖNCELİĞİ (Matematik, Tarih, Türkçe/Edebiyat, Fizik, Kimya, Biyoloji...)
+const SUBJECT_PRIORITY = [
+  "Matematik",
+  "Tarih",
+  "Türk Dili ve Edebiyatı",
+  "Türkçe",
+  "Fizik",
+  "Kimya",
+  "Biyoloji"
+];
+
+function sortSubjects(subjectsObj) {
+  const keys = Object.keys(subjectsObj);
+  keys.sort((a, b) => {
+    let indexA = SUBJECT_PRIORITY.findIndex(p => a.toLowerCase().includes(p.toLowerCase()));
+    let indexB = SUBJECT_PRIORITY.findIndex(p => b.toLowerCase().includes(p.toLowerCase()));
+    
+    if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+    if (indexA !== -1) return -1;
+    if (indexB !== -1) return 1;
+    return a.localeCompare(b, 'tr');
+  });
+
+  const sortedObj = {};
+  keys.forEach(k => {
+    sortedObj[k] = subjectsObj[k];
+  });
+  return sortedObj;
+}
+
+// EXCEL DOSYASINI OKUYUP ÖZEL SIRALAMAYLA MAARİF OBJESİNİ OLUŞTURAN MOTOR
 async function loadMaarifExcelFromRepo() {
   try {
     const response = await fetch('KONULAR MAARİF.xlsx');
@@ -911,7 +939,7 @@ async function loadMaarifExcelFromRepo() {
     const worksheet = workbook.Sheets[firstSheetName];
     const jsonRows = XLSX.utils.sheet_to_json(worksheet);
 
-    MASTER_CURRICULUM["MAARİF"] = {};
+    let rawMaarif = {};
 
     jsonRows.forEach(row => {
       const sinif = (row['SINIF'] || '').toString().trim();
@@ -920,19 +948,26 @@ async function loadMaarifExcelFromRepo() {
 
       if (!sinif || !ders || !konu) return;
 
-      if (!MASTER_CURRICULUM["MAARİF"][sinif]) {
-        MASTER_CURRICULUM["MAARİF"][sinif] = {};
+      if (!rawMaarif[sinif]) {
+        rawMaarif[sinif] = {};
       }
-      if (!MASTER_CURRICULUM["MAARİF"][sinif][ders]) {
-        MASTER_CURRICULUM["MAARİF"][sinif][ders] = [];
+      if (!rawMaarif[sinif][ders]) {
+        rawMaarif[sinif][ders] = [];
       }
-      if (!MASTER_CURRICULUM["MAARİF"][sinif][ders].includes(konu)) {
-        MASTER_CURRICULUM["MAARİF"][sinif][ders].push(konu);
+      if (!rawMaarif[sinif][ders].includes(konu)) {
+        rawMaarif[sinif][ders].push(konu);
       }
     });
-    console.log("Maarif Excel başarıyla yüklendi. Sınıf sayısı:", Object.keys(MASTER_CURRICULUM["MAARİF"]).length);
+
+    // Her sınıfın derslerini özel sıralama kuralına göre diz
+    MASTER_CURRICULUM["MAARİF"] = {};
+    Object.keys(rawMaarif).forEach(sinif => {
+      MASTER_CURRICULUM["MAARİF"][sinif] = sortSubjects(rawMaarif[sinif]);
+    });
+
+    console.log("Maarif Excel başarıyla yüklendi ve sıralandı.");
   } catch (err) {
-    console.warn("Excel dosyası doğrudan okunamadı, yedek liste devrede.", err);
+    console.warn("Excel dosyası doğrudan okunamadı:", err);
   }
 }
 
@@ -2343,7 +2378,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   await initDB();
   populateErrorReasonDropdowns();
   
-  // ÖNCE EXCEL'İ DOĞRUDAN OKU, SONRA SINAV KONTROLÜNÜ YAP
   await loadMaarifExcelFromRepo();
 
   checkExamSelection();
@@ -2351,7 +2385,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const today = new Date();
   if (today.getDay() === 0 && !sessionStorage.getItem("bulletin_shown")) {
-    sessionStorage.setItem("bulletin_shown", "true");
+    sessionStorage.getItem("bulletin_shown", "true");
     openBulletinModal();
   }
 
