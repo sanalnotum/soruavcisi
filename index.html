@@ -1,0 +1,2367 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SORU AVCISI</title>
+  <meta name="theme-color" content="#1c1917">
+  
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Soru%20Avcisi%22%2C%22short_name%22%3A%22SoruAvcisi%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%231c1917%22%2C%22theme_color%22%3A%22%231c1917%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Soru Avcısı">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- SHEETJS KÜTÜPHANESİ (EXCEL'İ %100 KAYIPSIZ OKUMAK İÇİN) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <script src="db.js"></script>
+
+  <style>
+    :root {
+      --bg: #1c1917;
+      --card-bg: rgba(28, 25, 23, 0.94);
+      --card-border: rgba(249, 115, 22, 0.22);
+      --accent-primary: #f97316;
+      --accent-secondary: #ea580c;
+      --accent-gradient: linear-gradient(135deg, #f97316, #ea580c, #c2410c);
+      --text: #fafaf9;
+      --text-muted: #a8a29e;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --nav-height: 68px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: calc(var(--nav-height) + 16px); min-height: 100vh; min-height: 100dvh; overflow-x: hidden; user-select: none; }
+
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+      padding-bottom: 10px; padding-left: 16px; padding-right: 16px;
+      position: sticky; top: 0; z-index: 30; backdrop-filter: blur(16px);
+      background: rgba(28, 25, 23, 0.95); border-bottom: 2px solid var(--accent-primary);
+      height: calc(60px + env(safe-area-inset-top, 0px));
+    }
+    .brand { display: flex; align-items: center; gap: 8px; }
+    .brand-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
+    .brand-name { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; position: relative; }
+    .btn-icon-head { background: #292524; border: 1px solid var(--card-border); color: var(--text); padding: 8px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .btn-icon-head.coach-btn { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
+
+    .dropdown-menu {
+      position: absolute; top: calc(100% + 8px); right: 0; width: 220px;
+      background: rgba(41, 37, 36, 0.98); backdrop-filter: blur(20px);
+      border: 1px solid var(--accent-primary); border-radius: 16px;
+      padding: 6px; display: none; flex-direction: column; gap: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 100;
+      animation: fadeIn 0.15s ease-out;
+    }
+    .dropdown-menu.active { display: flex; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px;
+      border: none; background: none; color: #fafaf9; font-size: 0.82rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: left; transition: 0.2s;
+    }
+    .dropdown-item:hover, .dropdown-item:active { background: rgba(249, 115, 22, 0.2); color: var(--accent-primary); }
+
+    .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
+    .tab-view.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .exam-select-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(14px);
+      z-index: 300; display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .exam-select-card {
+      background: #292524; border: 2px solid var(--accent-primary); border-radius: 24px; padding: 24px; width: 100%; max-width: 440px; text-align: center;
+    }
+    .exam-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; max-height: 52vh; overflow-y: auto; padding-right: 4px; }
+    .exam-opt-btn {
+      padding: 13px 8px; border-radius: 14px; border: 1px solid var(--card-border); background: #1c1917; color: var(--text); font-weight: 800; font-size: 0.86rem; cursor: pointer; text-align: center; transition: 0.2s;
+    }
+    .exam-opt-btn:hover { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+
+    .stories-container {
+      display: flex; gap: 12px; overflow-x: auto; padding: 6px 4px 12px 4px; margin-bottom: 12px; scrollbar-width: none;
+    }
+    .stories-container::-webkit-scrollbar { display: none; }
+    .story-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+    .story-ring {
+      width: 64px; height: 64px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, #f97316, #ef4444, #a855f7); display: flex; align-items: center; justify-content: center;
+    }
+    .story-inner {
+      width: 58px; height: 58px; border-radius: 50%; background: #1c1917; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    }
+    .story-title { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-align: center; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .clutch-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(239, 68, 68, 0.15));
+      border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px;
+    }
+    .btn-panic {
+      background: var(--accent-primary); color: #fff; border: none; padding: 9px 14px; border-radius: 12px; font-size: 0.8rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+    }
+    .btn-panic:active { transform: scale(0.95); }
+
+    .action-sub-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+    .btn-sub-action {
+      flex: 1; padding: 10px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text); font-size: 0.78rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
+    .pills-scroll::-webkit-scrollbar { display: none; }
+    .pill-chip { padding: 7px 14px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.78rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; cursor: pointer; }
+    .pill-chip.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+
+    .feed-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; overflow: hidden; margin-bottom: 16px; position: relative; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+    .card-top { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .tag-exam { font-weight: 800; color: var(--accent-primary); }
+    .tag-reason { background: rgba(239, 68, 68, 0.18); color: #f87171; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7rem; }
+    
+    .card-reactions-row { display: flex; gap: 6px; align-items: center; }
+    .react-pill { background: #292524; border: 1px solid var(--card-border); padding: 3px 8px; border-radius: 999px; font-size: 0.75rem; cursor: pointer; font-weight: 700; }
+    .react-pill.active { background: rgba(249, 115, 22, 0.25); border-color: var(--accent-primary); color: var(--accent-primary); }
+
+    .card-image-wrap { width: 100%; height: 220px; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; position: relative; }
+    .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .card-body { padding: 12px 14px; }
+    .topic-title { font-size: 0.95rem; font-weight: 900; margin-bottom: 4px; }
+    .note-text { font-size: 0.78rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 8px; margin-top: 6px; }
+
+    .card-status-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; margin-top: 6px; }
+    .status-mastered { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .status-doubt { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .status-stuck { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    .solution-accordion-btn {
+      width: 100%; padding: 10px 14px; background: #292524; border: none; border-top: 1px solid var(--card-border); color: #34d399; font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    }
+    .solution-accordion-content { display: none; padding: 12px 14px; background: #141210; border-top: 1px solid rgba(255,255,255,0.05); }
+    .solution-accordion-content.open { display: block; }
+
+    .card-actions { padding: 10px 14px 12px; display: flex; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
+    .btn-action { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--card-border); background: #292524; color: var(--text); font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+    #tab-practice.active {
+      display: flex; flex-direction: column; min-height: calc(100dvh - 60px - var(--nav-height) - 12px); padding: 6px 14px;
+    }
+    .setup-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 16px; margin-bottom: 12px;
+    }
+    .setup-count-badge {
+      display: flex; align-items: center; justify-content: space-between; background: rgba(249, 115, 22, 0.12); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 12px; padding: 10px 14px; margin: 12px 0; font-size: 0.85rem; font-weight: 800; color: var(--accent-primary);
+    }
+
+    .practice-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-shrink: 0; }
+    .practice-counter { font-size: 0.8rem; font-weight: 800; color: var(--accent-primary); }
+    .practice-timer { font-size: 0.78rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); padding: 3px 10px; border-radius: 8px; }
+
+    .practice-box {
+      flex: 1; min-height: 0; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; display: flex; flex-direction: column; padding: 12px; overflow: hidden;
+    }
+    .practice-img-area {
+      flex: 1; min-height: 240px; background: #000; border-radius: 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: zoom-in;
+    }
+    .practice-img-area img { width: 100%; height: 100%; object-fit: contain; }
+
+    .solution-drawer {
+      display: none; background: #292524; border: 1px solid var(--card-border); border-radius: 14px; margin-top: 10px; padding: 12px; flex-shrink: 0; max-height: 40%; overflow-y: auto;
+    }
+    .solution-drawer.open { display: block; }
+
+    .sweet-choice-bar-triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; width: 100%; max-width: 500px; margin: 12px auto 0 auto; flex-shrink: 0; }
+    .btn-choice {
+      padding: 12px 6px; border-radius: 14px; border: none; font-weight: 900; font-size: 0.78rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-align: center;
+    }
+    .btn-choice-stuck { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .btn-choice-doubt { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .btn-choice-master { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    .coach-alarm-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(249, 115, 22, 0.25));
+      border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; display: none; align-items: center; gap: 10px; animation: pulseGlow 3s infinite;
+    }
+    .coach-alarm-banner.active { display: flex; }
+
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(12px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-card {
+      background: #292524; border: 1px solid var(--card-border); border-radius: 22px; padding: 20px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto;
+    }
+
+    .input-group { margin-bottom: 12px; }
+    .input-group label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+    select, input, textarea {
+      width: 100%; padding: 12px; border-radius: 12px; background: #1c1917 !important; color: #fafaf9 !important; border: 1px solid var(--card-border); font-size: 0.9rem; outline: none; font-weight: 700;
+    }
+    select option { background-color: #1c1917 !important; color: #fafaf9 !important; }
+
+    nav.bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height);
+      background: rgba(28, 25, 23, 0.96); backdrop-filter: blur(20px); border-top: 1px solid var(--card-border);
+      display: flex; justify-content: space-around; align-items: center; z-index: 50; padding-bottom: env(safe-area-inset-bottom);
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; color: var(--text-muted); font-size: 0.68rem; font-weight: 800; cursor: pointer; flex: 1;
+    }
+    .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+    .nav-item.active { color: var(--accent-primary); }
+    .nav-item.active svg { stroke: var(--accent-primary); }
+
+    .nav-add-btn {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--accent-gradient); border: none; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(249, 115, 22, 0.6); cursor: pointer; transform: translateY(-8px); animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+    }
+
+    #cropperContainer {
+      width: 100%; height: 320px; background: #000; position: relative; overflow: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+    }
+    #cropperCanvas { max-width: 100%; max-height: 100%; touch-action: none; cursor: crosshair; }
+    .crop-btn-bar { display: flex; gap: 8px; justify-content: center; }
+
+    .story-modal {
+      position: fixed; inset: 0; background: #000; z-index: 500;
+      display: none; flex-direction: column; justify-content: space-between;
+    }
+    .story-modal.active { display: flex; }
+    .story-progress-bar { display: flex; gap: 4px; padding: 12px 16px; position: absolute; top: 0; left: 0; right: 0; z-index: 510; }
+    .story-progress-segment { flex: 1; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden; }
+    .story-progress-fill { width: 0%; height: 100%; background: #fff; }
+    .story-head { position: absolute; top: 22px; left: 16px; right: 16px; z-index: 510; display: flex; justify-content: space-between; align-items: center; }
+    .story-badge { background: var(--accent-gradient); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 900; }
+    .story-content { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; width: 100%; height: 100%; }
+    .story-content img { max-width: 96vw; max-height: 82vh; object-fit: contain; }
+    .story-nav-btn { position: absolute; top: 0; bottom: 0; width: 45%; z-index: 505; cursor: pointer; }
+    .story-nav-left { left: 0; }
+    .story-nav-right { right: 0; }
+
+    #lightboxModal {
+      background: rgba(0, 0, 0, 0.98);
+      padding: 0;
+      overflow: hidden;
+    }
+    .lightbox-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightboxImg {
+      width: 96vw !important;
+      height: 88vh !important;
+      max-width: 96vw !important;
+      max-height: 88vh !important;
+      object-fit: contain !important;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      border-radius: 8px;
+    }
+    #lightboxCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      touch-action: none;
+      cursor: crosshair;
+      z-index: 310;
+    }
+    .lightbox-bar {
+      position: absolute;
+      top: calc(env(safe-area-inset-top, 0px) + 12px);
+      right: 16px;
+      z-index: 350;
+      display: flex;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body onclick="handleBodyBackgroundClick(event)">
+
+  <div class="exam-select-modal" id="examSelectModal" style="display:none;" onclick="event.stopPropagation()">
+    <div class="exam-select-card">
+      <img src="logo.png" alt="Logo" style="width:48px; height:48px; object-fit:contain; margin-bottom:8px;" onerror="this.style.display='none'">
+      <h2 style="font-size:1.2rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">SORU AVCISI</h2>
+      <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">HAZIRLAYAN: YILDIRAY HOCA</div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;" id="modalInstructionText">Hazırlandığın ana sınav grubunu seç:</div>
+      <div class="exam-grid" id="examGridOptions"></div>
+    </div>
+  </div>
+
+  <header onclick="event.stopPropagation()">
+    <div class="brand">
+      <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+      <div>
+        <div class="brand-name">SORU AVCISI</div>
+        <div style="font-size:0.58rem; color:var(--text-muted); font-weight:800; letter-spacing:0.5px;">HAZIRLAYAN: YILDIRAY HOCA</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon-head coach-btn" onclick="openTeacherDeskModal()" title="Hoca Masası">👨‍🏫 Hoca Masası</button>
+      <button class="btn-icon-head" onclick="toggleQuickMenu(event)" title="Menü">☰ Araçlar</button>
+
+      <div class="dropdown-menu" id="quickMenu">
+        <button class="dropdown-item" onclick="closeQuickMenu(); openHelpModal();">📖 Kullanım Kılavuzu</button>
+        <button class="dropdown-item" onclick="closeQuickMenu(); openPdfModal();">🖨️ PDF Kitapçık Bas</button>
+        <button class="dropdown-item" onclick="closeQuickMenu(); openBulletinModal();">📊 Haftalık Bülten</button>
+        <button class="dropdown-item" onclick="closeQuickMenu(); resetExamSelection();" style="color:#fdba74;">⚙️ Sınav / Sınıf Değiştir</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="tab-feed" class="tab-view active" onclick="event.stopPropagation()">
+    <div class="stories-container" id="storiesContainer"></div>
+
+    <div class="coach-alarm-banner" id="coachTwinAlarmBanner">
+      <span style="font-size:1.4rem;">🚨</span>
+      <div style="flex:1;">
+        <div style="font-size:0.8rem; font-weight:900; color:#fca5a5;" id="coachAlarmTitle">Hata İkizi Alarmı!</div>
+        <div style="font-size:0.7rem; color:#fecdd3;" id="coachAlarmDesc">Bu konuda peş peşe aynı hataya düşüldü.</div>
+      </div>
+      <button style="padding:6px 10px; background:#ef4444; border:none; border-radius:8px; color:#fff; font-size:0.72rem; font-weight:900; cursor:pointer;" onclick="launchTwinPractice()">Çöz ⚡</button>
+    </div>
+
+    <div class="clutch-bar">
+      <div>
+        <div style="font-size:0.82rem; font-weight:900; color:#fca5a5;">⏳ Hedefe Kalan: <span id="daysUntilExam">--</span> Gün</div>
+        <div style="font-size:0.7rem; color:var(--text-muted);">En kritik soruları hemen masaya yatır.</div>
+      </div>
+      <button class="btn-panic" onclick="triggerPanicMode()">🚨 Panik Modu</button>
+    </div>
+
+    <div class="action-sub-bar">
+      <button class="btn-sub-action" onclick="switchNavTab('practice', document.querySelectorAll('.nav-item')[1])">⚡ Antrenman Masası</button>
+      <button class="btn-sub-action" onclick="filterTrialQuestions()">🎯 Deneme Hataları</button>
+      <button class="btn-sub-action" onclick="filterTrapQuestions()">⚠️ Tuzak Sorular</button>
+    </div>
+
+    <div class="pills-scroll" id="examPillContainer"></div>
+    <div id="feedList"></div>
+  </div>
+
+  <div id="tab-practice" class="tab-view" onclick="event.stopPropagation()">
+    
+    <div id="practiceSetupView" class="setup-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary);">⚡ Antrenman Masası</h3>
+        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:800;" id="practiceActiveExamTag">YKS</span>
+      </div>
+
+      <div class="input-group">
+        <label>Ders Seçimi</label>
+        <select id="pSetupSubject" onchange="handlePracticeSubjectChange()">
+          <option value="all">Tüm Dersler</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Konu / Kazanım Seçimi</label>
+        <select id="pSetupTopic" onchange="updatePracticeCounterBadge()">
+          <option value="all">Tüm Konular</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Soru Niteliği / Filtre</label>
+        <select id="pSetupScope" onchange="updatePracticeCounterBadge()">
+          <option value="all">Tüm Soru Havuzu</option>
+          <option value="trials">🎯 Sadece Deneme Hataları</option>
+          <option value="traps">⚠️ Sadece Tuzak Sorular</option>
+          <option value="stuck">🚨 Sadece Tıkalı / Hoca Masası Soruları</option>
+          <option value="doubt">⏳ Şüpheli / 48 Saatlik Tekrarlar</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Hata Nedeni / Teşhis</label>
+        <select id="pSetupReason" onchange="updatePracticeCounterBadge()">
+          <option value="all">Tüm Hata Nedenleri</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Soru Sayısı</label>
+        <select id="pSetupLimit">
+          <option value="5">5 Soru (Hızlı Seri)</option>
+          <option value="10">10 Soru (Tam Odak)</option>
+          <option value="all">Filtreye Uyan Tüm Sorular</option>
+        </select>
+      </div>
+
+      <div class="setup-count-badge">
+        <span>🎯 Eşleşen Hedef Soru:</span>
+        <span id="pFoundCount" style="font-size:1.1rem;">0 Soru</span>
+      </div>
+
+      <button style="width:100%; padding:14px; border-radius:14px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.95rem; cursor:pointer;" onclick="launchTargetedPractice()">
+        Avı Başlat 🚀
+      </button>
+    </div>
+
+    <div id="practiceCardView" style="display:none; flex-direction:column; flex:1;">
+      <div class="practice-header-bar">
+        <button onclick="returnToPracticeSetup()" style="background:#292524; border:1px solid var(--card-border); color:var(--text); padding:6px 10px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer;">⚙️ Masaya Dön</button>
+        <div class="practice-counter" id="pCardCount">Soru 1 / 5</div>
+        <div class="practice-timer" id="pTimer">⏱️ 00:00</div>
+      </div>
+      
+      <div class="practice-box">
+        <div style="font-size:0.78rem; font-weight:800; color:var(--accent-primary); margin-bottom:6px; flex-shrink:0;" id="pMetaText">Ders - Konu</div>
+        
+        <div class="practice-img-area" onclick="openLightbox(document.getElementById('pQuestionImg').src)">
+          <img id="pQuestionImg" alt="Soru Görseli">
+        </div>
+
+        <button style="width:100%; padding:11px; border-radius:12px; border:1px solid var(--card-border); background:#292524; color:var(--text); font-weight:800; font-size:0.82rem; cursor:pointer; margin-top:10px;" onclick="toggleSolutionDrawer()">
+          💡 Çözümü & Notu Göster / Gizle
+        </button>
+
+        <div class="solution-drawer" id="solutionDrawer">
+          <div style="font-size:0.75rem; font-weight:800; color:#34d399; margin-bottom:4px;">ÇÖZÜM GÖRSELİ (DOKUN: BÜYÜT)</div>
+          <div style="max-height:160px; overflow:hidden; background:#000; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:zoom-in;" onclick="openLightbox(document.getElementById('pSolutionImg').src)">
+            <img id="pSolutionImg" style="max-width:100%; max-height:160px; object-fit:contain;" alt="Çözüm Görseli">
+          </div>
+          <div id="pReasonText" style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;"></div>
+          <div id="pNotesText" style="font-size:0.78rem; color:var(--text); margin-top:2px;"></div>
+          <div id="pAudioContainer" style="margin-top:8px;"></div>
+        </div>
+      </div>
+
+      <div class="sweet-choice-bar-triple">
+        <button class="btn-choice btn-choice-stuck" onclick="handleThreeLevelChoice('stuck')">
+          <span style="font-size:1.1rem;">🚨</span>
+          <span>Tıkalıyım</span>
+          <span style="font-size:0.62rem; opacity:0.8;">Hoca Masasına</span>
+        </button>
+        <button class="btn-choice btn-choice-doubt" onclick="handleThreeLevelChoice('doubt')">
+          <span style="font-size:1.1rem;">⏳</span>
+          <span>Şüpheliyim</span>
+          <span style="font-size:0.62rem; opacity:0.8;">48s Sonra Tekrar</span>
+        </button>
+        <button class="btn-choice btn-choice-master" onclick="handleThreeLevelChoice('mastered')">
+          <span style="font-size:1.1rem;">👑</span>
+          <span>Tam Oturdu</span>
+          <span style="font-size:0.62rem; opacity:0.8;">Avlandı</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-analytics" class="tab-view" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); text-transform:uppercase;">Genel Hata Analizi & Performans</div>
+      <button onclick="openBulletinModal()" style="background:#292524; border:1px solid var(--accent-primary); color:var(--accent-primary); padding:4px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; cursor:pointer;">📊 Haftalık Bülten</button>
+    </div>
+    
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px; display:flex; flex-direction:column; gap:8px;">
+      <button style="background:var(--accent-gradient); border:none; color:#fff; padding:12px; border-radius:12px; font-weight:900; font-size:0.85rem; cursor:pointer;" onclick="openAirDropSender()">📲➡️💻 QR / AirDrop ile Tablete Aktar</button>
+      <div style="display:flex; gap:8px;">
+        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="openAirDropReceiver()">📥 Tabletten Al</button>
+        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="exportDataBackup()">📦 JSON İndir</button>
+        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="document.getElementById('importFile').click()">📂 JSON Yükle</button>
+        <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataBackup(event)">
+      </div>
+    </div>
+
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-size:0.8rem; font-weight:900; color:var(--accent-primary);" id="userLevelText">Seviye 1: Çırak Avcı</div>
+        <div style="font-size:0.72rem; font-weight:800; color:#34d399;" id="streakBadgeText">🔥 1 Gün Seri</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-top:10px;">
+        <div style="background:#292524; border:1px solid var(--card-border); border-radius:12px; padding:10px 4px; text-align:center;" id="badge-first"><div style="font-size:1.4rem;">🎯</div><div style="font-size:0.65rem; font-weight:800; margin-top:2px;">İlk Av</div></div>
+        <div style="background:#292524; border:1px solid var(--card-border); border-radius:12px; padding:10px 4px; text-align:center;" id="badge-practiced"><div style="font-size:1.4rem;">⚡</div><div style="font-size:0.65rem; font-weight:800; margin-top:2px;">Pratik</div></div>
+        <div style="background:#292524; border:1px solid var(--card-border); border-radius:12px; padding:10px 4px; text-align:center;" id="badge-streak"><div style="font-size:1.4rem;">🔥</div><div style="font-size:0.65rem; font-weight:800; margin-top:2px;">Ateş</div></div>
+        <div style="background:#292524; border:1px solid var(--card-border); border-radius:12px; padding:10px 4px; text-align:center;" id="badge-master"><div style="font-size:1.4rem;">👑</div><div style="font-size:0.65rem; font-weight:800; margin-top:2px;">Usta</div></div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:14px;">
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;">
+        <div style="font-size:1.5rem; font-weight:900; color:var(--accent-primary);" id="statTotalCount">0</div>
+        <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Toplam Soru</div>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;">
+        <div style="font-size:1.5rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div>
+        <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Tam Oturan</div>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;">
+        <div style="font-size:1.5rem; font-weight:900; color:#ef4444;" id="statStuckCount">0</div>
+        <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Hoca Masası</div>
+      </div>
+    </div>
+
+    <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px;">
+      <h4 style="font-size:0.78rem; text-transform:uppercase; color:var(--accent-primary); margin-bottom:8px; font-weight:900;">Hata Nedenleri Dağılımı</h4>
+      <div id="chartReasons" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+  </div>
+
+  <div id="tab-add" class="tab-view" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="font-size:1.2rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Soru Arşivle</h3>
+      <span id="batchQueueStatus" style="font-size:0.75rem; font-weight:800; color:var(--accent-primary); display:none;">Kuyruk: 1/3</span>
+    </div>
+
+    <div class="input-group" style="background:#292524; padding:10px; border-radius:12px; border:1px dashed var(--accent-primary); margin-bottom:12px;">
+      <label style="color:#fdba74;">📸 Seri Yükleme Modu (Çoklu Seçim Yapabilirsiniz)</label>
+      <input type="file" id="batchInputFiles" accept="image/*" multiple onchange="handleBatchFileSelect(event)">
+      <div style="font-size:0.68rem; color:var(--text-muted); margin-top:4px;">Birden fazla soru fotoğrafı seçip art arda etiketleyerek kaydedebilirsiniz.</div>
+    </div>
+
+    <form id="addForm" onsubmit="handleQuestionSubmit(event)">
+      <div class="input-group">
+        <label>📸 Soru Görseli (Zorunlu)</label>
+        <div style="display:flex; gap:6px;">
+          <input type="file" id="formQImg" accept="image/*" onchange="triggerImageCrop(this, 'q')">
+          <button type="button" id="btnCropQ" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="reopenCropper('q')">✂️ Kırp</button>
+        </div>
+        <img id="previewQImg" style="display:none; max-height:120px; border-radius:8px; margin-top:6px; object-fit:contain; background:#000;">
+      </div>
+
+      <div class="input-group">
+        <label>💡 Çözüm Görseli (İsteğe Bağlı)</label>
+        <div style="display:flex; gap:6px;">
+          <input type="file" id="formSImg" accept="image/*" onchange="triggerImageCrop(this, 's')">
+          <button type="button" id="btnCropS" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="reopenCropper('s')">✂️ Kırp</button>
+        </div>
+        <img id="previewSImg" style="display:none; max-height:120px; border-radius:8px; margin-top:6px; object-fit:contain; background:#000;">
+      </div>
+
+      <div class="input-group">
+        <label>Ders & Konu</label>
+        <div style="display:flex; gap:6px; margin-bottom:6px;">
+          <select id="formSubjectSelect" required onchange="renderTopicDropdown()"></select>
+        </div>
+        <select id="formTopicSelect" onchange="if(this.value) document.getElementById('formTopicManual').value = this.value;" required>
+          <option value="">-- Konu / Kazanım Seçin --</option>
+        </select>
+        <input type="text" id="formTopicManual" placeholder="Veya elle konu adı girin" required style="margin-top:6px;">
+      </div>
+
+      <div class="input-group" style="background:rgba(249, 115, 22, 0.1); border:1px solid rgba(249, 115, 22, 0.3); padding:10px; border-radius:12px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fdba74; margin:0;">
+          <input type="checkbox" id="formIsTrial" onchange="toggleTrialInput()" style="width:18px; height:18px; cursor:pointer;">
+          <span>🎯 <b>Deneme Sınavı Sorusu mu?</b></span>
+        </label>
+        <div id="trialNameContainer" style="display:none; margin-top:8px;">
+          <input type="text" id="formTrialName" placeholder="Deneme Adı / Yayın (Örn: 3D TYT-1, Özdebir vb.)">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Hata Nedeni / Teşhis</label>
+        <select id="formReasonSelect" required></select>
+      </div>
+
+      <div class="input-group" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); padding:10px; border-radius:12px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fca5a5; margin:0;">
+          <input type="checkbox" id="formIsTrap" style="width:18px; height:18px; cursor:pointer;">
+          <span>⚠️ <b>Tuzak Soru / ÖSYM Kelime Oyunu (Alarm Modu)</b></span>
+        </label>
+      </div>
+
+      <div class="input-group">
+        <label>🎙️ Sesli Not / Hoca İpucu (İsteğe Bağlı)</label>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button type="button" id="audioRecBtn" onclick="toggleAudio()" style="padding:8px 14px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-size:0.78rem; font-weight:800; cursor:pointer;">🎙️ Kaydet</button>
+          <span id="audioStatus" style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Kayıt yok</span>
+        </div>
+        <audio id="audioPreview" controls style="width:100%; margin-top:6px; display:none; height:32px;"></audio>
+      </div>
+
+      <div class="input-group">
+        <label>Not / Kaynak</label>
+        <input type="text" id="formNotes" placeholder="Örn: 3D Yayınları Deneme 2">
+      </div>
+
+      <button type="submit" id="addFormSubmitBtn" style="width:100%; padding:14px; border-radius:14px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.95rem; cursor:pointer; margin-top:6px;">
+        Arşive Ekle ve Avla 🚀
+      </button>
+    </form>
+  </div>
+
+  <nav class="bottom-nav" onclick="event.stopPropagation()">
+    <button class="nav-item active" onclick="switchNavTab('feed', this)">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Akış</span>
+    </button>
+    <button class="nav-item" onclick="switchNavTab('practice', this)">
+      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      <span>Pratik</span>
+    </button>
+    <button class="nav-add-btn" onclick="switchNavTab('add', null)" title="Hızlı Soru Ekle">
+      <svg viewBox="0 0 24 24" style="width:24px; height:24px; stroke:#fff; fill:none; stroke-width:3;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
+    <button class="nav-item" onclick="switchNavTab('analytics', this)">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      <span>Rapor</span>
+    </button>
+  </nav>
+
+  <div class="modal-overlay" id="helpModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:520px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.3rem;">📖</span>
+          <h3 style="font-size:1.15rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Soru Avcısı Kullanım Kılavuzu</h3>
+        </div>
+        <button onclick="closeHelpModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="font-size:0.8rem; line-height:1.55; color:#d6d3d1; display:flex; flex-direction:column; gap:12px;">
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:var(--accent-primary); margin-bottom:3px;">1. 📸 Hızlı & Seri Soru Arşivleme</div>
+          <div>Ortadaki <b>(+)</b> butonuyla yapamadığınız veya kaçırdığınız soruları tek tek ya da <b>Seri Yükleme Modu</b> ile çoklu olarak ekleyebilirsiniz. Görselleri kırpıp döndürürken orijinal netlik tamamen korunur.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#38bdf8; margin-bottom:3px;">2. 🎯 Teşhis, Deneme & Tuzak Etiketleri</div>
+          <div>Her soruya hata nedeni (dikkat, formül, yorum vb.) tanımlanır. Denemeleri yayın adıyla etiketleyebilir, kritik kelime oyunlarını <b>⚠️ Tuzak Soru</b> olarak kaydedebilirsiniz.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#34d399; margin-bottom:3px;">3. ⚡ Antrenman Masası & 3 Kademeli Karar</div>
+          <div>Soruları çözerken tek dokunuşla çözümü ve sesli notu dinleyebilir, ardından:
+            <ul style="margin-left:18px; margin-top:4px; font-size:0.75rem;">
+              <li><b>👑 Tam Oturdu (Avlandı):</b> Zihne yerleşen soruları arşive kaldırır.</li>
+              <li><b>⏳ Şüpheliyim (48s Tekrar):</b> Periyodik tekrar havuzuna alır.</li>
+              <li><b>🚨 Tıkalıyım:</b> Soruyu doğrudan <b>Hoca Masası</b>'na yönlendirir.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#f87171; margin-bottom:3px;">4. 👨‍🏫 Hoca Masası, Hikayeler & Çizim</div>
+          <div>Üstteki ders dairelerine dokunarak <b>Instagram Hikayeleri</b> modunda sırasıyla soru, çözüm ve sesli ipuçlarını izleyin. Ekrana dokunarak manuel olarak sonraki/önceki adıma geçebilirsiniz. Herhangi bir soruya dokunarak devasa ekranda açıp üzerinde serbestçe <b>karalama & çizim</b> yapabilirsiniz.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#fbbf24; margin-bottom:3px;">5. 📊 Bülten, 🖨️ PDF & 📲 QR Aktarım</div>
+          <div>Haftalık en çok hata yapılan konuları bültenle izleyebilir, istediğiniz filtreye göre A4 PDF deneme kitapçığı basabilir veya AirDrop/QR ile telefon-tablet arası veri aktarabilirsiniz.</div>
+        </div>
+
+        <div style="background:rgba(249, 115, 22, 0.12); border:1px solid rgba(249, 115, 22, 0.4); border-radius:14px; padding:12px; text-align:center; margin-top:4px;">
+          <div style="font-size:0.75rem; font-weight:900; color:var(--accent-primary); letter-spacing:0.8px; margin-bottom:4px;">İLETİŞİM</div>
+          <div style="font-size:0.85rem; font-weight:900; color:#fff;">HAZIRLAYAN: YILDIRAY HOCA (MATEMATİK ÖĞRETMENİ)</div>
+          <div style="font-size:0.8rem; font-weight:700; color:#fed7aa; margin-top:3px;">
+            MAİL: <a href="mailto:sanalnotum@gmail.com" style="color:#fdba74; text-decoration:underline;">sanalnotum@gmail.com</a>
+          </div>
+        </div>
+      </div>
+
+      <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:14px; cursor:pointer;" onclick="closeHelpModal()">Anladım, Kapat ✔️</button>
+    </div>
+  </div>
+
+  <div class="story-modal" id="storyModal" onclick="event.stopPropagation()">
+    <div class="story-progress-bar" id="storyProgressContainer"></div>
+    <div class="story-head">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="story-badge" id="storyTypeBadge">SORU</span>
+        <span style="font-weight:900; font-size:0.9rem; color:#fff;" id="storySubTitle">Ders Adı</span>
+      </div>
+      <button onclick="closeStoryViewer()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">✕</button>
+    </div>
+    <div class="story-content">
+      <div class="story-nav-btn story-nav-left" onclick="prevStory()" title="Önceki Slayt"></div>
+      <div class="story-nav-btn story-nav-right" onclick="nextStory()" title="Sonraki Slayt"></div>
+      <img id="storyImg" alt="Story İçerik">
+    </div>
+    <div style="padding: 14px; text-align: center; color: #fff; font-size: 0.8rem; background: rgba(0,0,0,0.75); z-index: 510;">
+      <div id="storyTopicDesc" style="margin-bottom:6px;"></div>
+      <div id="storyAudioWrap" style="display:none; max-width:400px; margin:0 auto;">
+        <audio id="storyAudioPlayer" controls style="width:100%; height:30px;"></audio>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="teacherDeskModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:580px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="font-size:1.15rem; font-weight:900; color:#f87171;">👨‍🏫 Birebir Hoca Masası</h3>
+        <button onclick="closeTeacherDeskModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Öğrencinin "Tıkalıyım" dediği ve hoca desteği bekleyen sorular listesi:</div>
+      
+      <div id="teacherDeskBody">
+        <div id="teacherDeskEmpty" style="display:none; text-align:center; padding:30px; color:var(--text-muted); font-weight:800;">Şu an hoca masasında bekleyen tıkalı soru yok! 🎉</div>
+        <div id="teacherDeskContent" style="display:none; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:800; color:var(--accent-primary);">
+            <span id="tdMeta">Ders - Konu</span>
+            <span id="tdCounter">1 / 4</span>
+          </div>
+          <div style="background:#000; border-radius:12px; height:260px; display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:zoom-in;" onclick="openLightbox(document.getElementById('tdImg').src)">
+            <img id="tdImg" style="max-width:100%; max-height:100%; object-fit:contain;">
+          </div>
+          <div id="tdReason" style="font-size:0.75rem; color:#f87171; font-weight:800;"></div>
+          <div id="tdNotes" style="font-size:0.75rem; color:var(--text-muted);"></div>
+          
+          <div id="tdAudioArea" style="display:none; margin-top:4px;">
+            <audio id="tdAudioPlayer" controls style="width:100%; height:32px; border-radius:8px;"></audio>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button style="flex:1; padding:12px; background:#10b981; border:none; border-radius:12px; color:#fff; font-weight:900; font-size:0.8rem; cursor:pointer;" onclick="resolveTeacherDeskQuestion(true)">✔️ Hoca Çözdü & Anlaşıldı</button>
+            <button style="padding:12px 14px; background:#292524; border:1px solid var(--card-border); border-radius:12px; color:#fff; font-weight:800; font-size:0.8rem; cursor:pointer;" onclick="nextTeacherDeskQuestion()">Sonraki ⏭️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="bulletinModal" onclick="event.stopPropagation()">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="font-size:1.15rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">📊 Haftalık Hata Bülteni</h3>
+        <button onclick="closeBulletinModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:12px;" id="bulletinDateRange">Son 7 Günlük Bilanço</div>
+
+      <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center;">
+          <div>
+            <div style="font-size:1.4rem; font-weight:900; color:var(--accent-primary);" id="bWeeklyTotal">0</div>
+            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Eklenen Yanlış</div>
+          </div>
+          <div>
+            <div style="font-size:1.4rem; font-weight:900; color:#34d399;" id="bWeeklyMastered">0</div>
+            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Kurtarılan Soru</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#1c1917; border:1px solid rgba(239,68,68,0.3); border-radius:14px; padding:12px; margin-bottom:12px;">
+        <div style="font-size:0.75rem; font-weight:900; color:#f87171; margin-bottom:4px;">🔥 Haftanın En Çok Can Yakan Konusu:</div>
+        <div style="font-size:0.95rem; font-weight:900;" id="bTopPainTopic">Henüz yeterli veri yok</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;" id="bTopPainReason">--</div>
+      </div>
+
+      <div style="background:rgba(249, 115, 22, 0.1); border:1px solid rgba(249,115,22,0.3); border-radius:14px; padding:12px; font-size:0.75rem; line-height:1.4; color:#fed7aa;" id="bCoachAdvice">
+        Koç Tavsiyesi yükleniyor...
+      </div>
+
+      <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:14px; cursor:pointer;" onclick="closeBulletinModal()">Tamam, Odaklanıyorum 🎯</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="cropperModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:500px; text-align:center;">
+      <h3 style="font-size:1.05rem; font-weight:900; margin-bottom:10px;">✂️ Görseli Ayarla</h3>
+      <div id="cropperContainer">
+        <canvas id="cropperCanvas"></canvas>
+      </div>
+      <div class="crop-btn-bar">
+        <button class="btn-sub-action" onclick="rotateCropper(90)">🔄 90° Döndür</button>
+        <button class="btn-sub-action" onclick="resetCropSelection()">🔄 Sıfırla</button>
+        <button class="btn-sub-action" style="background:var(--accent-primary); border-color:var(--accent-primary); color:#fff;" onclick="applyCropAndClose()">Tamamla ✔️</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="pdfModal" onclick="event.stopPropagation()">
+    <div class="modal-card">
+      <h3 style="font-size:1.1rem; font-weight:900; margin-bottom:10px;">🖨️ PDF Kitapçık Bas</h3>
+      <div class="input-group">
+        <label>Çıktı Kapsamı</label>
+        <select id="pdfScopeSelect">
+          <option value="all">Tüm Soru Havuzu</option>
+          <option value="traps">Sadece Tuzak Sorular (⚠️)</option>
+          <option value="trials">Sadece Deneme Hataları (🎯)</option>
+          <option value="stuck">Sadece Hoca Masası / Tıkalı Sorular (🚨)</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Hata Türü Filtresi</label>
+        <select id="pdfErrorFilter"></select>
+      </div>
+      <div class="input-group">
+        <label>Biçim Seçimi</label>
+        <select id="pdfPrintMode">
+          <option value="questions">📝 Sadece Sorular (Boş Test)</option>
+          <option value="solutions">💡 Sadece Çözümler & Notlar</option>
+          <option value="full">📑 Soru + Çözüm + Analiz</option>
+        </select>
+      </div>
+      <button style="width:100%; padding:14px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; cursor:pointer; margin-top:8px;" onclick="executeFilteredPrint()">PDF Çıktısı Al 🖨️</button>
+      <button style="width:100%; padding:10px; margin-top:8px; background:none; border:none; color:var(--danger); font-weight:800; cursor:pointer;" onclick="closePdfModal()">Vazgeç</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
+    <div class="lightbox-bar" onclick="event.stopPropagation()">
+      <button class="btn-icon-head" onclick="toggleCanvasMode()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.8rem; padding:8px 12px;">✏️ Çiz / Karala</button>
+      <button class="btn-icon-head" onclick="clearCanvas()" id="canvasClearBtn" style="display:none; background:#ef4444; border:none; color:#fff; font-size:0.8rem; padding:8px 12px;">🗑️ Sil</button>
+      <button class="btn-icon-head" onclick="closeLightbox()" style="font-size:0.8rem; padding:8px 12px;">✕ Kapat</button>
+    </div>
+    <div class="lightbox-stage" onclick="event.stopPropagation()">
+      <img id="lightboxImg" alt="Büyütülmüş Soru" onload="positionLightboxCanvas()">
+      <canvas id="lightboxCanvas" style="display:none;"></canvas>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="airdropModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="text-align:center;">
+      <h3 style="font-size:1.1rem; font-weight:900;" id="airdropTitle">AirDrop Cihaz Eşleme</h3>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" id="airdropStatus">Bağlantı kuruluyor...</div>
+      <div id="airdropSenderView">
+        <div id="qrcodeBox" style="background:#fff; padding:12px; border-radius:16px; display:inline-block; margin:14px 0;"></div>
+        <div style="font-size:0.8rem; font-weight:800;">Eşleşme Kodu: <span id="airdropCode" style="color:var(--accent-primary); font-size:1.1rem;">----</span></div>
+      </div>
+      <div id="airdropReceiverView" style="display:none; margin-top:14px;">
+        <input type="text" id="joinPeerInput" placeholder="4 haneli kod" style="text-align:center; font-weight:900; letter-spacing:2px; font-size:1.1rem;">
+        <button onclick="connectAndFetchData()" style="width:100%; padding:12px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; margin-top:10px; cursor:pointer;">Verileri Çek 🚀</button>
+      </div>
+      <button style="width:100%; padding:10px; margin-top:14px; background:none; border:none; color:var(--text-muted); font-weight:800; cursor:pointer;" onclick="closeAirDropModal()">Kapat</button>
+    </div>
+  </div>
+
+<script>
+const DB_NAME = "SoruAvcisiDB_YildirayHoca_v11";
+const STORE_NAME = "questions";
+let db;
+let allQuestions = [];
+let activeExam = "";
+let activeMaarifGrade = "";
+let selectedSubjectFilter = "";
+
+function initDB() {
+  return new Promise((resolve) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = (e) => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE_NAME)) {
+        d.createObjectStore(STORE_NAME, { keyPath: "id" });
+      }
+    };
+    req.onsuccess = (e) => { db = e.target.result; resolve(); };
+  });
+}
+
+function dbPut(item) {
+  return new Promise((resolve) => {
+    const tx = db.transaction([STORE_NAME], "readwrite");
+    tx.objectStore(STORE_NAME).put(item);
+    tx.oncomplete = () => resolve();
+  });
+}
+
+function dbGetAll() {
+  return new Promise((resolve) => {
+    const tx = db.transaction([STORE_NAME], "readonly");
+    const req = tx.objectStore(STORE_NAME).getAll();
+    req.onsuccess = () => resolve(req.result || []);
+  });
+}
+
+function dbDelete(id) {
+  return new Promise((resolve) => {
+    const tx = db.transaction([STORE_NAME], "readwrite");
+    tx.objectStore(STORE_NAME).delete(id);
+    tx.oncomplete = () => resolve();
+  });
+}
+
+function populateErrorReasonDropdowns() {
+  const selects = [
+    { id: "formReasonSelect", placeholder: null },
+    { id: "pdfErrorFilter", placeholder: "Tüm Hata Türleri" },
+    { id: "pSetupReason", placeholder: "Tüm Hata Nedenleri" }
+  ];
+
+  selects.forEach(sObj => {
+    const el = document.getElementById(sObj.id);
+    if (!el) return;
+    el.innerHTML = "";
+    if (sObj.placeholder) {
+      el.innerHTML += `<option value="all">${sObj.placeholder}</option>`;
+    }
+    ERROR_REASONS.forEach(r => {
+      el.innerHTML += `<option value="${r}">${r}</option>`;
+    });
+  });
+}
+
+// EXCEL DOSYASINI DOĞRUDAN OKUYUP MAARİF OBJESİNİ OLUŞTURAN AKILLI MOTOR
+async function loadMaarifExcelFromRepo() {
+  try {
+    const response = await fetch('KONULAR MAARİF.xlsx');
+    if (!response.ok) return;
+    const arrayBuffer = await response.arrayBuffer();
+    const data = new Uint8Array(arrayBuffer);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    const jsonRows = XLSX.utils.sheet_to_json(worksheet);
+
+    MASTER_CURRICULUM["MAARİF"] = {};
+
+    jsonRows.forEach(row => {
+      const sinif = (row['SINIF'] || '').toString().trim();
+      const ders = (row['DERS'] || '').toString().trim();
+      const konu = (row['KONU'] || '').toString().trim();
+
+      if (!sinif || !ders || !konu) return;
+
+      if (!MASTER_CURRICULUM["MAARİF"][sinif]) {
+        MASTER_CURRICULUM["MAARİF"][sinif] = {};
+      }
+      if (!MASTER_CURRICULUM["MAARİF"][sinif][ders]) {
+        MASTER_CURRICULUM["MAARİF"][sinif][ders] = [];
+      }
+      if (!MASTER_CURRICULUM["MAARİF"][sinif][ders].includes(konu)) {
+        MASTER_CURRICULUM["MAARİF"][sinif][ders].push(konu);
+      }
+    });
+    console.log("Maarif Excel başarıyla yüklendi. Sınıf sayısı:", Object.keys(MASTER_CURRICULUM["MAARİF"]).length);
+  } catch (err) {
+    console.warn("Excel dosyası doğrudan okunamadı, yedek liste devrede.", err);
+  }
+}
+
+async function checkExamSelection() {
+  activeExam = localStorage.getItem("avci_active_exam");
+  activeMaarifGrade = localStorage.getItem("avci_maarif_grade") || "";
+
+  if (!activeExam || !MASTER_CURRICULUM[activeExam] || (activeExam === "MAARİF" && !activeMaarifGrade)) {
+    showExamSelectionMainGrid();
+  } else {
+    document.getElementById("examSelectModal").style.display = "none";
+    initAppForExam();
+    updateExamCountdown();
+  }
+}
+
+function showExamSelectionMainGrid() {
+  const grid = document.getElementById("examGridOptions");
+  const instruction = document.getElementById("modalInstructionText");
+  instruction.innerText = "Hazırlandığın ana sınav grubunu seç:";
+  grid.innerHTML = "";
+
+  Object.keys(MASTER_CURRICULUM).forEach(ex => {
+    grid.innerHTML += `<button class="exam-opt-btn" onclick="handleExamBtnClick('${ex}')">${ex}</button>`;
+  });
+  document.getElementById("examSelectModal").style.display = "flex";
+}
+
+function handleExamBtnClick(ex) {
+  if (ex === "MAARİF") {
+    activeExam = "MAARİF";
+    localStorage.setItem("avci_active_exam", "MAARİF");
+    showMaarifGradesGrid();
+  } else {
+    setExamSelection(ex);
+  }
+}
+
+function showMaarifGradesGrid() {
+  const grid = document.getElementById("examGridOptions");
+  const instruction = document.getElementById("modalInstructionText");
+  instruction.innerText = "Maarif Modeli için sınıf düzeyini seç:";
+  grid.innerHTML = `<button class="exam-opt-btn" style="grid-column: span 2; background:#292524;" onclick="showExamSelectionMainGrid()">⬅️ Geri Dön</button>`;
+
+  const grades = Object.keys(MASTER_CURRICULUM["MAARİF"] || {});
+  if (grades.length === 0) {
+    grid.innerHTML += `<div style="grid-column: span 2; color:#f87171; font-size:0.8rem; padding:10px;">Excel dosyası yükleniyor veya bulunamadı!</div>`;
+    return;
+  }
+  grades.forEach(g => {
+    grid.innerHTML += `<button class="exam-opt-btn" onclick="setMaarifGradeSelection('${g}')">${g}</button>`;
+  });
+}
+
+function setMaarifGradeSelection(grade) {
+  activeMaarifGrade = grade;
+  localStorage.setItem("avci_maarif_grade", grade);
+  document.getElementById("examSelectModal").style.display = "none";
+  selectedSubjectFilter = "";
+  initAppForExam();
+  updateExamCountdown();
+  refreshAll();
+}
+
+function setExamSelection(ex) {
+  localStorage.setItem("avci_active_exam", ex);
+  localStorage.removeItem("avci_maarif_grade");
+  activeExam = ex;
+  activeMaarifGrade = "";
+  document.getElementById("examSelectModal").style.display = "none";
+  selectedSubjectFilter = "";
+  initAppForExam();
+  updateExamCountdown();
+  refreshAll();
+}
+
+function resetExamSelection() {
+  localStorage.removeItem("avci_active_exam");
+  localStorage.removeItem("avci_maarif_grade");
+  checkExamSelection();
+}
+
+function getCurrentActiveSubjectsObj() {
+  if (activeExam === "MAARİF") {
+    return MASTER_CURRICULUM["MAARİF"][activeMaarifGrade] || {};
+  }
+  return MASTER_CURRICULUM[activeExam] || {};
+}
+
+function initAppForExam() {
+  const subjects = getCurrentActiveSubjectsObj();
+  
+  const subSelect = document.getElementById("formSubjectSelect");
+  subSelect.innerHTML = "";
+  Object.keys(subjects).forEach(s => { subSelect.innerHTML += `<option value="${s}">${s}</option>`; });
+  renderTopicDropdown();
+
+  const pSetupSub = document.getElementById("pSetupSubject");
+  pSetupSub.innerHTML = '<option value="all">Tüm Dersler</option>';
+  Object.keys(subjects).forEach(s => { pSetupSub.innerHTML += `<option value="${s}">${s}</option>`; });
+  handlePracticeSubjectChange();
+
+  const tagLabel = activeExam === "MAARİF" ? `MAARİF (${activeMaarifGrade})` : activeExam;
+  document.getElementById("practiceActiveExamTag").innerText = tagLabel;
+
+  buildStoriesBar();
+  buildExamPills();
+}
+
+function renderTopicDropdown() {
+  const subjects = getCurrentActiveSubjectsObj();
+  const sub = document.getElementById("formSubjectSelect").value;
+  const top = document.getElementById("formTopicSelect");
+  top.innerHTML = '<option value="">-- Konu / Kazanım Seçin --</option>';
+  if (subjects[sub]) {
+    subjects[sub].forEach(t => { top.innerHTML += `<option value="${t}">${t}</option>`; });
+  }
+}
+
+function handlePracticeSubjectChange() {
+  const subjects = getCurrentActiveSubjectsObj();
+  const chosenSub = document.getElementById("pSetupSubject").value;
+  const topSelect = document.getElementById("pSetupTopic");
+  topSelect.innerHTML = '<option value="all">Tüm Konular</option>';
+
+  if (chosenSub !== "all" && subjects[chosenSub]) {
+    subjects[chosenSub].forEach(t => {
+      topSelect.innerHTML += `<option value="${t}">${t}</option>`;
+    });
+  }
+  updatePracticeCounterBadge();
+}
+
+function updatePracticeCounterBadge() {
+  const count = getFilteredPracticeQuestions().length;
+  document.getElementById("pFoundCount").innerText = `${count} Soru`;
+}
+
+function getFilteredPracticeQuestions() {
+  const sub = document.getElementById("pSetupSubject").value;
+  const topic = document.getElementById("pSetupTopic").value;
+  const scope = document.getElementById("pSetupScope").value;
+  const reason = document.getElementById("pSetupReason").value;
+
+  return allQuestions.filter(q => {
+    if (q.exam !== activeExam) return false;
+    if (activeExam === "MAARİF" && q.maarifGrade !== activeMaarifGrade) return false;
+    if (sub !== "all" && q.subject !== sub) return false;
+    if (topic !== "all" && q.topic !== topic) return false;
+    if (reason !== "all" && q.reason !== reason) return false;
+    if (scope === "trials" && !q.isTrial) return false;
+    if (scope === "traps" && !q.isTrap) return false;
+    if (scope === "stuck" && q.status !== "stuck") return false;
+    if (scope === "doubt" && q.status !== "doubt") return false;
+    return true;
+  });
+}
+
+function launchTargetedPractice() {
+  let targetQuestions = getFilteredPracticeQuestions();
+  if (targetQuestions.length === 0) return alert("Seçtiğin kriterlere uygun soru bulunamadı!");
+
+  const limitVal = document.getElementById("pSetupLimit").value;
+  targetQuestions = targetQuestions.sort(() => 0.5 - Math.random());
+
+  if (limitVal !== "all") {
+    const num = parseInt(limitVal, 10);
+    targetQuestions = targetQuestions.slice(0, num);
+  }
+
+  document.getElementById("practiceSetupView").style.display = "none";
+  document.getElementById("practiceCardView").style.display = "flex";
+  setupPracticeSession(targetQuestions);
+}
+
+function returnToPracticeSetup() {
+  clearInterval(practiceTimerInterval);
+  document.getElementById("practiceCardView").style.display = "none";
+  document.getElementById("practiceSetupView").style.display = "block";
+  updatePracticeCounterBadge();
+}
+
+function toggleTrialInput() {
+  const isChecked = document.getElementById("formIsTrial").checked;
+  document.getElementById("trialNameContainer").style.display = isChecked ? "block" : "none";
+}
+
+function updateExamCountdown() {
+  const now = new Date();
+  let targetYear = now.getFullYear();
+  const examMonthDays = {
+    "YKS (TYT + AYT)": { month: 5, day: 20 },
+    "LGS": { month: 5, day: 6 },
+    "KPSS": { month: 6, day: 15 },
+    "ALES": { month: 3, day: 20 },
+    "DGS": { month: 6, day: 2 },
+    "AGS": { month: 6, day: 25 },
+    "ÖABT": { month: 7, day: 4 },
+    "TUS": { month: 8, day: 10 },
+    "DUS": { month: 9, day: 12 },
+    "EUS": { month: 9, day: 18 },
+    "YÖKDİL": { month: 2, day: 15 },
+    "MAARİF": { month: 5, day: 15 }
+  };
+  const info = examMonthDays[activeExam] || { month: 5, day: 15 };
+  let targetDate = new Date(targetYear, info.month, info.day, 10, 0, 0);
+  if (targetDate < now) {
+    targetYear++;
+    targetDate = new Date(targetYear, info.month, info.day, 10, 0, 0);
+  }
+  const diff = Math.max(0, Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24)));
+  document.getElementById("daysUntilExam").innerText = diff;
+}
+
+let twinPracticeTopic = null;
+function checkTwinErrorAlarms() {
+  const examPool = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade));
+  const map = {};
+  examPool.forEach(q => {
+    const key = `${q.subject}___${q.topic}___${q.reason}`;
+    map[key] = (map[key] || 0) + 1;
+  });
+
+  const banner = document.getElementById("coachTwinAlarmBanner");
+  let foundTwin = null;
+
+  for (const [k, count] of Object.entries(map)) {
+    if (count >= 2) {
+      const parts = k.split("___");
+      foundTwin = { subject: parts[0], topic: parts[1], reason: parts[2], count: count };
+      break;
+    }
+  }
+
+  if (foundTwin) {
+    twinPracticeTopic = foundTwin;
+    document.getElementById("coachAlarmTitle").innerText = `🚨 ${foundTwin.topic} Konusunda İkiz Hata!`;
+    document.getElementById("coachAlarmDesc").innerText = `"${foundTwin.reason}" sebebiyle ${foundTwin.count} soru kaçırıldı. Telafi şart.`;
+    banner.classList.add("active");
+  } else {
+    twinPracticeTopic = null;
+    banner.classList.remove("active");
+  }
+}
+
+function launchTwinPractice() {
+  if (!twinPracticeTopic) return;
+  const filtered = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade) && q.topic === twinPracticeTopic.topic && q.reason === twinPracticeTopic.reason);
+  switchNavTab("practice", document.querySelectorAll(".nav-item")[1]);
+  document.getElementById("practiceSetupView").style.display = "none";
+  document.getElementById("practiceCardView").style.display = "flex";
+  setupPracticeSession(filtered);
+}
+
+function buildStoriesBar() {
+  const container = document.getElementById("storiesContainer");
+  container.innerHTML = "";
+  const subjects = getCurrentActiveSubjectsObj();
+  
+  const subLastAdded = {};
+  Object.keys(subjects).forEach(sub => { subLastAdded[sub] = 0; });
+
+  allQuestions.forEach(q => {
+    if (q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade) && q.subject) {
+      const t = new Date(q.createdAt).getTime();
+      if (t > (subLastAdded[q.subject] || 0)) subLastAdded[q.subject] = t;
+    }
+  });
+
+  const sortedSubjects = Object.keys(subjects).sort((a, b) => subLastAdded[b] - subLastAdded[a]);
+
+  sortedSubjects.forEach(sub => {
+    const emojis = { "Matematik": "📐", "Türkçe": "📚", "Fizik": "⚡", "Kimya": "🧪", "Biyoloji": "🧬", "Tarih": "📜", "Coğrafya": "🌍", "Geometri": "🔺", "Edebiyat": "✒️", "Felsefe": "🧠", "Din": "🌙", "İngilizce": "🇬🇧", "Fen": "🔬", "Anatomi": "🫀", "Gramer": "📖", "Hayat": "🌱" };
+    let em = "🎯";
+    for (const [k, v] of Object.entries(emojis)) {
+      if (sub.includes(k)) { em = v; break; }
+    }
+    const isLatest = subLastAdded[sub] > 0;
+    container.innerHTML += `
+      <div class="story-item" onclick="openStoryViewer('${sub}')">
+        <div class="story-ring" style="${isLatest && sortedSubjects[0]===sub ? 'background:linear-gradient(135deg, #f97316, #10b981);':''}"><div class="story-inner">${em}</div></div>
+        <div class="story-title">${sub}</div>
+      </div>
+    `;
+  });
+}
+
+function buildExamPills() {
+  const container = document.getElementById("examPillContainer");
+  container.innerHTML = `<div class="pill-chip ${selectedSubjectFilter===''?'active':''}" onclick="filterBySubject('', this)">Tüm Dersler</div>`;
+  const subjects = getCurrentActiveSubjectsObj();
+  Object.keys(subjects).forEach(sub => {
+    container.innerHTML += `<div class="pill-chip ${selectedSubjectFilter===sub?'active':''}" onclick="filterBySubject('${sub}', this)">${sub}</div>`;
+  });
+}
+
+function filterBySubject(sub, el) {
+  selectedSubjectFilter = sub;
+  document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderFeed();
+}
+
+function filterTrapQuestions() {
+  selectedSubjectFilter = "TRAP";
+  document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
+  renderFeed();
+}
+
+function filterTrialQuestions() {
+  selectedSubjectFilter = "TRIAL";
+  document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
+  renderFeed();
+}
+
+function renderFeed() {
+  const container = document.getElementById("feedList");
+  container.innerHTML = "";
+
+  let items = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade)).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (selectedSubjectFilter === "TRAP") {
+    items = items.filter(q => q.isTrap === true);
+  } else if (selectedSubjectFilter === "TRIAL") {
+    items = items.filter(q => q.isTrial === true);
+  } else if (selectedSubjectFilter) {
+    items = items.filter(q => q.subject === selectedSubjectFilter);
+  }
+
+  if (items.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:0.85rem; font-weight:700;">Bu kategoride kayıtlı soru bulunmuyor 🎯</div>`;
+    return;
+  }
+
+  items.forEach(q => {
+    const card = document.createElement("div");
+    card.className = "feed-card";
+    
+    let statusBadge = '';
+    if (q.status === 'mastered') statusBadge = '<span class="card-status-badge status-mastered">👑 Avlandı (Tam Oturdu)</span>';
+    else if (q.status === 'doubt') statusBadge = '<span class="card-status-badge status-doubt">⏳ Şüpheli (48s Sonra)</span>';
+    else if (q.status === 'stuck') statusBadge = '<span class="card-status-badge status-stuck">🚨 Tıkalı (Hoca Masası)</span>';
+
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="tag-exam">${q.subject} ${q.isTrap ? '⚠️[TUZAK]' : ''} ${q.isTrial ? '🎯['+(q.trialName || 'Deneme')+']' : ''}</span>
+        <div class="card-reactions-row">
+          <span class="react-pill ${q.reactions?.heart ? 'active':''}" onclick="toggleCardReaction('${q.id}', 'heart')">❤️</span>
+          <span class="react-pill ${q.reactions?.star ? 'active':''}" onclick="toggleCardReaction('${q.id}', 'star')">⭐</span>
+          <span class="react-pill ${q.reactions?.excl ? 'active':''}" onclick="toggleCardReaction('${q.id}', 'excl')">❗</span>
+          <span class="tag-reason">${q.reason}</span>
+        </div>
+      </div>
+      <div class="card-image-wrap" onclick="openLightbox('${q.questionImg}')">
+        <img src="${q.questionImg}" alt="Soru">
+      </div>
+      <div class="card-body">
+        <div class="topic-title">${q.topic}</div>
+        ${statusBadge}
+        ${q.notes ? `<div class="note-text">${q.notes}</div>` : ''}
+        ${q.audioData ? `
+          <div style="margin-top:8px; background:#1c1917; padding:6px; border-radius:10px; border:1px solid var(--card-border);">
+            <div style="font-size:0.68rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🎙️ Sesli Hoca Notu / İpucu:</div>
+            <audio controls src="${q.audioData}" style="width:100%; height:32px; border-radius:8px;"></audio>
+          </div>
+        ` : ''}
+      </div>
+      ${q.solutionImg ? `
+        <button class="solution-accordion-btn" onclick="toggleAccordion(this)">
+          <span>💡 Çözümü & Notu Göster / Gizle</span>
+          <span>▼</span>
+        </button>
+        <div class="solution-accordion-content">
+          <div style="font-size:0.72rem; font-weight:800; color:#34d399; margin-bottom:4px;">ÇÖZÜM GÖRSELİ (DOKUN: BÜYÜT)</div>
+          <img src="${q.solutionImg}" style="max-width:100%; max-height:220px; object-fit:contain; border-radius:6px; cursor:zoom-in; display:block; margin:0 auto;" onclick="openLightbox('${q.solutionImg}')">
+        </div>
+      ` : ''}
+      <div class="card-actions">
+        <button class="btn-action" style="background:var(--accent-gradient); border:none; color:#fff; font-weight:800;" onclick="openLightbox('${q.questionImg}')">✏️ Büyüt & Karala</button>
+        <button class="btn-action" style="color:var(--danger);" onclick="deleteQuestion('${q.id}')">🗑️ Sil</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function toggleAccordion(btn) {
+  const content = btn.nextElementSibling;
+  content.classList.toggle("open");
+  btn.querySelector("span:last-child").innerText = content.classList.contains("open") ? "▲" : "▼";
+}
+
+async function toggleCardReaction(id, type) {
+  const q = allQuestions.find(x => x.id === id);
+  if (q) {
+    if (!q.reactions) q.reactions = { heart: false, star: false, excl: false };
+    q.reactions[type] = !q.reactions[type];
+    await dbPut(q);
+    await refreshAll();
+  }
+}
+
+async function deleteQuestion(id) {
+  if (confirm("Bu soruyu silmek istediğine emin misin?")) {
+    await dbDelete(id);
+    await refreshAll();
+  }
+}
+
+let practiceList = [];
+let currentPracticeIdx = 0;
+let practiceTimerInterval = null;
+let practiceSeconds = 0;
+
+function setupPracticeSession(items) {
+  practiceList = items && items.length > 0 ? [...items] : [];
+  currentPracticeIdx = 0;
+  loadCurrentPracticeCard();
+}
+
+function startTimer() {
+  clearInterval(practiceTimerInterval);
+  practiceSeconds = 0;
+  practiceTimerInterval = setInterval(() => {
+    practiceSeconds++;
+    const m = String(Math.floor(practiceSeconds / 60)).padStart(2, '0');
+    const s = String(practiceSeconds % 60).padStart(2, '0');
+    document.getElementById("pTimer").innerText = `⏱️ ${m}:${s}`;
+  }, 1000);
+}
+
+function loadCurrentPracticeCard() {
+  document.getElementById("solutionDrawer").classList.remove("open");
+  if (practiceList.length === 0 || currentPracticeIdx >= practiceList.length) {
+    clearInterval(practiceTimerInterval);
+    alert("Tebrikler! Antrenman seansı tamamlandı. 🎉");
+    returnToPracticeSetup();
+    return;
+  }
+  startTimer();
+  const q = practiceList[currentPracticeIdx];
+  document.getElementById("pCardCount").innerText = `Soru ${currentPracticeIdx + 1} / ${practiceList.length}`;
+  document.getElementById("pMetaText").innerText = `${q.subject} - ${q.topic} ${q.isTrap ? '⚠️[TUZAK]' : ''} ${q.isTrial ? '🎯['+(q.trialName || 'Deneme')+']' : ''}`;
+  document.getElementById("pQuestionImg").src = q.questionImg;
+  document.getElementById("pSolutionImg").src = q.solutionImg || q.questionImg;
+  document.getElementById("pReasonText").innerText = `Teşhis: ${q.reason}`;
+  document.getElementById("pNotesText").innerText = q.notes ? `Not: ${q.notes}` : "";
+
+  const audioBox = document.getElementById("pAudioContainer");
+  if (q.audioData) {
+    audioBox.innerHTML = `
+      <div style="margin-top:6px; background:#1c1917; padding:6px; border-radius:8px; border:1px solid var(--card-border);">
+        <div style="font-size:0.68rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🎙️ Sesli İpucu:</div>
+        <audio controls src="${q.audioData}" style="width:100%; height:32px; border-radius:6px;"></audio>
+      </div>
+    `;
+    audioBox.style.display = "block";
+  } else {
+    audioBox.innerHTML = "";
+    audioBox.style.display = "none";
+  }
+}
+
+function toggleSolutionDrawer() { document.getElementById("solutionDrawer").classList.toggle("open"); }
+
+async function handleThreeLevelChoice(level) {
+  if (practiceList.length === 0) return;
+  const currentQ = practiceList[currentPracticeIdx];
+  currentQ.status = level;
+  currentQ.lastReviewedAt = new Date().toISOString();
+
+  if (level === "mastered") {
+    let mCount = parseInt(localStorage.getItem("avci_mastered") || "0", 10) + 1;
+    localStorage.setItem("avci_mastered", mCount);
+  }
+
+  await dbPut(currentQ);
+  currentPracticeIdx++;
+  loadCurrentPracticeCard();
+}
+
+function triggerPanicMode() {
+  const examPool = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade));
+  if (examPool.length === 0) return alert("Bu grup için henüz soru eklenmedi!");
+  const chosen = [...examPool].sort(() => 0.5 - Math.random()).slice(0, 5);
+  switchNavTab("practice", document.querySelectorAll('.nav-item')[1]);
+  document.getElementById("practiceSetupView").style.display = "none";
+  document.getElementById("practiceCardView").style.display = "flex";
+  setupPracticeSession(chosen);
+}
+
+let teacherDeskQuestions = [];
+let tdCurrentIdx = 0;
+
+function openTeacherDeskModal() {
+  teacherDeskQuestions = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade) && q.status === "stuck");
+  tdCurrentIdx = 0;
+  document.getElementById("teacherDeskModal").classList.add("active");
+  renderTeacherDeskCard();
+}
+
+function closeTeacherDeskModal() {
+  document.getElementById("teacherDeskModal").classList.remove("active");
+  refreshAll();
+}
+
+function renderTeacherDeskCard() {
+  const emptyEl = document.getElementById("teacherDeskEmpty");
+  const contentEl = document.getElementById("teacherDeskContent");
+
+  if (teacherDeskQuestions.length === 0 || tdCurrentIdx >= teacherDeskQuestions.length) {
+    emptyEl.style.display = "block";
+    contentEl.style.display = "none";
+    return;
+  }
+
+  emptyEl.style.display = "none";
+  contentEl.style.display = "flex";
+
+  const q = teacherDeskQuestions[tdCurrentIdx];
+  document.getElementById("tdMeta").innerText = `${q.subject} - ${q.topic}`;
+  document.getElementById("tdCounter").innerText = `${tdCurrentIdx + 1} / ${teacherDeskQuestions.length}`;
+  document.getElementById("tdImg").src = q.questionImg;
+  document.getElementById("tdReason").innerText = `Hata: ${q.reason}`;
+  document.getElementById("tdNotes").innerText = q.notes ? `Öğrenci Notu: ${q.notes}` : "";
+
+  const tdAudioArea = document.getElementById("tdAudioArea");
+  const tdAudioPlayer = document.getElementById("tdAudioPlayer");
+  if (q.audioData) {
+    tdAudioPlayer.src = q.audioData;
+    tdAudioArea.style.display = "block";
+  } else {
+    tdAudioPlayer.src = "";
+    tdAudioArea.style.display = "none";
+  }
+}
+
+async function resolveTeacherDeskQuestion(isResolved) {
+  if (teacherDeskQuestions.length === 0) return;
+  const q = teacherDeskQuestions[tdCurrentIdx];
+  if (isResolved) {
+    q.status = "mastered";
+    await dbPut(q);
+  }
+  tdCurrentIdx++;
+  renderTeacherDeskCard();
+}
+
+function nextTeacherDeskQuestion() {
+  tdCurrentIdx++;
+  if (tdCurrentIdx >= teacherDeskQuestions.length) tdCurrentIdx = 0;
+  renderTeacherDeskCard();
+}
+
+function openBulletinModal() {
+  document.getElementById("bulletinModal").classList.add("active");
+  generateWeeklyBulletin();
+}
+
+function closeBulletinModal() {
+  document.getElementById("bulletinModal").classList.remove("active");
+}
+
+function generateWeeklyBulletin() {
+  const examPool = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade));
+  const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  const weeklyList = examPool.filter(q => new Date(q.createdAt) >= oneWeekAgo);
+  const masteredThisWeek = weeklyList.filter(q => q.status === "mastered").length;
+
+  document.getElementById("bWeeklyTotal").innerText = weeklyList.length;
+  document.getElementById("bWeeklyMastered").innerText = masteredThisWeek;
+
+  const topicCounts = {};
+  const topicReasons = {};
+  weeklyList.forEach(q => {
+    topicCounts[q.topic] = (topicCounts[q.topic] || 0) + 1;
+    if (!topicReasons[q.topic]) topicReasons[q.topic] = {};
+    topicReasons[q.topic][q.reason] = (topicReasons[q.topic][q.reason] || 0) + 1;
+  });
+
+  let worstTopic = null;
+  let maxC = 0;
+  for (const [t, c] of Object.entries(topicCounts)) {
+    if (c > maxC) { maxC = c; worstTopic = t; }
+  }
+
+  if (worstTopic) {
+    document.getElementById("bTopPainTopic").innerText = `${worstTopic} (${maxC} Hata)`;
+    const rObj = topicReasons[worstTopic] || {};
+    const topReason = Object.keys(rObj).sort((a,b) => rObj[b] - rObj[a])[0];
+    document.getElementById("bTopPainReason").innerText = `En sık sebep: ${topReason}`;
+    document.getElementById("bCoachAdvice").innerHTML = `<b>Koç Notu:</b> Bu hafta özellikle <b>${worstTopic}</b> konusunda yoğunlaşman gerekiyor. "${topReason}" tuzağına dikkat ederek özel bir telafi çalışması yap!`;
+  } else {
+    document.getElementById("bTopPainTopic").innerText = "Henüz son 7 günde eklenen soru yok.";
+    document.getElementById("bTopPainReason").innerText = "--";
+    document.getElementById("bCoachAdvice").innerText = "Tebrikler! Düzenli çalışmaya ve kaçırdığın soruları buraya eklemeye devam et.";
+  }
+}
+
+function toggleQuickMenu(e) {
+  if (e) e.stopPropagation();
+  const m = document.getElementById("quickMenu");
+  m.classList.toggle("active");
+}
+
+function closeQuickMenu() {
+  document.getElementById("quickMenu").classList.remove("active");
+}
+
+function openHelpModal() {
+  document.getElementById("helpModal").classList.add("active");
+}
+
+function closeHelpModal() {
+  document.getElementById("helpModal").classList.remove("active");
+}
+
+let storySlides = [];
+let currentStoryIdx = 0;
+
+function openStoryViewer(subject) {
+  const filtered = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade) && q.subject === subject);
+  if (filtered.length === 0) {
+    alert(`${subject} dersine ait henüz kayıtlı soru yok!`);
+    return;
+  }
+
+  storySlides = [];
+  filtered.forEach(q => {
+    storySlides.push({
+      img: q.questionImg,
+      type: "SORU",
+      topic: q.topic,
+      reason: q.reason,
+      notes: q.notes,
+      audio: q.audioData
+    });
+    if (q.solutionImg) {
+      storySlides.push({
+        img: q.solutionImg,
+        type: "💡 ÇÖZÜM & ANALİZ",
+        topic: q.topic,
+        reason: q.reason,
+        notes: q.notes,
+        audio: q.audioData
+      });
+    }
+  });
+
+  currentStoryIdx = 0;
+  document.getElementById("storySubTitle").innerText = subject;
+  document.getElementById("storyModal").classList.add("active");
+  loadStory();
+}
+
+function closeStoryViewer() {
+  const p = document.getElementById("storyAudioPlayer");
+  p.pause();
+  p.src = "";
+  document.getElementById("storyModal").classList.remove("active");
+}
+
+function loadStory() {
+  if (currentStoryIdx >= storySlides.length) {
+    closeStoryViewer();
+    return;
+  }
+
+  const slide = storySlides[currentStoryIdx];
+  document.getElementById("storyTypeBadge").innerText = slide.type;
+  document.getElementById("storyImg").src = slide.img;
+  document.getElementById("storyTopicDesc").innerText = `${slide.topic} • ${slide.reason} ${slide.notes ? '• ' + slide.notes : ''}`;
+
+  const audioWrap = document.getElementById("storyAudioWrap");
+  const audioPlayer = document.getElementById("storyAudioPlayer");
+  if (slide.audio) {
+    audioPlayer.src = slide.audio;
+    audioWrap.style.display = "block";
+  } else {
+    audioPlayer.pause();
+    audioPlayer.src = "";
+    audioWrap.style.display = "none";
+  }
+
+  const progContainer = document.getElementById("storyProgressContainer");
+  progContainer.innerHTML = "";
+  storySlides.forEach((_, idx) => {
+    const seg = document.createElement("div");
+    seg.className = "story-progress-segment";
+    let fillWidth = "0%";
+    if (idx <= currentStoryIdx) fillWidth = "100%";
+    seg.innerHTML = `<div class="story-progress-fill" style="width: ${fillWidth};"></div>`;
+    progContainer.appendChild(seg);
+  });
+}
+
+function nextStory() {
+  if (currentStoryIdx < storySlides.length - 1) {
+    currentStoryIdx++;
+    loadStory();
+  } else {
+    closeStoryViewer();
+  }
+}
+
+function prevStory() {
+  if (currentStoryIdx > 0) {
+    currentStoryIdx--;
+    loadStory();
+  }
+}
+
+let batchFilesQueue = [];
+let currentBatchIdx = 0;
+
+function handleBatchFileSelect(e) {
+  const files = Array.from(e.target.files);
+  if (!files || files.length === 0) return;
+  batchFilesQueue = files;
+  currentBatchIdx = 0;
+  loadBatchItemIntoForm();
+}
+
+async function loadBatchItemIntoForm() {
+  if (currentBatchIdx >= batchFilesQueue.length) {
+    batchFilesQueue = [];
+    currentBatchIdx = 0;
+    document.getElementById("batchQueueStatus").style.display = "none";
+    document.getElementById("addFormSubmitBtn").innerText = "Arşive Ekle ve Avla 🚀";
+    alert("Seri soru yükleme tamamlandı! 🎉");
+    return;
+  }
+
+  document.getElementById("batchQueueStatus").style.display = "block";
+  document.getElementById("batchQueueStatus").innerText = `Kuyruk: ${currentBatchIdx + 1} / ${batchFilesQueue.length}`;
+  document.getElementById("addFormSubmitBtn").innerText = `Kaydet & Sıradakine Geç (${currentBatchIdx + 1}/${batchFilesQueue.length}) ⏭️`;
+
+  const file = batchFilesQueue[currentBatchIdx];
+  const b64 = await readFileAsBase64(file);
+  curCropTarget = 'q';
+  workingRawImg = b64;
+  processedImages.q = b64;
+  document.getElementById("previewQImg").src = b64;
+  document.getElementById("previewQImg").style.display = "block";
+  document.getElementById("btnCropQ").style.display = "inline-block";
+}
+
+let curCropTarget = 'q';
+let workingRawImg = null;
+let processedImages = { q: null, s: null };
+let cropCanvas, cropCtx;
+let cropImageObj = new Image();
+let rotationAngle = 0;
+let cropRect = { x: 0, y: 0, w: 0, h: 0 };
+let isDraggingCrop = false;
+let cropStartX = 0, cropStartY = 0;
+
+function readFileAsBase64(file) {
+  return new Promise((resolve) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.readAsDataURL(file);
+  });
+}
+
+async function triggerImageCrop(input, target) {
+  const file = input.files[0];
+  if (!file) return;
+  const b64 = await readFileAsBase64(file);
+  curCropTarget = target;
+  workingRawImg = b64;
+  processedImages[target] = b64;
+
+  const prev = document.getElementById(target === 'q' ? "previewQImg" : "previewSImg");
+  const btnC = document.getElementById(target === 'q' ? "btnCropQ" : "btnCropS");
+  prev.src = b64;
+  prev.style.display = "block";
+  btnC.style.display = "inline-block";
+
+  openCropperModal();
+}
+
+function reopenCropper(target) {
+  curCropTarget = target;
+  workingRawImg = processedImages[target];
+  if (workingRawImg) openCropperModal();
+}
+
+function openCropperModal() {
+  document.getElementById("cropperModal").classList.add("active");
+  rotationAngle = 0;
+  cropCanvas = document.getElementById("cropperCanvas");
+  cropCtx = cropCanvas.getContext("2d");
+
+  cropImageObj.onload = () => {
+    setupCropperDimensions();
+    attachCropperEvents();
+  };
+  cropImageObj.src = workingRawImg;
+}
+
+function setupCropperDimensions() {
+  const container = document.getElementById("cropperContainer");
+  const cW = container.clientWidth;
+  const cH = container.clientHeight;
+
+  let imgW = cropImageObj.naturalWidth || cropImageObj.width;
+  let imgH = cropImageObj.naturalHeight || cropImageObj.height;
+  if (rotationAngle === 90 || rotationAngle === 270) {
+    const tmp = imgW; imgW = imgH; imgH = tmp;
+  }
+
+  const scale = Math.min(cW / imgW, cH / imgH, 1);
+  cropCanvas.width = imgW * scale;
+  cropCanvas.height = imgH * scale;
+
+  resetCropSelection();
+  drawCropper();
+}
+
+function resetCropSelection() {
+  cropRect = { x: 10, y: 10, w: cropCanvas.width - 20, h: cropCanvas.height - 20 };
+  drawCropper();
+}
+
+function rotateCropper(deg) {
+  rotationAngle = (rotationAngle + deg) % 360;
+  setupCropperDimensions();
+}
+
+function drawCropper() {
+  cropCtx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
+  cropCtx.save();
+  cropCtx.translate(cropCanvas.width / 2, cropCanvas.height / 2);
+  cropCtx.rotate((rotationAngle * Math.PI) / 180);
+
+  let drawW = cropCanvas.width;
+  let drawH = cropCanvas.height;
+  if (rotationAngle === 90 || rotationAngle === 270) {
+    drawW = cropCanvas.height;
+    drawH = cropCanvas.width;
+  }
+
+  cropCtx.drawImage(cropImageObj, -drawW / 2, -drawH / 2, drawW, drawH);
+  cropCtx.restore();
+
+  cropCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
+  cropCtx.fillRect(0, 0, cropCanvas.width, cropRect.y);
+  cropCtx.fillRect(0, cropRect.y + cropRect.h, cropCanvas.width, cropCanvas.height - (cropRect.y + cropRect.h));
+  cropCtx.fillRect(0, cropRect.y, cropRect.x, cropRect.h);
+  cropCtx.fillRect(cropRect.x + cropRect.w, cropRect.y, cropCanvas.width - (cropRect.x + cropRect.w), cropRect.h);
+
+  cropCtx.strokeStyle = "#f97316";
+  cropCtx.lineWidth = 2;
+  cropCtx.strokeRect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
+}
+
+function attachCropperEvents() {
+  cropCanvas.onmousedown = (e) => startCropDrag(e.offsetX, e.offsetY);
+  cropCanvas.onmousemove = (e) => doCropDrag(e.offsetX, e.offsetY);
+  cropCanvas.onmouseup = () => isDraggingCrop = false;
+
+  cropCanvas.ontouchstart = (e) => {
+    const rect = cropCanvas.getBoundingClientRect();
+    startCropDrag(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+    e.preventDefault();
+  };
+  cropCanvas.ontouchmove = (e) => {
+    const rect = cropCanvas.getBoundingClientRect();
+    doCropDrag(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+    e.preventDefault();
+  };
+  cropCanvas.ontouchend = () => isDraggingCrop = false;
+}
+
+function startCropDrag(x, y) {
+  isDraggingCrop = true;
+  cropStartX = x;
+  cropStartY = y;
+  cropRect = { x: x, y: y, w: 0, h: 0 };
+}
+
+function doCropDrag(x, y) {
+  if (!isDraggingCrop) return;
+  cropRect.x = Math.max(0, Math.min(cropStartX, x));
+  cropRect.y = Math.max(0, Math.min(cropStartY, y));
+  cropRect.w = Math.min(cropCanvas.width - cropRect.x, Math.abs(x - cropStartX));
+  cropRect.h = Math.min(cropCanvas.height - cropRect.y, Math.abs(y - cropStartY));
+  drawCropper();
+}
+
+function applyCropAndClose() {
+  if (cropRect.w < 20 || cropRect.h < 20) {
+    resetCropSelection();
+  }
+
+  let rawW = cropImageObj.naturalWidth || cropImageObj.width;
+  let rawH = cropImageObj.naturalHeight || cropImageObj.height;
+  if (rotationAngle === 90 || rotationAngle === 270) {
+    const tmp = rawW; rawW = rawH; rawH = tmp;
+  }
+
+  const scaleRatioX = rawW / cropCanvas.width;
+  const scaleRatioY = rawH / cropCanvas.height;
+
+  const realCropX = cropRect.x * scaleRatioX;
+  const realCropY = cropRect.y * scaleRatioY;
+  const realCropW = cropRect.w * scaleRatioX;
+  const realCropH = cropRect.h * scaleRatioY;
+
+  const finalCanvas = document.createElement("canvas");
+  finalCanvas.width = realCropW;
+  finalCanvas.height = realCropH;
+  const fCtx = finalCanvas.getContext("2d");
+
+  fCtx.save();
+  fCtx.translate(finalCanvas.width / 2, finalCanvas.height / 2);
+  fCtx.rotate((rotationAngle * Math.PI) / 180);
+
+  let drawW = (rotationAngle === 90 || rotationAngle === 270) ? realCropH : realCropW;
+  let drawH = (rotationAngle === 90 || rotationAngle === 270) ? realCropW : realCropH;
+
+  fCtx.drawImage(
+    cropImageObj,
+    (cropRect.x / cropCanvas.width) * (cropImageObj.naturalWidth || cropImageObj.width),
+    (cropRect.y / cropCanvas.height) * (cropImageObj.naturalHeight || cropImageObj.height),
+    (cropRect.w / cropCanvas.width) * (cropImageObj.naturalWidth || cropImageObj.width),
+    (cropRect.h / cropCanvas.height) * (cropImageObj.naturalHeight || cropImageObj.height),
+    -drawW / 2, -drawH / 2, drawW, drawH
+  );
+  fCtx.restore();
+
+  const croppedBase64 = finalCanvas.toDataURL("image/jpeg", 0.95);
+  processedImages[curCropTarget] = croppedBase64;
+
+  const prev = document.getElementById(curCropTarget === 'q' ? "previewQImg" : "previewSImg");
+  prev.src = croppedBase64;
+
+  document.getElementById("cropperModal").classList.remove("active");
+}
+
+async function handleQuestionSubmit(e) {
+  e.preventDefault();
+  const qBase64 = processedImages.q;
+  const topic = document.getElementById("formTopicManual").value.trim();
+
+  if (!qBase64 || !topic) return alert("Soru görseli ve konu zorunludur.");
+
+  const isTrial = document.getElementById("formIsTrial").checked;
+  const trialName = isTrial ? document.getElementById("formTrialName").value.trim() : "";
+
+  const item = {
+    id: "q_" + Date.now(),
+    exam: activeExam,
+    maarifGrade: activeExam === "MAARİF" ? activeMaarifGrade : null,
+    subject: document.getElementById("formSubjectSelect").value,
+    topic: topic,
+    reason: document.getElementById("formReasonSelect").value,
+    isTrap: document.getElementById("formIsTrap").checked,
+    isTrial: isTrial,
+    trialName: trialName,
+    notes: document.getElementById("formNotes").value,
+    status: "doubt",
+    reactions: { heart: false, star: false, excl: false },
+    audioData: audioBlobBase64,
+    questionImg: qBase64,
+    solutionImg: processedImages.s || null,
+    createdAt: new Date().toISOString()
+  };
+
+  await dbPut(item);
+
+  if (batchFilesQueue.length > 0) {
+    currentBatchIdx++;
+    processedImages = { q: null, s: null };
+    document.getElementById("previewQImg").style.display = "none";
+    document.getElementById("previewSImg").style.display = "none";
+    document.getElementById("btnCropQ").style.display = "none";
+    document.getElementById("btnCropS").style.display = "none";
+    loadBatchItemIntoForm();
+    await refreshAll();
+    return;
+  }
+
+  document.getElementById("addForm").reset();
+  processedImages = { q: null, s: null };
+  document.getElementById("previewQImg").style.display = "none";
+  document.getElementById("previewSImg").style.display = "none";
+  document.getElementById("btnCropQ").style.display = "none";
+  document.getElementById("btnCropS").style.display = "none";
+  audioBlobBase64 = null;
+  document.getElementById("audioPreview").style.display = "none";
+  document.getElementById("audioStatus").innerText = "Kayıt yok";
+  document.getElementById("trialNameContainer").style.display = "none";
+
+  await refreshAll();
+  switchNavTab("feed", document.querySelector(".bottom-nav .nav-item"));
+}
+
+function renderAnalytics() {
+  const examPool = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade));
+  const total = examPool.length;
+  const mastered = examPool.filter(q => q.status === "mastered").length;
+  const stuck = examPool.filter(q => q.status === "stuck").length;
+
+  document.getElementById("statTotalCount").innerText = total;
+  document.getElementById("statMasteredCount").innerText = mastered;
+  document.getElementById("statStuckCount").innerText = stuck;
+
+  let level = 1, title = "Çırak Avcı";
+  if (total >= 5) { level = 2; title = "Kıdemli Avcı"; }
+  if (total >= 15) { level = 3; title = "Soru Uzmanı"; }
+  if (total >= 30) { level = 4; title = "Efsane Avcı 👑"; }
+  document.getElementById("userLevelText").innerText = `Seviye ${level}: ${title}`;
+
+  if (total >= 1) document.getElementById("badge-first").style.opacity = "1";
+  else document.getElementById("badge-first").style.opacity = "0.3";
+
+  const reasons = {};
+  examPool.forEach(q => { reasons[q.reason] = (reasons[q.reason] || 0) + 1; });
+  const maxR = Math.max(...Object.values(reasons), 1);
+  const rBox = document.getElementById("chartReasons");
+  rBox.innerHTML = "";
+  for (const [r, c] of Object.entries(reasons)) {
+    const pct = (c / maxR) * 100;
+    rBox.innerHTML += `
+      <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;">
+        <span style="width:130px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${r}</span>
+        <div style="flex:1; background:#1c1917; height:8px; border-radius:4px; overflow:hidden;">
+          <div style="width:${pct}%; background:var(--accent-primary); height:100%;"></div>
+        </div>
+        <span style="font-weight:900; width:18px; text-align:right;">${c}</span>
+      </div>
+    `;
+  }
+}
+
+let mediaRec, audioBlobBase64 = null, audioChunks = [];
+let recordedMimeType = "audio/webm";
+
+function getSupportedAudioMimeType() {
+  const types = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/aac'];
+  for (const t of types) {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) {
+      return t;
+    }
+  }
+  return '';
+}
+
+function toggleAudio() {
+  const btn = document.getElementById("audioRecBtn");
+  const status = document.getElementById("audioStatus");
+  const player = document.getElementById("audioPreview");
+
+  if (!mediaRec || mediaRec.state === "inactive") {
+    audioChunks = [];
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      recordedMimeType = getSupportedAudioMimeType();
+      const options = recordedMimeType ? { mimeType: recordedMimeType } : {};
+      
+      try {
+        mediaRec = new MediaRecorder(stream, options);
+      } catch (err) {
+        mediaRec = new MediaRecorder(stream);
+        recordedMimeType = mediaRec.mimeType || 'audio/mp4';
+      }
+
+      mediaRec.start();
+      btn.innerText = "⏹️ Bitir";
+      status.innerText = "Kayıtta...";
+
+      mediaRec.ondataavailable = e => {
+        if (e.data && e.data.size > 0) audioChunks.push(e.data);
+      };
+
+      mediaRec.onstop = () => {
+        const finalType = recordedMimeType || (audioChunks[0] ? audioChunks[0].type : 'audio/mp4');
+        const blob = new Blob(audioChunks, { type: finalType });
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          audioBlobBase64 = reader.result;
+          player.src = audioBlobBase64;
+          player.style.display = "block";
+          status.innerText = "Hazır!";
+        };
+      };
+    }).catch(err => {
+      alert("Mikrofon izni verilmedi veya erişilemedi: " + err.message);
+    });
+  } else {
+    mediaRec.stop();
+    mediaRec.stream.getTracks().forEach(t => t.stop());
+    btn.innerText = "🎙️ Kaydet";
+  }
+}
+
+let isCanvasActive = false;
+let canvasCtx = null;
+let drawing = false;
+
+function openLightbox(src) {
+  if (!src) return;
+  const img = document.getElementById("lightboxImg");
+  img.src = src;
+  document.getElementById("lightboxModal").classList.add("active");
+  isCanvasActive = false;
+  document.getElementById("lightboxCanvas").style.display = "none";
+  document.getElementById("canvasToggleBtn").innerText = "✏️ Çiz / Karala";
+  document.getElementById("canvasClearBtn").style.display = "none";
+}
+
+function positionLightboxCanvas() {
+  const img = document.getElementById("lightboxImg");
+  const canvas = document.getElementById("lightboxCanvas");
+  if (!img || !canvas) return;
+
+  const rect = img.getBoundingClientRect();
+  canvas.style.left = rect.left + "px";
+  canvas.style.top = rect.top + "px";
+  canvas.style.width = rect.width + "px";
+  canvas.style.height = rect.height + "px";
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+
+  canvasCtx = canvas.getContext("2d");
+  canvasCtx.strokeStyle = "#f97316";
+  canvasCtx.lineWidth = 4;
+  canvasCtx.lineCap = "round";
+  canvasCtx.lineJoin = "round";
+}
+
+function closeLightbox() {
+  document.getElementById("lightboxModal").classList.remove("active");
+  isCanvasActive = false;
+  const canvas = document.getElementById("lightboxCanvas");
+  if (canvasCtx) canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function toggleCanvasMode() {
+  isCanvasActive = !isCanvasActive;
+  const canvas = document.getElementById("lightboxCanvas");
+  const btn = document.getElementById("canvasToggleBtn");
+  const clearBtn = document.getElementById("canvasClearBtn");
+
+  if (isCanvasActive) {
+    positionLightboxCanvas();
+    canvas.style.display = "block";
+    btn.innerText = "👁️ Karalamayı Koru";
+    clearBtn.style.display = "inline-block";
+
+    canvas.onmousedown = startDraw;
+    canvas.onmousemove = draw;
+    canvas.onmouseup = stopDraw;
+    canvas.ontouchstart = (e) => { startDraw(e.touches[0]); e.preventDefault(); };
+    canvas.ontouchmove = (e) => { draw(e.touches[0]); e.preventDefault(); };
+    canvas.ontouchend = stopDraw;
+  } else {
+    canvas.style.display = "none";
+    btn.innerText = "✏️ Çiz / Karala";
+    clearBtn.style.display = "none";
+  }
+}
+
+function startDraw(e) {
+  drawing = true;
+  const rect = document.getElementById("lightboxCanvas").getBoundingClientRect();
+  canvasCtx.beginPath();
+  canvasCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+}
+
+function draw(e) {
+  if (!drawing) return;
+  const rect = document.getElementById("lightboxCanvas").getBoundingClientRect();
+  canvasCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+  canvasCtx.stroke();
+}
+
+function stopDraw() { drawing = false; }
+function clearCanvas() {
+  const canvas = document.getElementById("lightboxCanvas");
+  if (canvasCtx) canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+window.addEventListener("resize", () => {
+  if (document.getElementById("lightboxModal").classList.contains("active") && isCanvasActive) {
+    positionLightboxCanvas();
+  }
+});
+
+function handleBodyBackgroundClick(e) {
+  closeQuickMenu();
+  if (e.target.closest("button") || e.target.closest("input") || e.target.closest("select") || e.target.closest(".modal-card") || e.target.closest(".feed-card") || e.target.closest(".setup-card") || e.target.closest(".dropdown-menu")) {
+    return;
+  }
+}
+
+function executeFilteredPrint() {
+  closePdfModal();
+  const scope = document.getElementById("pdfScopeSelect").value;
+  const errorFilter = document.getElementById("pdfErrorFilter").value;
+  const mode = document.getElementById("pdfPrintMode").value;
+
+  let items = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade)).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+  if (scope === "traps") items = items.filter(q => q.isTrap === true);
+  else if (scope === "trials") items = items.filter(q => q.isTrial === true);
+  else if (scope === "stuck") items = items.filter(q => q.status === "stuck");
+
+  if (errorFilter !== "all") {
+    items = items.filter(q => q.reason === errorFilter);
+  }
+
+  let titleText = "KİŞİSEL TELAFİ KİTAPÇIĞI";
+  if (mode === "questions") titleText = "ÖZEL TELAFİ TESTİ (BOŞ DENEME)";
+  if (mode === "solutions") titleText = "ÖZEL ÇÖZÜMLER VE ANALİZLER";
+
+  let htmlContent = `
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+      <meta charset="UTF-8">
+      <title>SORU AVCISI - PDF Çıktı</title>
+      <style>
+        @page { size: A4 portrait; margin: 12mm; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fff; color: #000; padding: 0; font-size: 11pt; }
+        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 6mm; margin-bottom: 6mm; }
+        .brand { font-size: 1.25rem; font-weight: 900; text-transform: uppercase; }
+        .sub { font-size: 0.8rem; font-weight: 800; margin-top: 2px; }
+        .test-container { display: flex; flex-direction: column; gap: 6mm; }
+        .question-block { border-bottom: 1.5px solid #333; padding-bottom: 6mm; margin-bottom: 6mm; page-break-inside: avoid; }
+        .q-meta { font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; display: flex; justify-content: space-between; background: #f3f4f6; padding: 4px 8px; border-radius: 4px; }
+        .q-topic { font-size: 0.85rem; font-weight: bold; margin: 4px 0; }
+        .img-wrap { text-align: center; margin: 6px 0; }
+        .img-wrap img { max-width: 90%; max-height: 240px; object-fit: contain; border: 1px solid #ddd; }
+        .solution-box { margin-top: 6px; padding: 6px 8px; background: #fafafa; border-left: 3px solid #059669; font-size: 0.8rem; }
+        .note-box { font-size: 0.78rem; font-style: italic; color: #444; margin-top: 4px; }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="brand">SORU AVCISI</div>
+        <div class="sub">${titleText} (${activeExam === 'MAARİF' ? 'MAARİF - ' + activeMaarifGrade : activeExam})</div>
+        <div style="font-size: 0.7rem; margin-top: 2px;">Tarih: ${new Date().toLocaleDateString('tr-TR')} • HAZIRLAYAN: YILDIRAY HOCA</div>
+      </div>
+      <div class="test-container">
+  `;
+
+  items.forEach((q, idx) => {
+    htmlContent += `
+      <div class="question-block">
+        <div class="q-meta">
+          <span>Soru #${idx+1} • ${q.subject} ${q.isTrap ? '⚠️[TUZAK]' : ''} ${q.isTrial ? '🎯['+(q.trialName || 'Deneme')+']' : ''}</span>
+          <span>Teşhis: ${q.reason}</span>
+        </div>
+        <div class="q-topic">Konu: ${q.topic}</div>
+    `;
+
+    if (mode !== "solutions") {
+      htmlContent += `<div class="img-wrap"><img src="${q.questionImg}" alt="Soru ${idx+1}"></div>`;
+    }
+
+    if (q.notes) {
+      htmlContent += `<div class="note-box"><b>Not:</b> ${q.notes}</div>`;
+    }
+
+    if (mode !== "questions" && q.solutionImg) {
+      htmlContent += `
+        <div class="solution-box">
+          <b style="color:#065f46;">Çözüm:</b>
+          <div class="img-wrap" style="margin-top:4px;"><img src="${q.solutionImg}" alt="Çözüm ${idx+1}"></div>
+        </div>
+      `;
+    }
+
+    htmlContent += `</div>`;
+  });
+
+  htmlContent += `</div></body></html>`;
+
+  let oldIframe = document.getElementById("printIframe");
+  if (oldIframe) oldIframe.remove();
+
+  const iframe = document.createElement('iframe');
+  iframe.id = "printIframe";
+  iframe.style.position = 'fixed';
+  iframe.style.width = '0px';
+  iframe.style.height = '0px';
+  iframe.style.border = 'none';
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write(htmlContent);
+  doc.close();
+
+  setTimeout(() => {
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+  }, 400);
+}
+
+let peer = null;
+function openAirDropSender() {
+  document.getElementById("airdropModal").classList.add("active");
+  document.getElementById("airdropSenderView").style.display = "block";
+  document.getElementById("airdropReceiverView").style.display = "none";
+  document.getElementById("airdropTitle").innerText = "📲 Tablete Aktar";
+  document.getElementById("airdropStatus").innerText = "Eşleşme bekleniyor...";
+
+  const randomCode = Math.floor(1000 + Math.random() * 9000).toString();
+  document.getElementById("airdropCode").innerText = randomCode;
+
+  if (peer) peer.destroy();
+  peer = new Peer("avci-" + randomCode);
+
+  peer.on('open', () => {
+    const qrContainer = document.getElementById("qrcodeBox");
+    qrContainer.innerHTML = "";
+    new QRCode(qrContainer, { text: window.location.origin + window.location.pathname + "?pair=" + randomCode, width: 130, height: 130 });
+  });
+
+  peer.on('connection', (conn) => {
+    document.getElementById("airdropStatus").innerText = "Bağlanıldı, veriler aktarılıyor...";
+    conn.on('open', async () => {
+      const data = await dbGetAll();
+      conn.send({ type: "SYNC", questions: data });
+      setTimeout(() => { document.getElementById("airdropStatus").innerText = "Aktarım Tamamlandı! 🎉"; }, 800);
+    });
+  });
+}
+
+function openAirDropReceiver() {
+  document.getElementById("airdropModal").classList.add("active");
+  document.getElementById("airdropSenderView").style.display = "none";
+  document.getElementById("airdropReceiverView").style.display = "block";
+  document.getElementById("airdropTitle").innerText = "📥 Tablete Al";
+}
+
+function connectAndFetchData(pairParam) {
+  const code = pairParam || document.getElementById("joinPeerInput").value.trim();
+  if (!code) return alert("Kodu girin.");
+  if (peer) peer.destroy();
+  peer = new Peer();
+  peer.on('open', () => {
+    const conn = peer.connect("avci-" + code);
+    conn.on('data', async (data) => {
+      if (data.type === "SYNC") {
+        for (const q of data.questions) { await dbPut(q); }
+        alert("Veriler başarıyla eşitlendi! 🎉");
+        closeAirDropModal();
+        await refreshAll();
+      }
+    });
+  });
+}
+
+function closeAirDropModal() { document.getElementById("airdropModal").classList.remove("active"); if (peer) { peer.destroy(); peer=null; } }
+function openPdfModal() { document.getElementById("pdfModal").classList.add("active"); }
+function closePdfModal() { document.getElementById("pdfModal").classList.remove("active"); }
+
+function switchNavTab(tabId, btn) {
+  document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById('tab-' + tabId);
+  if (target) target.classList.add('active');
+  if (btn) btn.classList.add('active');
+  
+  if (tabId === 'practice') returnToPracticeSetup();
+  if (tabId === 'analytics') renderAnalytics();
+}
+
+async function exportDataBackup() {
+  const data = await dbGetAll();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `SoruAvcisi_Yedek_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importDataBackup(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = async (ev) => {
+    try {
+      const list = JSON.parse(ev.target.result);
+      for (const item of list) { await dbPut(item); }
+      alert("Yedek başarıyla yüklendi!");
+      await refreshAll();
+    } catch(err) { alert("Hatalı dosya biçimi!"); }
+  };
+  r.readAsText(f);
+}
+
+async function refreshAll() {
+  allQuestions = await dbGetAll();
+  buildStoriesBar();
+  buildExamPills();
+  renderFeed();
+  checkTwinErrorAlarms();
+  updatePracticeCounterBadge();
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
+  await initDB();
+  populateErrorReasonDropdowns();
+  
+  // ÖNCE EXCEL'İ DOĞRUDAN OKU, SONRA SINAV KONTROLÜNÜ YAP
+  await loadMaarifExcelFromRepo();
+
+  checkExamSelection();
+  await refreshAll();
+
+  const today = new Date();
+  if (today.getDay() === 0 && !sessionStorage.getItem("bulletin_shown")) {
+    sessionStorage.setItem("bulletin_shown", "true");
+    openBulletinModal();
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const pairParam = urlParams.get('pair');
+  if (pairParam) {
+    openAirDropReceiver();
+    connectAndFetchData(pairParam);
+  }
+});
+</script>
+</body>
+</html>
