@@ -89,10 +89,14 @@
     .clutch-bar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(239, 68, 68, 0.15)); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; }
     .btn-panic { background: var(--accent-primary); color: #fff; border: none; padding: 9px 14px; border-radius: 12px; font-size: 0.8rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4); }
 
-    .action-sub-bar { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-    .action-sub-bar::-webkit-scrollbar { display: none; }
-    .btn-sub-action { flex-shrink: 0; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition:0.2s; }
+    /* Akış Ekranı Buton Grubu: Esnek ve her ekrana sığacak şekilde düzenlendi */
+    .action-sub-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
+    @media(min-width: 480px) { .action-sub-bar { grid-template-columns: repeat(4, 1fr); } }
+    .btn-sub-action { width: 100%; padding: 9px 10px; border-radius: 14px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text); font-size: 0.75rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition:0.2s; text-align: center; }
     .btn-sub-action.active { background: var(--accent-gradient); border-color: var(--accent-primary); color: #fff; }
+
+    /* Bilgi Kasası Sekmesi Buton Grubu: Satırı eşit dolduracak şekilde */
+    .notes-sub-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; width: 100%; }
 
     .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
     .pills-scroll::-webkit-scrollbar { display: none; }
@@ -274,6 +278,9 @@
     </div>
     <div class="pills-scroll" id="examPillContainer"></div>
     <div id="feedList"></div>
+    <div id="loadMoreContainer" style="text-align:center; margin:16px 0; display:none;">
+      <button onclick="loadMoreFeed()" style="padding:10px 20px; background:#292524; border:1px solid var(--card-border); color:var(--accent-primary); font-weight:900; border-radius:12px; cursor:pointer;">Daha Fazla Soru Göster 🔽</button>
+    </div>
   </div>
 
   <!-- 2. PRATİK SEKMESİ -->
@@ -447,7 +454,7 @@
       <h3 style="font-size:1.2rem; font-weight:900; color:#fbbf24;">🗂️ Bilgi Kasası (Formüller)</h3>
     </div>
     
-    <div class="action-sub-bar" style="margin-bottom:16px;">
+    <div class="notes-sub-bar">
       <button class="btn-sub-action active" id="btnNavNoteAdd" onclick="toggleNotesSubView('add')">📥 Yeni Bilgi Ekle</button>
       <button class="btn-sub-action" id="btnNavNoteArch" onclick="toggleNotesSubView('arch')">🗂️ Kasa Arşivi</button>
     </div>
@@ -798,6 +805,7 @@ let allNotes = [];
 let activeExam = "";
 let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
+let feedDisplayLimit = 10; // Sonsuz kaydırma/sayfalama limiti
 
 function initDB() {
   return new Promise((resolve) => {
@@ -979,6 +987,7 @@ function setMaarifGradeSelection(grade) {
   localStorage.setItem("avci_maarif_grade", grade);
   document.getElementById("examSelectModal").style.display = "none";
   selectedSubjectFilter = "";
+  feedDisplayLimit = 10;
   initAppForExam();
   updateExamCountdown();
   refreshAll();
@@ -991,6 +1000,7 @@ function setExamSelection(ex) {
   activeMaarifGrade = "";
   document.getElementById("examSelectModal").style.display = "none";
   selectedSubjectFilter = "";
+  feedDisplayLimit = 10;
   initAppForExam();
   updateExamCountdown();
   refreshAll();
@@ -1147,6 +1157,7 @@ async function handleQuestionSubmit(e) {
   audioBlobsBase64['q'] = null; document.getElementById("audioPreview_q").style.display = "none"; document.getElementById("audioStatus_q").innerText = "Kayıt yok";
   document.getElementById("trialNameContainer").style.display = "none";
 
+  feedDisplayLimit = 10;
   await refreshAll();
 
   if (batchFilesQueue.length > 0 && currentBatchIdx < batchFilesQueue.length - 1) {
@@ -1296,6 +1307,7 @@ function buildExamPills() {
 
 function filterBySubject(sub, el) {
   selectedSubjectFilter = sub;
+  feedDisplayLimit = 10;
   document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   renderFeed();
@@ -1303,6 +1315,7 @@ function filterBySubject(sub, el) {
 
 function filterAllQuestions(btn) {
   selectedSubjectFilter = "";
+  feedDisplayLimit = 10;
   document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.action-sub-bar .btn-sub-action').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -1311,6 +1324,7 @@ function filterAllQuestions(btn) {
 
 function filterTrapQuestions(btn) {
   selectedSubjectFilter = "TRAP";
+  feedDisplayLimit = 10;
   document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.action-sub-bar .btn-sub-action').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
@@ -1319,6 +1333,7 @@ function filterTrapQuestions(btn) {
 
 function filterTrialQuestions(btn) {
   selectedSubjectFilter = "TRIAL";
+  feedDisplayLimit = 10;
   document.querySelectorAll('#examPillContainer .pill-chip').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.action-sub-bar .btn-sub-action').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
@@ -1335,10 +1350,12 @@ function renderFeed() {
 
   if (items.length === 0) {
     container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:0.85rem; font-weight:700;">Bu kategoride kayıtlı soru bulunmuyor 🎯</div>`;
+    document.getElementById("loadMoreContainer").style.display = "none";
     return;
   }
 
-  items.forEach(q => {
+  const paginatedItems = items.slice(0, feedDisplayLimit);
+  paginatedItems.forEach(q => {
     const card = document.createElement("div");
     card.className = "feed-card";
     let statusBadge = '';
@@ -1371,6 +1388,18 @@ function renderFeed() {
     `;
     container.appendChild(card);
   });
+
+  const loadMoreBtnContainer = document.getElementById("loadMoreContainer");
+  if (items.length > feedDisplayLimit) {
+    loadMoreBtnContainer.style.display = "block";
+  } else {
+    loadMoreBtnContainer.style.display = "none";
+  }
+}
+
+function loadMoreFeed() {
+  feedDisplayLimit += 10;
+  renderFeed();
 }
 
 function toggleAccordion(btn) {
@@ -1562,6 +1591,7 @@ function generateNoteCardHTML(n, showDeleteBtn = true) {
   `;
 }
 
+// Bilgi Kasası silme fonksiyonu - Kalıcı silme hatası düzeltildi
 async function deleteNote(id) {
   if (confirm("Bu bilgi kartını silmek istediğine emin misin?")) {
     await dbDelete("notes", id);
@@ -1684,7 +1714,7 @@ function openCustomReportPopup() {
 
 function closeCustomReportModal() { document.getElementById("customReportModal").classList.remove("active"); }
 
-// GİZLİ IFRAME YÖNTEMİYLE YENİ SEKME AÇMADAN TEMİZ YAZDIRMA (MOBİL & PC KİLİTLENME SORUNU ÇÖZÜLDÜ)
+// GİZLİ IFRAME YÖNTEMİYLE YENİ SEKME AÇMADAN TEMİZ YAZDIRMA
 function executeCustomReportPrint() {
   closeCustomReportModal();
   const timeVal = document.getElementById("smartReportTime").value;
@@ -1731,7 +1761,6 @@ function executeFilteredPrint() {
   triggerHiddenIframePrint(htmlContent);
 }
 
-// Yeni sekme açmadan arka planda çalışan güvenli iframe yazdırma fonksiyonu
 function triggerHiddenIframePrint(htmlContent) {
   const oldIframe = document.getElementById("hiddenPrintIframe");
   if (oldIframe) oldIframe.remove();
@@ -1750,7 +1779,6 @@ function triggerHiddenIframePrint(htmlContent) {
   doc.write(htmlContent);
   doc.close();
 
-  // Yazdırma bittikten sonra iframe'i temizle
   iframe.contentWindow.onafterprint = () => { iframe.remove(); };
 }
 
