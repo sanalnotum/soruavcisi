@@ -21,13 +21,13 @@
   <style>
     :root {
       --bg: #1c1917;
-      --card-bg: rgba(28, 25, 23, 0.94);
-      --card-border: rgba(249, 115, 22, 0.22);
+      --card-bg: rgba(28, 25, 23, 0.96);
+      --card-border: rgba(249, 115, 22, 0.28);
       --accent-primary: #f97316;
       --accent-secondary: #ea580c;
       --accent-gradient: linear-gradient(135deg, #f97316, #ea580c, #c2410c);
-      --text: #fafaf9;
-      --text-muted: #a8a29e;
+      --text: #ffffff;
+      --text-muted: #d6d3d1;
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
@@ -51,7 +51,7 @@
 
     .header-actions { display: flex; align-items: center; gap: 8px; position: relative; }
     .btn-icon-head { background: #292524; border: 1px solid var(--card-border); color: var(--text); padding: 8px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-    .btn-icon-head.coach-btn { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
+    .btn-icon-head.coach-btn { background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
 
     .dropdown-menu {
       position: absolute; top: calc(100% + 8px); right: 0; width: 230px;
@@ -64,10 +64,10 @@
     .dropdown-menu.active { display: flex; }
     .dropdown-item {
       display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px;
-      border: none; background: none; color: #fafaf9; font-size: 0.82rem; font-weight: 800;
+      border: none; background: none; color: #ffffff; font-size: 0.82rem; font-weight: 800;
       border-radius: 10px; cursor: pointer; text-align: left; transition: 0.2s;
     }
-    .dropdown-item:hover, .dropdown-item:active { background: rgba(249, 115, 22, 0.2); color: var(--accent-primary); }
+    .dropdown-item:hover, .dropdown-item:active { background: rgba(249, 115, 22, 0.25); color: var(--accent-primary); }
 
     .tab-view { display: none; padding: 12px 14px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
     .tab-view.active { display: block; }
@@ -79,14 +79,14 @@
     .exam-opt-btn { padding: 13px 8px; border-radius: 14px; border: 1px solid var(--card-border); background: #1c1917; color: var(--text); font-weight: 800; font-size: 0.86rem; cursor: pointer; text-align: center; transition: 0.2s; }
     .exam-opt-btn:hover { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
 
-    .stories-container { display: flex; gap: 12px; overflow-x: auto; padding: 6px 4px 12px 4px; margin-bottom: 12px; scrollbar-width: none; }
+    .stories-container { display: flex; gap: 14px; overflow-x: auto; padding: 6px 4px 14px 4px; margin-bottom: 12px; scrollbar-width: none; }
     .stories-container::-webkit-scrollbar { display: none; }
     .story-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
-    .story-ring { width: 66px; height: 66px; border-radius: 50%; padding: 3px; display: flex; align-items: center; justify-content: center; position: relative; transition: all 0.3s ease; }
-    .story-inner { width: 60px; height: 60px; border-radius: 50%; background: #1c1917; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; z-index: 2; }
-    .story-title { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-align: center; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .story-ring { width: 68px; height: 68px; border-radius: 50%; padding: 3px; display: flex; align-items: center; justify-content: center; position: relative; transition: all 0.3s ease; }
+    .story-inner { width: 62px; height: 62px; border-radius: 50%; background: #1c1917; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; z-index: 2; }
+    .story-title { font-size: 0.72rem; font-weight: 800; color: var(--text); text-align: center; max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    .clutch-bar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(239, 68, 68, 0.15)); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; }
+    .clutch-bar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(239, 68, 68, 0.15)); border: 1px solid rgba(249, 115, 22, 0.35); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; }
     .btn-panic { background: var(--accent-primary); color: #fff; border: none; padding: 9px 14px; border-radius: 12px; font-size: 0.8rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4); }
 
     .action-sub-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
@@ -98,38 +98,38 @@
 
     .pills-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
     .pills-scroll::-webkit-scrollbar { display: none; }
-    .pill-chip { padding: 7px 14px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.78rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; cursor: pointer; }
+    .pill-chip { padding: 7px 14px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.8rem; font-weight: 800; color: var(--text-muted); white-space: nowrap; cursor: pointer; }
     .pill-chip.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
 
     .feed-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; overflow: hidden; margin-bottom: 16px; position: relative; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-    .card-top { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .tag-exam { font-weight: 800; color: var(--accent-primary); }
-    .tag-reason { background: rgba(239, 68, 68, 0.18); color: #f87171; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7rem; }
+    .card-top { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .tag-exam { font-weight: 900; color: var(--accent-primary); }
+    .tag-reason { background: rgba(239, 68, 68, 0.22); color: #fca5a5; padding: 4px 9px; border-radius: 6px; font-weight: 800; font-size: 0.72rem; }
     .card-reactions-row { display: flex; gap: 6px; align-items: center; }
-    .react-pill { background: #292524; border: 1px solid var(--card-border); padding: 3px 8px; border-radius: 999px; font-size: 0.75rem; cursor: pointer; font-weight: 700; }
-    .react-pill.active { background: rgba(249, 115, 22, 0.25); border-color: var(--accent-primary); color: var(--accent-primary); }
+    .react-pill { background: #292524; border: 1px solid var(--card-border); padding: 4px 9px; border-radius: 999px; font-size: 0.78rem; cursor: pointer; font-weight: 800; color: var(--text); }
+    .react-pill.active { background: rgba(249, 115, 22, 0.3); border-color: var(--accent-primary); color: var(--accent-primary); }
     .card-image-wrap { width: 100%; height: 220px; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; position: relative; }
     .card-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .card-body { padding: 12px 14px; }
-    .topic-title { font-size: 0.95rem; font-weight: 900; margin-bottom: 4px; }
-    .note-text { font-size: 0.78rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 8px; margin-top: 6px; line-height:1.4; }
-    .card-status-badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; margin-top: 6px; }
-    .status-mastered { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .status-doubt { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
-    .status-stuck { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .topic-title { font-size: 0.98rem; font-weight: 900; margin-bottom: 4px; color: #fff; }
+    .note-text { font-size: 0.82rem; color: var(--text); background: rgba(0,0,0,0.4); padding: 8px 10px; border-radius: 8px; margin-top: 6px; line-height:1.4; font-weight: 700; }
+    .card-status-badge { display: inline-block; padding: 4px 9px; border-radius: 6px; font-size: 0.72rem; font-weight: 900; margin-top: 6px; }
+    .status-mastered { background: rgba(16, 185, 129, 0.25); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); }
+    .status-doubt { background: rgba(245, 158, 11, 0.25); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.5); }
+    .status-stuck { background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); }
 
-    .solution-accordion-btn { width: 100%; padding: 10px 14px; background: #292524; border: none; border-top: 1px solid var(--card-border); color: #34d399; font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-    .solution-accordion-content { display: none; padding: 12px 14px; background: #141210; border-top: 1px solid rgba(255,255,255,0.05); }
+    .solution-accordion-btn { width: 100%; padding: 10px 14px; background: #292524; border: none; border-top: 1px solid var(--card-border); color: #34d399; font-weight: 900; font-size: 0.82rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .solution-accordion-content { display: none; padding: 12px 14px; background: #141210; border-top: 1px solid rgba(255,255,255,0.08); }
     .solution-accordion-content.open { display: block; }
-    .card-actions { padding: 10px 14px 12px; display: flex; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
-    .btn-action { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--card-border); background: #292524; color: var(--text); font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .card-actions { padding: 10px 14px 12px; display: flex; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); }
+    .btn-action { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--card-border); background: #292524; color: var(--text); font-size: 0.8rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
 
     #tab-practice.active { display: flex; flex-direction: column; min-height: calc(100dvh - 60px - var(--nav-height) - 12px); padding: 6px 14px; }
     .setup-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 16px; margin-bottom: 12px; }
-    .setup-count-badge { display: flex; align-items: center; justify-content: space-between; background: rgba(249, 115, 22, 0.12); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 12px; padding: 10px 14px; margin: 12px 0; font-size: 0.85rem; font-weight: 800; color: var(--accent-primary); }
+    .setup-count-badge { display: flex; align-items: center; justify-content: space-between; background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.35); border-radius: 12px; padding: 10px 14px; margin: 12px 0; font-size: 0.88rem; font-weight: 900; color: var(--accent-primary); }
     .practice-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-shrink: 0; }
-    .practice-counter { font-size: 0.8rem; font-weight: 800; color: var(--accent-primary); }
-    .practice-timer { font-size: 0.78rem; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); padding: 3px 10px; border-radius: 8px; }
+    .practice-counter { font-size: 0.82rem; font-weight: 900; color: var(--accent-primary); }
+    .practice-timer { font-size: 0.8rem; font-weight: 900; color: #34d399; background: rgba(16, 185, 129, 0.2); padding: 4px 10px; border-radius: 8px; }
     .practice-box { flex: 1; min-height: 0; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; display: flex; flex-direction: column; padding: 12px; overflow: hidden; position: relative; }
     .practice-img-area { flex: 1; min-height: 240px; background: #000; border-radius: 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
     .practice-img-area img { width: 100%; height: 100%; object-fit: contain; }
@@ -137,27 +137,27 @@
     .solution-drawer { display: none; background: #292524; border: 1px solid var(--card-border); border-radius: 14px; margin-top: 10px; padding: 12px; flex-shrink: 0; max-height: 40%; overflow-y: auto; }
     .solution-drawer.open { display: block; }
     .sweet-choice-bar-triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; width: 100%; max-width: 500px; margin: 12px auto 0 auto; flex-shrink: 0; }
-    .btn-choice { padding: 12px 6px; border-radius: 14px; border: none; font-weight: 900; font-size: 0.78rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-align: center; }
-    .btn-choice-stuck { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .btn-choice-doubt { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
-    .btn-choice-master { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .btn-choice { padding: 12px 6px; border-radius: 14px; border: none; font-weight: 900; font-size: 0.8rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-align: center; }
+    .btn-choice-stuck { background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.45); }
+    .btn-choice-doubt { background: rgba(245, 158, 11, 0.25); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.45); }
+    .btn-choice-master { background: rgba(16, 185, 129, 0.25); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.45); }
 
     .note-flashcard { background: linear-gradient(145deg, #292524, #1c1917); border: 1px solid #d97706; border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
     .note-flashcard::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, #f59e0b, #d97706); }
-    .note-fc-top { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(245, 158, 11, 0.2); }
-    .note-fc-tag { background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 0.7rem; display:inline-block; margin-top:4px; }
+    .note-fc-top { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(245, 158, 11, 0.25); }
+    .note-fc-tag { background: rgba(245, 158, 11, 0.2); color: #fde047; padding: 4px 9px; border-radius: 6px; font-weight: 900; font-size: 0.72rem; display:inline-block; margin-top:4px; }
     .note-fc-img { width: 100%; max-height: 250px; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
     .note-fc-img img { width: 100%; height: 100%; object-fit: contain; }
-    .note-fc-footer { padding: 10px 14px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: flex-end; }
+    .note-fc-footer { padding: 10px 14px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: flex-end; }
     
     .btn-call-notes {
-      position: absolute; top: 12px; right: 12px; background: rgba(245, 158, 11, 0.9); backdrop-filter: blur(4px);
-      color: #fff; border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 900;
+      position: absolute; top: 12px; right: 12px; background: rgba(245, 158, 11, 0.95); backdrop-filter: blur(4px);
+      color: #fff; border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 900;
       cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); z-index: 10; animation: bounceGlow 2s infinite;
     }
     @keyframes bounceGlow { 0%, 100% { transform: translateY(0); box-shadow: 0 4px 12px rgba(245,158,11,0.4); } 50% { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(245,158,11,0.6); } }
 
-    .coach-alarm-banner { background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(249, 115, 22, 0.25)); border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; display: none; align-items: center; gap: 10px; animation: pulseGlow 3s infinite; }
+    .coach-alarm-banner { background: linear-gradient(135deg, rgba(239, 68, 68, 0.28), rgba(249, 115, 22, 0.28)); border: 1px solid rgba(239, 68, 68, 0.55); border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; display: none; align-items: center; gap: 10px; animation: pulseGlow 3s infinite; }
     .coach-alarm-banner.active { display: flex; }
 
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(12px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
@@ -165,9 +165,9 @@
     .modal-card { background: #292524; border: 1px solid var(--card-border); border-radius: 22px; padding: 20px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
 
     .input-group { margin-bottom: 12px; }
-    .input-group label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
-    select, input, textarea { width: 100%; padding: 12px; border-radius: 12px; background: #1c1917 !important; color: #fafaf9 !important; border: 1px solid var(--card-border); font-size: 0.9rem; outline: none; font-weight: 700; }
-    select option { background-color: #1c1917 !important; color: #fafaf9 !important; }
+    .input-group label { display: block; font-size: 0.78rem; font-weight: 900; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+    select, input, textarea { width: 100%; padding: 12px; border-radius: 12px; background: #1c1917 !important; color: #ffffff !important; border: 1px solid var(--card-border); font-size: 0.92rem; outline: none; font-weight: 800; }
+    select option { background-color: #1c1917 !important; color: #ffffff !important; }
 
     nav.bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height);
@@ -175,7 +175,7 @@
       display: flex; justify-content: space-around; align-items: center; z-index: 50; padding-bottom: env(safe-area-inset-bottom);
     }
     .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; color: var(--text-muted); font-size: 0.65rem; font-weight: 800; cursor: pointer; flex: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; color: var(--text-muted); font-size: 0.68rem; font-weight: 900; cursor: pointer; flex: 1;
     }
     .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
     .nav-item.active { color: var(--accent-primary); }
@@ -219,19 +219,20 @@
 </head>
 <body onclick="handleBodyBackgroundClick(event)">
 
-  <!-- VERSİYON GÜNCELLEME POP-UP MODALI -->
   <div class="modal-overlay" id="updateChangelogModal" style="display:none;" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:420px; text-align:left;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
-        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.2</span>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.3</span>
       </div>
-      <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.5; margin-bottom: 12px;">
-        Bu güncellemede kılavuzumuz yenilendi ve verilerini zırh gibi koruyan **Çift Katmanlı Kalıcılık** mimarisi geliştirildi:
+      <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; margin-bottom: 12px; font-weight: 700;">
+        Bu güncellemede Yıldıray Hocam'ın talimatlarıyla çok kritik iyileştirmeler yapıldı:
       </p>
-      <ul style="color: #fafaf9; font-size: 0.78rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6;">
-        <li><b>📖 Detaylı Kılavuz:</b> Uygulamanın tüm özellikleri adım adım açıklandı.</li>
-        <li><b>🛡️ Zırh Gibi Güvenlik:</b> Mobil PWA güncellemelerinde veriler asla uçmaz.</li>
+      <ul style="color: #ffffff; font-size: 0.8rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6; font-weight: 700;">
+        <li><b>⚙️ Ders-Konu Senkronizasyonu:</b> Tüm sınav gruplarında ders değişimlerindeki konu liste bug'ı kökten çözüldü.</li>
+        <li><b>📊 Zenginleştirilmiş Bülten:</b> Haftalık Hata Bülteni; ders dağılımı, başarı oranı ve baskın hata teşhisi ile donatıldı.</li>
+        <li><b>🎨 Yüksek Kontrast:</b> Yazılar ve etiketler en net okunabilirliğe kavuşturuldu.</li>
+        <li><b>🎯 Akıllı Story Halkaları:</b> Ders dairelerinin üzerindeki sayaç ve tıkalı rozetleri kararlı hale getirildi.</li>
       </ul>
       <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
     </div>
@@ -242,7 +243,7 @@
       <img src="logo.png" alt="Logo" style="width:48px; height:48px; object-fit:contain; margin-bottom:8px;" onerror="this.style.display='none'">
       <h2 style="font-size:1.2rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">SORU AVCISI</h2>
       <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">HAZIRLAYAN: YILDIRAY HOCA</div>
-      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;" id="modalInstructionText">Hazırlandığın ana sınav grubunu seç:</div>
+      <div style="font-size:0.78rem; color:var(--text-muted); margin-top:6px; font-weight:800;" id="modalInstructionText">Hazırlandığın ana sınav grubunu seç:</div>
       <div class="exam-grid" id="examGridOptions"></div>
     </div>
   </div>
@@ -252,7 +253,7 @@
       <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
       <div>
         <div class="brand-name">SORU AVCISI</div>
-        <div style="font-size:0.58rem; color:var(--text-muted); font-weight:800; letter-spacing:0.5px;">HAZIRLAYAN: YILDIRAY HOCA</div>
+        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:900; letter-spacing:0.5px;">HAZIRLAYAN: YILDIRAY HOCA</div>
       </div>
     </div>
     <div class="header-actions">
@@ -275,19 +276,19 @@
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
         <div>
           <h3 style="font-size:1.05rem; font-weight:900; color:var(--accent-primary);">📚 Konu Takip ve İlerleme Paneli</h3>
-          <div style="font-size:0.7rem; color:var(--text-muted);">Sınav grubuna ait konuları bitir, ilerlemeni anlık görselleştir.</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Sınav grubuna ait konuları bitir, ilerlemeni anlık görselleştir.</div>
         </div>
         <button onclick="closeTrackerModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
       </div>
 
       <div style="flex:1; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:14px;">
         <div style="display:flex; justify-content:space-between; align-items:center; background:#1c1917; padding:10px 14px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-size:0.75rem; font-weight:800; color:#fff;">Çalışma Serisi Durumu</div>
-          <div style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); padding:4px 10px; border-radius:8px; font-size:0.8rem; font-weight:900; color:#fbbf24;" id="streakCountBadge">🔥 0 Gün</div>
+          <div style="font-size:0.78rem; font-weight:900; color:#fff;">Çalışma Serisi Durumu</div>
+          <div style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); padding:4px 10px; border-radius:8px; font-size:0.82rem; font-weight:900; color:#fbbf24;" id="streakCountBadge">🔥 0 Gün</div>
         </div>
 
         <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px;">
-          <div style="font-size:0.75rem; font-weight:900; color:#34d399; margin-bottom:8px;">✨ Yeni Konu Bitişi Kaydet</div>
+          <div style="font-size:0.78rem; font-weight:900; color:#34d399; margin-bottom:8px;">✨ Yeni Konu Bitişi Kaydet</div>
           <div class="input-group" style="margin-bottom:8px;">
             <label>Ders Seçimi</label>
             <select id="trackerSubjectSelect" onchange="renderTrackerTopics()"></select>
@@ -300,18 +301,18 @@
             <label>Bitiş Tarihi (Esnek Seçim)</label>
             <input type="date" id="trackerDateInput">
           </div>
-          <button style="width:100%; padding:11px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.82rem; cursor:pointer;" onclick="handleTopicCompleteSubmit()">
+          <button style="width:100%; padding:11px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.85rem; cursor:pointer;" onclick="handleTopicCompleteSubmit()">
             Konuyu Bitti Olarak İşaretle ✔️
           </button>
         </div>
 
         <div>
-          <div style="font-size:0.78rem; font-weight:900; color:#fff; margin-bottom:8px;">📊 Ders Bazlı İlerleme Durumu (Detay için dokun)</div>
+          <div style="font-size:0.8rem; font-weight:900; color:#fff; margin-bottom:8px;">📊 Ders Bazlı İlerleme Durumu (Detay için dokun)</div>
           <div id="subjectProgressBarsContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
 
         <div>
-          <div style="font-size:0.78rem; font-weight:900; color:#fff; margin-bottom:6px;">📋 Bitirdiğim Konular Kronolojisi</div>
+          <div style="font-size:0.8rem; font-weight:900; color:#fff; margin-bottom:6px;">📋 Bitirdiğim Konular Kronolojisi</div>
           <div id="completedTopicsList" style="max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; padding-right:4px;"></div>
         </div>
       </div>
@@ -326,15 +327,15 @@
     <div class="coach-alarm-banner" id="coachTwinAlarmBanner">
       <span style="font-size:1.4rem;">🚨</span>
       <div style="flex:1;">
-        <div style="font-size:0.8rem; font-weight:900; color:#fca5a5;" id="coachAlarmTitle">Hata İkizi Alarmı!</div>
-        <div style="font-size:0.7rem; color:#fecdd3;" id="coachAlarmDesc">Bu konuda peş peşe aynı hataya düşüldü.</div>
+        <div style="font-size:0.82rem; font-weight:900; color:#fca5a5;" id="coachAlarmTitle">Hata İkizi Alarmı!</div>
+        <div style="font-size:0.75rem; color:#fecdd3; font-weight:700;" id="coachAlarmDesc">Bu konuda peş peşe aynı hataya düşüldü.</div>
       </div>
-      <button style="padding:6px 10px; background:#ef4444; border:none; border-radius:8px; color:#fff; font-size:0.72rem; font-weight:900; cursor:pointer;" onclick="launchTwinPractice()">Çöz ⚡</button>
+      <button style="padding:6px 10px; background:#ef4444; border:none; border-radius:8px; color:#fff; font-size:0.75rem; font-weight:900; cursor:pointer;" onclick="launchTwinPractice()">Çöz ⚡</button>
     </div>
     <div class="clutch-bar">
       <div>
-        <div style="font-size:0.82rem; font-weight:900; color:#fca5a5;">⏳ Hedefe Kalan: <span id="daysUntilExam">--</span> Gün</div>
-        <div style="font-size:0.7rem; color:var(--text-muted);">En kritik soruları hemen masaya yatır.</div>
+        <div style="font-size:0.85rem; font-weight:900; color:#fca5a5;">⏳ Hedefe Kalan: <span id="daysUntilExam">--</span> Gün</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">En kritik soruları hemen masaya yatır.</div>
       </div>
       <button class="btn-panic" onclick="triggerPanicMode()">🚨 Panik Modu</button>
     </div>
@@ -356,7 +357,7 @@
     <div id="practiceSetupView" class="setup-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary);">⚡ Antrenman Masası</h3>
-        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:800;" id="practiceActiveExamTag">YKS</span>
+        <span style="font-size:0.78rem; color:var(--text); font-weight:900;" id="practiceActiveExamTag">YKS</span>
       </div>
       <div class="input-group">
         <label>Ders Seçimi</label>
@@ -416,7 +417,7 @@
 
     <div id="practiceCardView" style="display:none; flex-direction:column; flex:1;">
       <div class="practice-header-bar">
-        <button onclick="returnToPracticeSetup()" style="background:#292524; border:1px solid var(--card-border); color:var(--text); padding:6px 10px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer;">⚙️ Masaya Dön</button>
+        <button onclick="returnToPracticeSetup()" style="background:#292524; border:1px solid var(--card-border); color:var(--text); padding:6px 10px; border-radius:8px; font-weight:900; font-size:0.78rem; cursor:pointer;">⚙️ Masaya Dön</button>
         <div class="practice-counter" id="pCardCount">Soru 1 / 5</div>
         <div class="practice-timer" id="pTimer">⏱️ 00:00</div>
       </div>
@@ -424,27 +425,27 @@
       <div class="practice-box">
         <button id="pNotesHintBtn" class="btn-call-notes" onclick="openPracticeNotesModal()">🧠 Konu Notlarını Çağır</button>
         
-        <div style="font-size:0.78rem; font-weight:800; color:var(--accent-primary); margin-bottom:6px; flex-shrink:0;" id="pMetaText">Ders - Konu</div>
+        <div style="font-size:0.8rem; font-weight:900; color:var(--accent-primary); margin-bottom:6px; flex-shrink:0;" id="pMetaText">Ders - Konu</div>
         <div class="practice-img-area" onclick="openLightbox(document.getElementById('pQuestionImg').src)">
           <img id="pQuestionImg" alt="Soru Görseli">
         </div>
-        <button style="width:100%; padding:11px; border-radius:12px; border:1px solid var(--card-border); background:#292524; color:var(--text); font-weight:800; font-size:0.82rem; cursor:pointer; margin-top:10px;" onclick="toggleSolutionDrawer()">
+        <button style="width:100%; padding:11px; border-radius:12px; border:1px solid var(--card-border); background:#292524; color:var(--text); font-weight:900; font-size:0.85rem; cursor:pointer; margin-top:10px;" onclick="toggleSolutionDrawer()">
           💡 Çözümü & Notu Göster / Gizle
         </button>
         <div class="solution-drawer" id="solutionDrawer">
-          <div style="font-size:0.75rem; font-weight:800; color:#34d399; margin-bottom:4px;">ÇÖZÜM GÖRSELİ (DOKUN: BÜYÜT)</div>
+          <div style="font-size:0.78rem; font-weight:900; color:#34d399; margin-bottom:4px;">ÇÖZÜM GÖRSELİ (DOKUN: BÜYÜT)</div>
           <div style="max-height:160px; overflow:hidden; background:#000; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:zoom-in;" onclick="openLightbox(document.getElementById('pSolutionImg').src)">
             <img id="pSolutionImg" style="max-width:100%; max-height:160px; object-fit:contain;" alt="Çözüm Görseli">
           </div>
-          <div id="pReasonText" style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;"></div>
-          <div id="pNotesText" style="font-size:0.78rem; color:var(--text); margin-top:2px;"></div>
+          <div id="pReasonText" style="font-size:0.78rem; color:#fca5a5; font-weight:900; margin-top:6px;"></div>
+          <div id="pNotesText" style="font-size:0.82rem; color:#fff; font-weight:800; margin-top:4px;"></div>
           <div id="pAudioContainer" style="margin-top:8px;"></div>
         </div>
       </div>
       <div class="sweet-choice-bar-triple">
-        <button class="btn-choice btn-choice-stuck" onclick="handleThreeLevelChoice('stuck')"><span style="font-size:1.1rem;">🚨</span><span>Tıkalıyım</span><span style="font-size:0.62rem; opacity:0.8;">Hoca Masasına</span></button>
-        <button class="btn-choice btn-choice-doubt" onclick="handleThreeLevelChoice('doubt')"><span style="font-size:1.1rem;">⏳</span><span>Şüpheliyim</span><span style="font-size:0.62rem; opacity:0.8;">48s Sonra Tekrar</span></button>
-        <button class="btn-choice btn-choice-master" onclick="handleThreeLevelChoice('mastered')"><span style="font-size:1.1rem;">👑</span><span>Tam Oturdu</span><span style="font-size:0.62rem; opacity:0.8;">Avlandı</span></button>
+        <button class="btn-choice btn-choice-stuck" onclick="handleThreeLevelChoice('stuck')"><span style="font-size:1.1rem;">🚨</span><span>Tıkalıyım</span><span style="font-size:0.65rem; opacity:0.9; font-weight:800;">Hoca Masasına</span></button>
+        <button class="btn-choice btn-choice-doubt" onclick="handleThreeLevelChoice('doubt')"><span style="font-size:1.1rem;">⏳</span><span>Şüpheliyim</span><span style="font-size:0.65rem; opacity:0.9; font-weight:800;">48s Sonra Tekrar</span></button>
+        <button class="btn-choice btn-choice-master" onclick="handleThreeLevelChoice('mastered')"><span style="font-size:1.1rem;">👑</span><span>Tam Oturdu</span><span style="font-size:0.65rem; opacity:0.9; font-weight:800;">Avlandı</span></button>
       </div>
     </div>
   </div>
@@ -453,7 +454,7 @@
   <div id="tab-add" class="tab-view" onclick="event.stopPropagation()">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
       <h3 style="font-size:1.2rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Soru Arşivle</h3>
-      <span id="batchQueueStatus" style="font-size:0.75rem; font-weight:800; color:var(--accent-primary); display:none;">Kuyruk: 1/3</span>
+      <span id="batchQueueStatus" style="font-size:0.78rem; font-weight:900; color:var(--accent-primary); display:none;">Kuyruk: 1/3</span>
     </div>
     <div class="input-group" style="background:#292524; padding:10px; border-radius:12px; border:1px dashed var(--accent-primary); margin-bottom:12px;">
       <label style="color:#fdba74;">📸 Seri Yükleme Modu (Çoklu Seçim)</label>
@@ -464,7 +465,7 @@
         <label>📸 Soru Görseli (Zorunlu)</label>
         <div style="display:flex; gap:6px;">
           <input type="file" id="formQImg" accept="image/*" onchange="triggerImageCrop(this, 'q')">
-          <button type="button" id="btnCropQ" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:800; cursor:pointer;" onclick="reopenCropper('q')">✂️ Kırp</button>
+          <button type="button" id="btnCropQ" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:900; cursor:pointer;" onclick="reopenCropper('q')">✂️ Kırp</button>
         </div>
         <img id="previewQImg" style="display:none; max-height:120px; border-radius:8px; margin-top:6px; object-fit:contain; background:#000;">
       </div>
@@ -472,7 +473,7 @@
         <label>💡 Çözüm Görseli (İsteğe Bağlı)</label>
         <div style="display:flex; gap:6px;">
           <input type="file" id="formSImg" accept="image/*" onchange="triggerImageCrop(this, 's')">
-          <button type="button" id="btnCropS" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:800; cursor:pointer;" onclick="reopenCropper('s')">✂️ Kırp</button>
+          <button type="button" id="btnCropS" style="display:none; padding:8px 12px; background:#292524; border:1px solid var(--accent-primary); border-radius:10px; color:#fff; font-weight:900; cursor:pointer;" onclick="reopenCropper('s')">✂️ Kırp</button>
         </div>
         <img id="previewSImg" style="display:none; max-height:120px; border-radius:8px; margin-top:6px; object-fit:contain; background:#000;">
       </div>
@@ -492,22 +493,22 @@
           <option value="5">⭐⭐⭐⭐⭐ 5 (Usta Seviyesi / ÖSYM Avı)</option>
         </select>
       </div>
-      <div class="input-group" style="background:rgba(249, 115, 22, 0.1); border:1px solid rgba(249, 115, 22, 0.3); padding:10px; border-radius:12px;">
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fdba74; margin:0;">
+      <div class="input-group" style="background:rgba(249, 115, 22, 0.12); border:1px solid rgba(249, 115, 22, 0.35); padding:10px; border-radius:12px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fdba74; margin:0; font-weight:900;">
           <input type="checkbox" id="formIsTrial" onchange="toggleTrialInput()" style="width:18px; height:18px; cursor:pointer;">
           <span>🎯 <b>Deneme Sınavı Sorusu mu?</b></span>
         </label>
         <div id="trialNameContainer" style="display:none; margin-top:8px;"><input type="text" id="formTrialName" placeholder="Deneme Adı / Yayın"></div>
       </div>
       <div class="input-group"><label>Hata Nedeni / Teşhis</label><select id="formReasonSelect" required></select></div>
-      <div class="input-group" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); padding:10px; border-radius:12px;">
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fca5a5; margin:0;"><input type="checkbox" id="formIsTrap" style="width:18px; height:18px; cursor:pointer;"><span>⚠️ <b>Tuzak Soru / Kelime Oyunu</b></span></label>
+      <div class="input-group" style="background:rgba(239, 68, 68, 0.12); border:1px solid rgba(239, 68, 68, 0.35); padding:10px; border-radius:12px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#fca5a5; margin:0; font-weight:900;"><input type="checkbox" id="formIsTrap" style="width:18px; height:18px; cursor:pointer;"><span>⚠️ <b>Tuzak Soru / Kelime Oyunu</b></span></label>
       </div>
       <div class="input-group">
         <label>🎙️ Sesli Not / İpucu</label>
         <div style="display:flex; gap:8px; align-items:center;">
-          <button type="button" id="audioRecBtn_q" onclick="toggleAudio('q')" style="padding:8px 14px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">🎙️ Kaydet</button>
-          <span id="audioStatus_q" style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Kayıt yok</span>
+          <button type="button" id="audioRecBtn_q" onclick="toggleAudio('q')" style="padding:8px 14px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-weight:900; cursor:pointer;">🎙️ Kaydet</button>
+          <span id="audioStatus_q" style="font-size:0.78rem; color:var(--text); font-weight:800;">Kayıt yok</span>
         </div>
         <audio id="audioPreview_q" controls style="width:100%; margin-top:6px; display:none; height:32px;"></audio>
       </div>
@@ -533,7 +534,7 @@
           <label>📸 Tahta Fotoğrafı / Formül Görseli (Önce Seç & Kırp)</label>
           <div style="display:flex; gap:6px;">
             <input type="file" id="noteImg" accept="image/*" onchange="triggerImageCrop(this, 'n')">
-            <button type="button" id="btnCropN" style="display:none; padding:8px 12px; background:#292524; border:1px solid #fbbf24; border-radius:10px; color:#fff; font-weight:800; cursor:pointer;" onclick="reopenCropper('n')">✂️ Kırp</button>
+            <button type="button" id="btnCropN" style="display:none; padding:8px 12px; background:#292524; border:1px solid #fbbf24; border-radius:10px; color:#fff; font-weight:900; cursor:pointer;" onclick="reopenCropper('n')">✂️ Kırp</button>
           </div>
           <img id="previewNoteImg" style="display:none; max-height:140px; border-radius:8px; margin-top:6px; object-fit:contain; background:#000;">
         </div>
@@ -564,8 +565,8 @@
         <div class="input-group">
           <label>🎙️ Sesli Anlatım (İsteğe Bağlı)</label>
           <div style="display:flex; gap:8px; align-items:center;">
-            <button type="button" id="audioRecBtn_n" onclick="toggleAudio('n')" style="padding:8px 14px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">🎙️ Kaydet</button>
-            <span id="audioStatus_n" style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Kayıt yok</span>
+            <button type="button" id="audioRecBtn_n" onclick="toggleAudio('n')" style="padding:8px 14px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-weight:900; cursor:pointer;">🎙️ Kaydet</button>
+            <span id="audioStatus_n" style="font-size:0.78rem; color:var(--text); font-weight:800;">Kayıt yok</span>
           </div>
           <audio id="audioPreview_n" controls style="width:100%; margin-top:6px; display:none; height:32px;"></audio>
         </div>
@@ -576,9 +577,9 @@
 
     <div id="notesArchView" style="display:none;">
       <div class="input-group" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:12px;">
-        <select id="noteFilterSub" style="padding:8px; font-size:0.75rem;" onchange="renderNotesArchiveDropdowns(); renderNotesGallery();"><option value="all">Tüm Dersler</option></select>
-        <select id="noteFilterTop" style="padding:8px; font-size:0.75rem;" onchange="renderNotesGallery()"><option value="all">Tüm Konular</option></select>
-        <select id="noteFilterTag" style="padding:8px; font-size:0.75rem;" onchange="renderNotesGallery()">
+        <select id="noteFilterSub" style="padding:8px; font-size:0.78rem;" onchange="renderNotesArchiveDropdowns(); renderNotesGallery();"><option value="all">Tüm Dersler</option></select>
+        <select id="noteFilterTop" style="padding:8px; font-size:0.78rem;" onchange="renderNotesGallery()"><option value="all">Tüm Konular</option></select>
+        <select id="noteFilterTag" style="padding:8px; font-size:0.78rem;" onchange="renderNotesGallery()">
           <option value="all">Tüm Etiketler</option>
           <option value="Altın Kural 👑">Altın Kural 👑</option>
           <option value="Kısa Yol ⚡">Kısa Yol ⚡</option>
@@ -594,44 +595,44 @@
   <!-- 5. ANALİZ & RAPOR SEKMESİ -->
   <div id="tab-analytics" class="tab-view" onclick="event.stopPropagation()">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-      <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); text-transform:uppercase;">Genel Hata Analizi</div>
-      <button onclick="openBulletinModal()" style="background:#292524; border:1px solid var(--accent-primary); color:var(--accent-primary); padding:4px 10px; border-radius:8px; font-size:0.75rem; font-weight:800; cursor:pointer;">📊 Haftalık Bülten</button>
+      <div style="font-size:0.88rem; font-weight:900; color:var(--accent-primary); text-transform:uppercase;">Genel Hata Analizi</div>
+      <button onclick="openBulletinModal()" style="background:#292524; border:1px solid var(--accent-primary); color:var(--accent-primary); padding:4px 10px; border-radius:8px; font-size:0.78rem; font-weight:900; cursor:pointer;">📊 Haftalık Bülten</button>
     </div>
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="font-size:0.8rem; font-weight:900; color:var(--accent-primary);" id="userLevelText">Seviye 1: Çırak Avcı</div>
-        <div style="font-size:0.72rem; font-weight:800; color:#34d399;" id="badgeCountHeaderText">0 / 8 Aktif Rozet</div>
+        <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary);" id="userLevelText">Seviye 1: Çırak Avcı</div>
+        <div style="font-size:0.75rem; font-weight:900; color:#34d399;" id="badgeCountHeaderText">0 / 8 Aktif Rozet</div>
       </div>
       <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-top:4px;" id="badges4x2Grid"></div>
     </div>
     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:14px;">
-      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:var(--accent-primary);" id="statTotalCount">0</div><div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Toplam Soru</div></div>
-      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div><div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Tam Oturan</div></div>
-      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:#ef4444;" id="statStuckCount">0</div><div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">Hoca Masası</div></div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:var(--accent-primary);" id="statTotalCount">0</div><div style="font-size:0.72rem; color:var(--text); font-weight:800;">Toplam Soru</div></div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div><div style="font-size:0.72rem; color:var(--text); font-weight:800;">Tam Oturan</div></div>
+      <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:#ef4444;" id="statStuckCount">0</div><div style="font-size:0.72rem; color:var(--text); font-weight:800;">Hoca Masası</div></div>
     </div>
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px; display:flex; flex-direction:column; gap:8px;">
-      <button style="background:var(--accent-gradient); border:none; color:#fff; padding:12px; border-radius:12px; font-weight:900; font-size:0.85rem; cursor:pointer;" onclick="openAirDropSender()">📲➡️💻 QR / AirDrop ile Tablete Aktar</button>
+      <button style="background:var(--accent-gradient); border:none; color:#fff; padding:12px; border-radius:12px; font-weight:900; font-size:0.88rem; cursor:pointer;" onclick="openAirDropSender()">📲➡️💻 QR / AirDrop ile Tablete Aktar</button>
       <div style="display:flex; gap:8px;">
-        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="openAirDropReceiver()">📥 Tabletten Al</button>
-        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="exportDataBackup()">📦 Yedek Al</button>
-        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="document.getElementById('importFile').click()">📂 Yedek Yükle</button>
+        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:900; font-size:0.78rem; cursor:pointer;" onclick="openAirDropReceiver()">📥 Tabletten Al</button>
+        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:900; font-size:0.78rem; cursor:pointer;" onclick="exportDataBackup()">📦 Yedek Al</button>
+        <button style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--card-border); background:#292524; color:#fff; font-weight:900; font-size:0.78rem; cursor:pointer;" onclick="document.getElementById('importFile').click()">📂 Yedek Yükle</button>
         <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataBackup(event)">
       </div>
     </div>
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px;">
-      <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); margin-bottom:4px;">📄 Filtrelenebilir Akıllı Hata Raporu</div>
-      <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:10px;">Tarih, ders ve hata nedenine göre özel rapor üretin, ekranda inceleyin ve PDF çıktısı alın.</div>
+      <div style="font-size:0.88rem; font-weight:900; color:var(--accent-primary); margin-bottom:4px;">📄 Filtrelenebilir Akıllı Hata Raporu</div>
+      <div style="font-size:0.75rem; color:var(--text); margin-bottom:10px; font-weight:700;">Tarih, ders ve hata nedenine göre özel rapor üretin, ekranda inceleyin ve PDF çıktısı alın.</div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
-        <div><label style="font-size:0.68rem; font-weight:800; color:var(--text-muted);">ZAMAN ARALIĞI</label><select id="smartReportTime" style="padding:8px; font-size:0.8rem; margin-top:3px;"><option value="today">Bugün</option><option value="7">Son 7 Gün</option><option value="30">Son 30 Gün</option><option value="all">Tüm Zamanlar</option></select></div>
-        <div><label style="font-size:0.68rem; font-weight:800; color:var(--text-muted);">DERS SEÇİMİ</label><select id="smartReportSubject" style="padding:8px; font-size:0.8rem; margin-top:3px;"><option value="all">Tüm Dersler</option></select></div>
+        <div><label style="font-size:0.72rem; font-weight:900; color:var(--text-muted);">ZAMAN ARALIĞI</label><select id="smartReportTime" style="padding:8px; font-size:0.82rem; margin-top:3px;"><option value="today">Bugün</option><option value="7">Son 7 Gün</option><option value="30">Son 30 Gün</option><option value="all">Tüm Zamanlar</option></select></div>
+        <div><label style="font-size:0.72rem; font-weight:900; color:var(--text-muted);">DERS SEÇİMİ</label><select id="smartReportSubject" style="padding:8px; font-size:0.82rem; margin-top:3px;"><option value="all">Tüm Dersler</option></select></div>
       </div>
       <div style="display:grid; grid-template-columns:1fr; gap:8px; margin-bottom:10px;">
-        <div><label style="font-size:0.68rem; font-weight:800; color:var(--text-muted);">HATA NEDENİ</label><select id="smartReportReason" style="padding:8px; font-size:0.8rem; margin-top:3px;"><option value="all">Tüm Hata Nedenleri</option></select></div>
+        <div><label style="font-size:0.72rem; font-weight:900; color:var(--text-muted);">HATA NEDENİ</label><select id="smartReportReason" style="padding:8px; font-size:0.82rem; margin-top:3px;"><option value="all">Tüm Hata Nedenleri</option></select></div>
       </div>
-      <button style="width:100%; padding:10px; border-radius:10px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.8rem; cursor:pointer;" onclick="openCustomReportPopup()">Raporu Oluştur & PDF İncele 🔍</button>
+      <button style="width:100%; padding:10px; border-radius:10px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.82rem; cursor:pointer;" onclick="openCustomReportPopup()">Raporu Oluştur & PDF İncele 🔍</button>
     </div>
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px;">
-      <h4 style="font-size:0.78rem; text-transform:uppercase; color:var(--accent-primary); margin-bottom:8px; font-weight:900;">Hata Nedenleri Dağılımı (Isı Haritası)</h4>
+      <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--accent-primary); margin-bottom:8px; font-weight:900;">Hata Nedenleri Dağılımı (Isı Haritası)</h4>
       <div id="chartReasons" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
   </div>
@@ -670,7 +671,6 @@
     </div>
   </div>
 
-  <!-- DETAYLI KILAVUZ MODALI (YILDIRAY HOCA İMZALI) -->
   <div class="modal-overlay" id="helpModal" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:560px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
@@ -681,11 +681,10 @@
         <button onclick="closeHelpModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
       </div>
 
-      <div style="font-size:0.78rem; line-height:1.6; color:#d6d3d1; display:flex; flex-direction:column; gap:12px; max-height:70vh; overflow-y:auto; padding-right:4px;">
-        
-        <div style="background:rgba(249, 115, 22, 0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(249, 115, 22, 0.3);">
+      <div style="font-size:0.8rem; line-height:1.6; color:#ffffff; display:flex; flex-direction:column; gap:12px; max-height:70vh; overflow-y:auto; padding-right:4px; font-weight:700;">
+        <div style="background:rgba(249, 115, 22, 0.1); padding:10px 12px; border-radius:12px; border:1px solid rgba(249, 115, 22, 0.35);">
           <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">🎯 Soru Avcısı Nedir? Avantajları Nelerdir?</div>
-          <div>Bu uygulama; öğrencilerimizin sınavlarda (YKS, LGS, KPSS vb.) takıldığı, kaçırdığı veya hata yaptığı soruları akıllı bir sistemle arşivleyerek **"Hata İkizleri"**ni kurutan bireysel bir akıllı koçluk asistanıdır. Asla veri kaybetmez, eksiklerinizi ısı haritalarıyla yüzünüze vurur ve sizi başarıya ulaştırır.</div>
+          <div>Bu uygulama; öğrencilerimizin sınavlarda (YKS, LGS, KPSS vb.) takıldığı, kaçırdığı veya hata yaptığı soruları akıllı bir sistemle arşivleyerek <b>"Hata İkizleri"</b>ni kurutan bireysel bir akıllı koçluk asistanıdır. Asla veri kaybetmez, eksiklerinizi ısı haritalarıyla yüzünüze vurur ve sizi başarıya ulaştırır.</div>
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
@@ -708,12 +707,11 @@
           <div>Çözemediğiniz soruları <b>Hoca Masası</b>'na gönderip birebir çözüm sağlayın. <b>QR / AirDrop</b> ile verilerinizi telefondan tablete saniyeler içinde aktarın, zırhlı <b>Yedek Al</b> özelliğiyle verilerinizi güvenceye alın.</div>
         </div>
 
-        <div style="background:rgba(249, 115, 22, 0.12); border:1px solid rgba(249, 115, 22, 0.4); border-radius:14px; padding:12px; text-align:center;">
-          <div style="font-size:0.72rem; font-weight:900; color:var(--accent-primary); letter-spacing:0.8px; margin-bottom:4px;">GÜVENLİ & KESİNTİSİZ EĞİTİM PLATFORMU</div>
-          <div style="font-size:0.82rem; font-weight:900; color:#fff;">HAZIRLAYAN: YILDIRAY HOCA (MATEMATİK ÖĞRETMENİ)</div>
-          <div style="font-size:0.78rem; font-weight:700; color:#fed7aa; margin-top:3px;">MAİL: <a href="mailto:sanalnotum@gmail.com" style="color:#fdba74; text-decoration:underline;">sanalnotum@gmail.com</a></div>
+        <div style="background:rgba(249, 115, 22, 0.15); border:1px solid rgba(249, 115, 22, 0.45); border-radius:14px; padding:12px; text-align:center;">
+          <div style="font-size:0.75rem; font-weight:900; color:var(--accent-primary); letter-spacing:0.8px; margin-bottom:4px;">GÜVENLİ & KESİNTİSİZ EĞİTİM PLATFORMU</div>
+          <div style="font-size:0.85rem; font-weight:900; color:#fff;">HAZIRLAYAN: YILDIRAY HOCA (MATEMATİK ÖĞRETMENİ)</div>
+          <div style="font-size:0.8rem; font-weight:800; color:#fed7aa; margin-top:3px;">MAİL: <a href="mailto:sanalnotum@gmail.com" style="color:#fdba74; text-decoration:underline;">sanalnotum@gmail.com</a></div>
         </div>
-
       </div>
       <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:14px; cursor:pointer;" onclick="closeHelpModal()">Harika, Anladım ✔️</button>
     </div>
@@ -733,7 +731,7 @@
       <div class="story-nav-btn story-nav-right" onclick="nextStory()"></div>
       <img id="storyImg" alt="Story İçerik">
     </div>
-    <div style="padding: 14px; text-align: center; color: #fff; font-size: 0.8rem; background: rgba(0,0,0,0.75); z-index: 510;">
+    <div style="padding: 14px; text-align: center; color: #fff; font-size: 0.82rem; background: rgba(0,0,0,0.85); z-index: 510; font-weight:800;">
       <div id="storyTopicDesc" style="margin-bottom:6px;"></div>
       <div id="storyAudioWrap" style="display:none; max-width:400px; margin:0 auto;"><audio id="storyAudioPlayer" controls style="width:100%; height:30px;"></audio></div>
     </div>
@@ -745,38 +743,55 @@
         <h3 style="font-size:1.15rem; font-weight:900; color:#f87171;">👨‍🏫 Birebir Hoca Masası</h3>
         <button onclick="closeTeacherDeskModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
       </div>
-      <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Öğrencinin "Tıkalıyım" dediği ve hoca desteği bekleyen sorular listesi:</div>
+      <div style="font-size:0.78rem; color:var(--text); font-weight:800; margin-bottom:10px;">Öğrencinin "Tıkalıyım" dediği ve hoca desteği bekleyen sorular listesi:</div>
       <div id="teacherDeskBody">
-        <div id="teacherDeskEmpty" style="display:none; text-align:center; padding:30px; color:var(--text-muted); font-weight:800;">Şu an hoca masasında bekleyen tıkalı soru yok! 🎉</div>
+        <div id="teacherDeskEmpty" style="display:none; text-align:center; padding:30px; color:var(--text-muted); font-weight:900;">Şu an hoca masasında bekleyen tıkalı soru yok! 🎉</div>
         <div id="teacherDeskContent" style="display:none; flex-direction:column; gap:10px;">
-          <div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:800; color:var(--accent-primary);"><span id="tdMeta">Ders - Konu</span><span id="tdCounter">1 / 4</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:900; color:var(--accent-primary);"><span id="tdMeta">Ders - Konu</span><span id="tdCounter">1 / 4</span></div>
           <div style="background:#000; border-radius:12px; height:260px; display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:zoom-in;" onclick="openLightbox(document.getElementById('tdImg').src)"><img id="tdImg" style="max-width:100%; max-height:100%; object-fit:contain;"></div>
-          <div id="tdReason" style="font-size:0.75rem; color:#f87171; font-weight:800;"></div>
-          <div id="tdNotes" style="font-size:0.75rem; color:var(--text-muted);"></div>
+          <div id="tdReason" style="font-size:0.78rem; color:#fca5a5; font-weight:900;"></div>
+          <div id="tdNotes" style="font-size:0.78rem; color:#fff; font-weight:800;"></div>
           <div id="tdAudioArea" style="display:none; margin-top:4px;"><audio id="tdAudioPlayer" controls style="width:100%; height:32px; border-radius:8px;"></audio></div>
           <div style="display:flex; gap:8px; margin-top:8px;">
-            <button style="flex:1; padding:12px; background:#10b981; border:none; border-radius:12px; color:#fff; font-weight:900; font-size:0.8rem; cursor:pointer;" onclick="resolveTeacherDeskQuestion(true)">✔️ Hoca Çözdü & Anlaşıldı</button>
-            <button style="padding:12px 14px; background:#292524; border:1px solid var(--card-border); border-radius:12px; color:#fff; font-weight:800; font-size:0.8rem; cursor:pointer;" onclick="nextTeacherDeskQuestion()">Sonraki ⏭️</button>
+            <button style="flex:1; padding:12px; background:#10b981; border:none; border-radius:12px; color:#fff; font-weight:900; font-size:0.82rem; cursor:pointer;" onclick="resolveTeacherDeskQuestion(true)">✔️ Hoca Çözdü & Anlaşıldı</button>
+            <button style="padding:12px 14px; background:#292524; border:1px solid var(--card-border); border-radius:12px; color:#fff; font-weight:900; font-size:0.82rem; cursor:pointer;" onclick="nextTeacherDeskQuestion()">Sonraki ⏭️</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- YENİLENMİŞ ZENGİN HAFTALIK BÜLTEN MODALI -->
   <div class="modal-overlay" id="bulletinModal" onclick="event.stopPropagation()">
-    <div class="modal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <h3 style="font-size:1.15rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">📊 Haftalık Hata Bülteni</h3>
+    <div class="modal-card" style="max-width:520px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="font-size:1.15rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">📊 Haftalık Hata ve Telafi Karnesi</h3>
         <button onclick="closeBulletinModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
       </div>
-      <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:12px;" id="bulletinDateRange">Son 7 Günlük Bilanço</div>
+      <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; margin-bottom:12px;" id="bulletinDateRange">Son 7 Günlük Bilanço & Performans Analizi</div>
+      
       <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center;">
-          <div><div style="font-size:1.4rem; font-weight:900; color:var(--accent-primary);" id="bWeeklyTotal">0</div><div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Eklenen Yanlış</div></div>
-          <div><div style="font-size:1.4rem; font-weight:900; color:#34d399;" id="bWeeklyMastered">0</div><div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Kurtarılan Soru</div></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
+          <div><div style="font-size:1.5rem; font-weight:900; color:var(--accent-primary);" id="bWeeklyTotal">0</div><div style="font-size:0.72rem; color:var(--text); font-weight:800;">Eklenen Yanlış</div></div>
+          <div><div style="font-size:1.5rem; font-weight:900; color:#34d399;" id="bWeeklyMastered">0</div><div style="font-size:0.72rem; color:var(--text); font-weight:800;">Kurtarılan Soru</div></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; font-weight:900; padding:4px 0;">
+          <span style="color:var(--text-muted);">✨ Haftalık Telafi Başarısı:</span>
+          <span id="bSuccessRatePct" style="color:#34d399; font-size:0.95rem;">%0</span>
         </div>
       </div>
-      <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:8px; cursor:pointer;" onclick="closeBulletinModal()">Tamam, Odaklanıyorum 🎯</button>
+
+      <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px; margin-bottom:12px;">
+        <div style="font-size:0.78rem; font-weight:900; color:var(--accent-primary); margin-bottom:6px;">📚 Ders Bazlı Yanlış Dağılımı</div>
+        <div id="bulletinSubjectBreakdown" style="display:flex; flex-direction:column; gap:6px; max-height:110px; overflow-y:auto; padding-right:4px;"></div>
+      </div>
+
+      <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px; margin-bottom:14px;">
+        <div style="font-size:0.78rem; font-weight:900; color:#fca5a5; margin-bottom:4px;">⚠️ Bu Haftanın En Baskın Hata Teşhisi</div>
+        <div id="bulletinTopReason" style="font-size:0.82rem; font-weight:900; color:#fff;">Henüz veri yok.</div>
+      </div>
+
+      <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; cursor:pointer;" onclick="closeBulletinModal()">Tamam, Odaklanıyorum 🎯</button>
     </div>
   </div>
 
@@ -786,11 +801,11 @@
         <h3 style="font-size:1.15rem; font-weight:900; color:var(--accent-primary);">📄 Özelleştirilmiş Hata Raporu</h3>
         <button onclick="closeCustomReportModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
       </div>
-      <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;" id="customReportMetaInfo">Filtrelenen kayıtlar: 0 soru</div>
+      <div style="font-size:0.78rem; color:var(--text); font-weight:800; margin-bottom:8px;" id="customReportMetaInfo">Filtrelenen kayıtlar: 0 soru</div>
       <div id="customReportListContainer" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding-right:4px; margin-bottom:12px;"></div>
       <div style="display:flex; gap:8px;">
         <button style="flex:1; padding:12px; background:var(--accent-gradient); border:none; border-radius:12px; color:#fff; font-weight:900; font-size:0.85rem; cursor:pointer;" onclick="executeCustomReportPrint()">🖨️ Saf Tablo / Liste PDF Raporu İndir</button>
-        <button style="padding:12px 16px; background:#292524; border:1px solid var(--card-border); border-radius:12px; color:#fff; font-weight:800; cursor:pointer;" onclick="closeCustomReportModal()">Kapat</button>
+        <button style="padding:12px 16px; background:#292524; border:1px solid var(--card-border); border-radius:12px; color:#fff; font-weight:900; cursor:pointer;" onclick="closeCustomReportModal()">Kapat</button>
       </div>
     </div>
   </div>
@@ -825,15 +840,15 @@
         </select>
       </div>
       <button style="width:100%; padding:14px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; cursor:pointer; margin-top:8px;" onclick="executeFilteredPrint()">PDF Çıktısı Al 🖨️</button>
-      <button style="width:100%; padding:10px; margin-top:8px; background:none; border:none; color:var(--danger); font-weight:800; cursor:pointer;" onclick="closePdfModal()">Vazgeç</button>
+      <button style="width:100%; padding:10px; margin-top:8px; background:none; border:none; color:var(--danger); font-weight:900; cursor:pointer;" onclick="closePdfModal()">Vazgeç</button>
     </div>
   </div>
 
   <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
     <div class="lightbox-bar" onclick="event.stopPropagation()">
-      <button class="btn-icon-head" onclick="toggleCanvasMode()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.8rem; padding:8px 12px;">✏️ Çiz / Karala</button>
-      <button class="btn-icon-head" onclick="clearCanvas()" id="canvasClearBtn" style="display:none; background:#ef4444; border:none; color:#fff; font-size:0.8rem; padding:8px 12px;">🗑️ Sil</button>
-      <button class="btn-icon-head" onclick="closeLightbox()" style="font-size:0.8rem; padding:8px 12px;">✕ Kapat</button>
+      <button class="btn-icon-head" onclick="toggleCanvasMode()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.8rem; padding:8px 12px; font-weight:900;">✏️ Çiz / Karala</button>
+      <button class="btn-icon-head" onclick="clearCanvas()" id="canvasClearBtn" style="display:none; background:#ef4444; border:none; color:#fff; font-size:0.8rem; padding:8px 12px; font-weight:900;">🗑️ Sil</button>
+      <button class="btn-icon-head" onclick="closeLightbox()" style="font-size:0.8rem; padding:8px 12px; font-weight:900;">✕ Kapat</button>
     </div>
     <div class="lightbox-stage" onclick="event.stopPropagation()">
       <img id="lightboxImg" alt="Büyütülmüş Soru" onload="positionLightboxCanvas()">
@@ -844,16 +859,16 @@
   <div class="modal-overlay" id="airdropModal" onclick="event.stopPropagation()">
     <div class="modal-card" style="text-align:center;">
       <h3 style="font-size:1.1rem; font-weight:900;" id="airdropTitle">AirDrop Cihaz Eşleme</h3>
-      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" id="airdropStatus">Bağlantı kuruluyor...</div>
+      <div style="font-size:0.78rem; color:var(--text); font-weight:800; margin-top:4px;" id="airdropStatus">Bağlantı kuruluyor...</div>
       <div id="airdropSenderView">
         <div id="qrcodeBox" style="background:#fff; padding:12px; border-radius:16px; display:inline-block; margin:14px 0;"></div>
-        <div style="font-size:0.8rem; font-weight:800;">Eşleşme Kodu: <span id="airdropCode" style="color:var(--accent-primary); font-size:1.1rem;">----</span></div>
+        <div style="font-size:0.82rem; font-weight:900;">Eşleşme Kodu: <span id="airdropCode" style="color:var(--accent-primary); font-size:1.1rem;">----</span></div>
       </div>
       <div id="airdropReceiverView" style="display:none; margin-top:14px;">
         <input type="text" id="joinPeerInput" placeholder="4 haneli kod" style="text-align:center; font-weight:900; letter-spacing:2px; font-size:1.1rem;">
         <button onclick="connectAndFetchData()" style="width:100%; padding:12px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; margin-top:10px; cursor:pointer;">Verileri Çek 🚀</button>
       </div>
-      <button style="width:100%; padding:10px; margin-top:14px; background:none; border:none; color:var(--text-muted); font-weight:800; cursor:pointer;" onclick="closeAirDropModal()">Kapat</button>
+      <button style="width:100%; padding:10px; margin-top:14px; background:none; border:none; color:var(--text); font-weight:900; cursor:pointer;" onclick="closeAirDropModal()">Kapat</button>
     </div>
   </div>
 
@@ -868,7 +883,7 @@ let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
-const CURRENT_VERSION = "v1.2.2";
+const CURRENT_VERSION = "v1.2.3";
 const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
 
 function checkVersionChangelog() {
@@ -1185,14 +1200,25 @@ function initAppForExam() {
   buildExamPills();
 }
 
+// KRİTİK REVİZE 1: DERS-KONU EŞLEŞTİRME BUG'INI KÖKTEN ÇÖZEN METOT
 function renderTopicDropdown(subId, topId, manId) {
   const subjects = getCurrentActiveSubjectsObj();
-  const sub = document.getElementById(subId).value;
-  const top = document.getElementById(topId);
-  if (!top) return;
-  top.innerHTML = '<option value="">-- Konu Seçin --</option>';
-  if (subjects[sub]) {
-    subjects[sub].forEach(t => { top.innerHTML += `<option value="${t}">${t}</option>`; });
+  const subSelect = document.getElementById(subId);
+  const topSelect = document.getElementById(topId);
+  const manInput = document.getElementById(manId);
+  if (!subSelect || !topSelect) return;
+
+  const chosenSub = subSelect.value;
+  topSelect.innerHTML = '<option value="">-- Konu Seçin --</option>';
+
+  if (chosenSub && subjects[chosenSub]) {
+    subjects[chosenSub].forEach(t => { 
+      topSelect.innerHTML += `<option value="${t}">${t}</option>`; 
+    });
+  }
+  // Eğer ders değiştiğinde elle girilen eski konu kalıntısını temizle
+  if (manInput && !subjects[chosenSub]?.includes(manInput.value)) {
+    manInput.value = "";
   }
 }
 
@@ -1294,11 +1320,11 @@ function renderTrackerUI() {
     let subTopicsHtml = '';
     if (isExpanded) {
       if (finishedItems.length === 0) {
-        subTopicsHtml = `<div style="font-size:0.7rem; color:var(--text-muted); padding:6px 0;">Bu derste henüz bitirilen konu yok.</div>`;
+        subTopicsHtml = `<div style="font-size:0.75rem; color:var(--text); padding:6px 0; font-weight:800;">Bu derste henüz bitirilen konu yok.</div>`;
       } else {
         finishedItems.forEach(fi => {
           subTopicsHtml += `
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#141210; padding:4px 8px; border-radius:6px; margin-top:4px; font-size:0.7rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#141210; padding:6px 10px; border-radius:6px; margin-top:4px; font-size:0.75rem; font-weight:800;">
               <span>✔️ ${fi.topic} <span style="color:var(--text-muted);">(${fi.completedDate})</span></span>
               <button onclick="deleteCompletedTopic('${fi.id}')" style="background:none; border:none; color:#fca5a5; font-weight:900; cursor:pointer;" title="Sil">✕</button>
             </div>
@@ -1309,11 +1335,11 @@ function renderTrackerUI() {
 
     barsContainer.innerHTML += `
       <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:10px; padding:8px 10px; cursor:pointer;" onclick="toggleTrackerSubjectDetail('${sub}')">
-        <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:800; margin-bottom:4px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:900; margin-bottom:4px;">
           <span>${sub} ${isExpanded ? '▲' : '▼'}</span>
           <span style="color:var(--accent-primary);">${finishedInSub} / ${totalInSub} Konu (%${pct})</span>
         </div>
-        <div style="background:#141210; height:7px; border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
+        <div style="background:#141210; height:7px; border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
           <div style="width:${pct}%; background:var(--accent-gradient); height:100%; transition: width 0.3s ease;"></div>
         </div>
         ${subTopicsHtml}
@@ -1323,16 +1349,16 @@ function renderTrackerUI() {
 
   const sortedCompleted = [...activeGroupTopics].sort((a,b) => new Date(b.completedDate) - new Date(a.completedDate));
   if (sortedCompleted.length === 0) {
-    listContainer.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:0.75rem;">Henüz tamamlanan konu kaydedilmedi.</div>`;
+    listContainer.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text); font-size:0.78rem; font-weight:800;">Henüz tamamlanan konu kaydedilmedi.</div>`;
   } else {
     sortedCompleted.forEach(ct => {
       listContainer.innerHTML += `
-        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:10px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; font-size:0.75rem;">
+        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:10px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; font-weight:800;">
           <div>
             <div style="font-weight:900; color:#fff;">${ct.subject} — ${ct.topic}</div>
-            <div style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">Bitiş: ${ct.completedDate}</div>
+            <div style="font-size:0.7rem; color:var(--text); margin-top:2px;">Bitiş: ${ct.completedDate}</div>
           </div>
-          <button onclick="deleteCompletedTopic('${ct.id}')" style="background:rgba(239,68,68,0.2); border:none; color:#fca5a5; padding:4px 8px; border-radius:6px; font-weight:900; cursor:pointer;" title="Sil">🗑️</button>
+          <button onclick="deleteCompletedTopic('${ct.id}')" style="background:rgba(239,68,68,0.25); border:none; color:#fca5a5; padding:4px 8px; border-radius:6px; font-weight:900; cursor:pointer;" title="Sil">🗑️</button>
         </div>
       `;
     });
@@ -1547,6 +1573,7 @@ function launchTwinPractice() {
   setupPracticeSession(filtered);
 }
 
+// KRİTİK REVİZE 4: STORY HALKALARI SAYAÇ STANDARDI (TOPLAM SORU + STUCK BADGE)
 function buildStoriesBar() {
   const container = document.getElementById("storiesContainer");
   container.innerHTML = "";
@@ -1579,11 +1606,18 @@ function buildStoriesBar() {
     const pct = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
     const ringBackground = stats.total > 0 ? `conic-gradient(#10b981 ${pct}%, #f97316 ${pct}%, #292524 100%)` : `linear-gradient(135deg, #f97316, #292524)`;
 
+    let badgeHtml = '';
+    if (stats.stuck > 0) {
+      badgeHtml = `<span style="position:absolute; top:-2px; right:-2px; background:#ef4444; color:#fff; font-size:10px; font-weight:900; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #1c1917; z-index:3;" title="${stats.stuck} Tıkalı Soru">${stats.stuck}</span>`;
+    } else if (stats.total > 0) {
+      badgeHtml = `<span style="position:absolute; top:-2px; right:-2px; background:var(--accent-primary); color:#fff; font-size:9px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #1c1917; z-index:3;" title="${stats.total} Toplam Soru">${stats.total}</span>`;
+    }
+
     container.innerHTML += `
       <div class="story-item" onclick="openStoryViewer('${sub}')">
         <div class="story-ring" style="background: ${ringBackground};">
           <div class="story-inner">${em}</div>
-          ${stats.stuck > 0 ? `<span style="position:absolute; top:-2px; right:-2px; background:#ef4444; color:#fff; font-size:9px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #1c1917; z-index:3;">${stats.stuck}</span>` : ''}
+          ${badgeHtml}
         </div>
         <div class="story-title">${sub}</div>
       </div>
@@ -1642,7 +1676,7 @@ function renderFeed() {
   else if (selectedSubjectFilter) items = items.filter(q => q.subject === selectedSubjectFilter);
 
   if (items.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:0.85rem; font-weight:700;">Bu kategoride kayıtlı soru bulunmuyor 🎯</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text); font-size:0.9rem; font-weight:800;">Bu kategoride kayıtlı soru bulunmuyor 🎯</div>`;
     document.getElementById("loadMoreContainer").style.display = "none";
     return;
   }
@@ -1659,7 +1693,7 @@ function renderFeed() {
 
     card.innerHTML = `
       <div class="card-top">
-        <span class="tag-exam">${q.subject} ${q.isTrap ? '⚠️' : ''} ${q.isTrial ? '🎯' : ''} <span style="font-size:0.7rem;">(${starRating})</span></span>
+        <span class="tag-exam">${q.subject} ${q.isTrap ? '⚠️' : ''} ${q.isTrial ? '🎯' : ''} <span style="font-size:0.75rem;">(${starRating})</span></span>
         <div class="card-reactions-row">
           <span class="react-pill ${q.reactions?.heart ? 'active':''}" onclick="toggleCardReaction('${q.id}', 'heart')">❤️</span>
           <span class="react-pill ${q.reactions?.star ? 'active':''}" onclick="toggleCardReaction('${q.id}', 'star')">⭐</span>
@@ -1676,7 +1710,7 @@ function renderFeed() {
       ${q.solutionImg ? `<button class="solution-accordion-btn" onclick="toggleAccordion(this)"><span>💡 Çözümü Göster</span><span>▼</span></button><div class="solution-accordion-content"><img src="${q.solutionImg}" style="max-width:100%; border-radius:6px;" onclick="openLightbox('${q.solutionImg}')"></div>` : ''}
       <div class="card-actions">
         <button class="btn-action" style="background:var(--accent-gradient); border:none; color:#fff;" onclick="openLightbox('${q.questionImg}')">✏️ Büyüt & Karala</button>
-        <button class="btn-action" style="color:var(--danger);" onclick="deleteQuestion('${q.id}')">🗑️ Sil</button>
+        <button class="btn-action" style="color:#fca5a5;" onclick="deleteQuestion('${q.id}')">🗑️ Sil</button>
       </div>
     `;
     container.appendChild(card);
@@ -1848,7 +1882,7 @@ function renderNotesGallery() {
   filtered.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.8rem; font-weight:800;">Bu kriterlere uygun kayıtlı bilgi bulunamadı 🗂️</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text); font-size:0.85rem; font-weight:800;">Bu kriterlere uygun kayıtlı bilgi bulunamadı 🗂️</div>`;
     return;
   }
 
@@ -1859,19 +1893,19 @@ function renderNotesGallery() {
 
 function generateNoteCardHTML(n, showDeleteBtn = true) {
   let imgHtml = n.image ? `<div class="note-fc-img" onclick="openLightbox('${n.image}')"><img src="${n.image}" alt="Bilgi Görseli"></div>` : '';
-  let txtHtml = n.text ? `<div style="padding:10px 14px; font-size:0.8rem; line-height:1.4; color:var(--text);">${n.text}</div>` : '';
+  let txtHtml = n.text ? `<div style="padding:10px 14px; font-size:0.85rem; line-height:1.4; color:#ffffff; font-weight:800;">${n.text}</div>` : '';
   let audHtml = n.audio ? `<div style="padding:0 14px 10px 14px;"><audio controls src="${n.audio}" style="width:100%; height:32px;"></audio></div>` : '';
   
   let footerHtml = showDeleteBtn ? `
     <div class="note-fc-footer">
-      <button onclick="deleteNote('${n.id}')" style="background:rgba(239, 68, 68, 0.2); border:1px solid rgba(239, 68, 68, 0.5); color:#fca5a5; font-size:0.75rem; font-weight:900; padding:6px 14px; border-radius:10px; cursor:pointer;" title="Bu Bilgiyi Sil">🗑️ Bu Bilgiyi Sil</button>
+      <button onclick="deleteNote('${n.id}')" style="background:rgba(239, 68, 68, 0.25); border:1px solid rgba(239, 68, 68, 0.5); color:#fca5a5; font-size:0.78rem; font-weight:900; padding:6px 14px; border-radius:10px; cursor:pointer;" title="Bu Bilgiyi Sil">🗑️ Bu Bilgiyi Sil</button>
     </div>` : '';
 
   return `
     <div class="note-flashcard">
       <div class="note-fc-top">
         <div>
-          <div style="font-weight:900; font-size:0.85rem; color:#fff;">${n.subject} - ${n.topic}</div>
+          <div style="font-weight:900; font-size:0.88rem; color:#fff;">${n.subject} - ${n.topic}</div>
           <div class="note-fc-tag">${n.tag}</div>
         </div>
       </div>
@@ -1942,12 +1976,49 @@ function nextTeacherDeskQuestion() { tdCurrentIdx++; if (tdCurrentIdx >= teacher
 function openBulletinModal() { document.getElementById("bulletinModal").classList.add("active"); generateWeeklyBulletin(); }
 function closeBulletinModal() { document.getElementById("bulletinModal").classList.remove("active"); }
 
+// KRİTİK REVİZE 2: ZENGİNLEŞTİRİLMİŞ HAFTALIK BÜLTEN & KARNE MANTIĞI
 function generateWeeklyBulletin() {
   const examPool = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade));
   const nowMs = Date.now();
   const weeklyList = examPool.filter(q => new Date(q.createdAt).getTime() >= nowMs - 7 * 24 * 60 * 60 * 1000);
-  document.getElementById("bWeeklyTotal").innerText = weeklyList.length;
-  document.getElementById("bWeeklyMastered").innerText = weeklyList.filter(q => q.status === "mastered").length;
+  
+  const totalAdded = weeklyList.length;
+  const masteredList = weeklyList.filter(q => q.status === "mastered");
+  const totalMastered = masteredList.length;
+  
+  document.getElementById("bWeeklyTotal").innerText = totalAdded;
+  document.getElementById("bWeeklyMastered").innerText = totalMastered;
+
+  const successRate = totalAdded > 0 ? Math.round((totalMastered / totalAdded) * 100) : 0;
+  document.getElementById("bSuccessRatePct").innerText = `%${successRate}`;
+
+  // Ders Bazlı Yanlış Dağılımı (Fikir 1)
+  const subMap = {};
+  weeklyList.forEach(q => { subMap[q.subject] = (subMap[q.subject] || 0) + 1; });
+  const subBreakdownBox = document.getElementById("bulletinSubjectBreakdown");
+  subBreakdownBox.innerHTML = "";
+  if (Object.keys(subMap).length === 0) {
+    subBreakdownBox.innerHTML = `<div style="font-size:0.75rem; color:var(--text); font-weight:800;">Son 7 günde eklenen yanlış bulunmuyor.</div>`;
+  } else {
+    for (const [sub, cnt] of Object.entries(subMap)) {
+      subBreakdownBox.innerHTML += `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#141210; padding:6px 10px; border-radius:8px; font-size:0.78rem; font-weight:900;">
+          <span>${sub}</span>
+          <span style="color:var(--accent-primary);">${cnt} Yanlış</span>
+        </div>
+      `;
+    }
+  }
+
+  // En Baskın Hata Teşhisi (Fikir 4)
+  const reasonMap = {};
+  weeklyList.forEach(q => { reasonMap[q.reason] = (reasonMap[q.reason] || 0) + 1; });
+  let topReason = "Henüz yeterli veri yok";
+  let maxCount = 0;
+  for (const [r, c] of Object.entries(reasonMap)) {
+    if (c > maxCount) { maxCount = c; topReason = r; }
+  }
+  document.getElementById("bulletinTopReason").innerText = totalAdded > 0 ? `"${topReason}" (${maxCount} kez tekrarlandı)` : "Bu hafta tertemiz geçiyor! 🎉";
 }
 
 function openCustomReportPopup() {
@@ -1966,13 +2037,13 @@ function openCustomReportPopup() {
   container.innerHTML = "";
   document.getElementById("customReportMetaInfo").innerText = `Filtrelenen kayıtlar: ${filtered.length} soru`;
 
-  if (filtered.length === 0) container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted);">Kayıt bulunamadı.</div>`;
+  if (filtered.length === 0) container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text); font-weight:800;">Kayıt bulunamadı.</div>`;
   else {
     filtered.forEach((q, idx) => {
       container.innerHTML += `
-        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; font-size:0.78rem;">
-          <div><div style="font-weight:900; color:var(--accent-primary);">${idx+1}. ${q.subject} — ${q.topic} (${'⭐'.repeat(q.difficulty || 3)})</div><div style="color:#f87171; margin-top:2px;">Nedeni: ${q.reason}</div></div>
-          <div style="text-align:right; color:var(--text-muted); font-size:0.72rem;"><div>${new Date(q.createdAt).toLocaleDateString('tr-TR')}</div><div style="color:#34d399; margin-top:2px;">${translateStatus(q.status)}</div></div>
+        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; font-weight:800;">
+          <div><div style="font-weight:900; color:var(--accent-primary);">${idx+1}. ${q.subject} — ${q.topic} (${'⭐'.repeat(q.difficulty || 3)})</div><div style="color:#fca5a5; margin-top:2px;">Nedeni: ${q.reason}</div></div>
+          <div style="text-align:right; color:var(--text); font-size:0.75rem;"><div>${new Date(q.createdAt).toLocaleDateString('tr-TR')}</div><div style="color:#34d399; margin-top:2px; font-weight:900;">${translateStatus(q.status)}</div></div>
         </div>`;
     });
   }
@@ -2299,10 +2370,10 @@ function renderAnalytics() {
   const rBox = document.getElementById("chartReasons"); rBox.innerHTML = "";
   for (const [r, c] of Object.entries(reasons)) {
     rBox.innerHTML += `
-      <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;">
-        <span style="width:130px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${r}</span>
+      <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
+        <span style="width:130px; font-weight:900; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#fff;">${r}</span>
         <div style="flex:1; background:#1c1917; height:8px; border-radius:4px; overflow:hidden;"><div style="width:${(c/maxR)*100}%; background:var(--accent-primary); height:100%;"></div></div>
-        <span style="font-weight:900; width:18px; text-align:right;">${c}</span>
+        <span style="font-weight:900; width:18px; text-align:right; color:#fff;">${c}</span>
       </div>`;
   }
 }
@@ -2327,7 +2398,7 @@ function renderBadgesGrid(examPool) {
   let act = 0;
   badgesDef.forEach(b => {
     if (b.unlocked) act++;
-    grid.innerHTML += `<div style="background:#292524; border:1px solid var(--card-border); border-radius:12px; padding:10px 4px; text-align:center;" class="${b.unlocked ? 'badge-unlocked' : 'badge-locked'}"><div style="font-size:1.3rem;">${b.icon}</div><div style="font-size:0.65rem; font-weight:800; margin-top:2px;">${b.name}</div><div style="font-size:0.55rem; color:var(--text-muted); margin-top:1px;">${b.desc}</div></div>`;
+    grid.innerHTML += `<div style="background:#292524; border:1px solid var(--card-border); border-radius:12px; padding:10px 4px; text-align:center;" class="${b.unlocked ? 'badge-unlocked' : 'badge-locked'}"><div style="font-size:1.3rem;">${b.icon}</div><div style="font-size:0.68rem; font-weight:900; margin-top:2px; color:#fff;">${b.name}</div><div style="font-size:0.6rem; color:var(--text); margin-top:1px; font-weight:800;">${b.desc}</div></div>`;
   });
   document.getElementById("badgeCountHeaderText").innerText = `${act} / 8 Aktif Rozet`;
 }
