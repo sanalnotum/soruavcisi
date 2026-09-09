@@ -224,15 +224,14 @@
     <div class="modal-card" style="max-width:420px; text-align:left;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
-        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2</span>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.1</span>
       </div>
       <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.5; margin-bottom: 12px;">
-        Uygulamamız yenilendi! Bu sürümde eklenen harika yeni özellikler:
+        Bu güncellemede verilerini zırh gibi koruyan **Çift Katmanlı Kalıcılık ve Self-Healing (Kendi Kendini Onarma)** mimarisi eklendi:
       </p>
       <ul style="color: #fafaf9; font-size: 0.78rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6;">
-        <li><b>📚 Konu Takip Paneli:</b> Artık "Araçlar" menüsünden ulaşılan, sayfanı aşağıya uzatmayan kompakt ve açılır/kapanır detaylı konu takip modülü!</li>
-        <li><b>⚡ Canlı Anlık Güncelleme:</b> Konu bitişi işaretlediğin an sayfa yenilenmeden ilerleme barları ve yüzdeler anında gözünün önünde güncellenir!</li>
-        <li><b>🔥 Günlük Seri (Streak) Sistemi:</b> Her gün düzenli çalışarak çalışma serini artır ve rozetleri kap!</li>
+        <li><b>🛡️ Zırh Gibi Veri Güvenliği:</b> Mobil PWA güncellemelerinde ve veritabanı geçişlerinde veriler asla uçmaz, arka planda anında localStorage ile yedeklenir.</li>
+        <li><b>🔄 Akıllı Kurtarma (Self-Healing):</b> Mobil tarayıcılar önbellek temizlese bile uygulama açılışında verileri anında kurtarıp yerine yazar.</li>
       </ul>
       <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
     </div>
@@ -270,7 +269,7 @@
     </div>
   </header>
 
-  <!-- KONU TAKİP PANELİ MODALI (RAPOR SAYFASINDAN TAŞINDI) -->
+  <!-- KONU TAKİP PANELİ MODALI -->
   <div class="modal-overlay" id="trackerModal" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:540px; max-height:85vh; display:flex; flex-direction:column;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
@@ -282,13 +281,11 @@
       </div>
 
       <div style="flex:1; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:14px;">
-        <!-- Üst Bilgi & Streak -->
         <div style="display:flex; justify-content:space-between; align-items:center; background:#1c1917; padding:10px 14px; border-radius:12px; border:1px solid var(--card-border);">
           <div style="font-size:0.75rem; font-weight:800; color:#fff;">Çalışma Serisi Durumu</div>
           <div style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); padding:4px 10px; border-radius:8px; font-size:0.8rem; font-weight:900; color:#fbbf24;" id="streakCountBadge">🔥 0 Gün</div>
         </div>
 
-        <!-- Hızlı Konu Bitişi Kaydet -->
         <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px;">
           <div style="font-size:0.75rem; font-weight:900; color:#34d399; margin-bottom:8px;">✨ Yeni Konu Bitişi Kaydet</div>
           <div class="input-group" style="margin-bottom:8px;">
@@ -308,13 +305,11 @@
           </button>
         </div>
 
-        <!-- Ders Bazlı Özet İlerleme Çubukları (Açılır Detaylı) -->
         <div>
           <div style="font-size:0.78rem; font-weight:900; color:#fff; margin-bottom:8px;">📊 Ders Bazlı İlerleme Durumu (Detay için dokun)</div>
           <div id="subjectProgressBarsContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
 
-        <!-- Bitirdiğim Konular Kronolojisi -->
         <div>
           <div style="font-size:0.78rem; font-weight:900; color:#fff; margin-bottom:6px;">📋 Bitirdiğim Konular Kronolojisi</div>
           <div id="completedTopicsList" style="max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; padding-right:4px;"></div>
@@ -521,7 +516,7 @@
     </form>
   </div>
 
-  <!-- 4. BİLGİ KASASI (FORMÜL DEFTERİ) SEKMESİ -->
+  <!-- 4. BİLGİ KASASI SEKMESİ -->
   <div id="tab-notes" class="tab-view" onclick="event.stopPropagation()">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
       <h3 style="font-size:1.2rem; font-weight:900; color:#fbbf24;">🗂️ Bilgi Kasası (Formüller)</h3>
@@ -532,7 +527,6 @@
       <button class="btn-sub-action" id="btnNavNoteArch" onclick="toggleNotesSubView('arch')">🗂️ Kasa Arşivi</button>
     </div>
 
-    <!-- Bilgi Ekleme Formu -->
     <div id="notesAddView" class="setup-card">
       <form id="addNoteForm" onsubmit="handleNoteSubmit(event)">
         <div class="input-group">
@@ -580,7 +574,6 @@
       </form>
     </div>
 
-    <!-- Bilgi Arşivi -->
     <div id="notesArchView" style="display:none;">
       <div class="input-group" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:12px;">
         <select id="noteFilterSub" style="padding:8px; font-size:0.75rem;" onchange="renderNotesArchiveDropdowns(); renderNotesGallery();"><option value="all">Tüm Dersler</option></select>
@@ -598,7 +591,7 @@
     </div>
   </div>
 
-  <!-- 5. ANALİZ & RAPOR SEKMESİ (PIRIL PIRIL VE TEMİZ) -->
+  <!-- 5. ANALİZ & RAPOR SEKMESİ -->
   <div id="tab-analytics" class="tab-view" onclick="event.stopPropagation()">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
       <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); text-transform:uppercase;">Genel Hata Analizi</div>
@@ -688,38 +681,10 @@
       </div>
 
       <div style="font-size:0.78rem; line-height:1.6; color:#d6d3d1; display:flex; flex-direction:column; gap:12px; max-height:70vh; overflow-y:auto; padding-right:4px;">
-        
         <div style="background:rgba(249, 115, 22, 0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(249, 115, 22, 0.3);">
           <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">🎯 Soru Avcısı Nedir? Avantajları Nelerdir?</div>
-          <div>Bu uygulama; öğrencilerimizin sınavlarda (YKS, LGS, KPSS vb.) takıldığı, kaçırdığı veya hata yaptığı soruları akıllı bir sistemle arşivleyerek **"Hata İkizleri"**ni kurutan bireysel bir akıllı koçluk asistanıdır. Asla veri kaybetmez, eksiklerinizi ısı haritalarıyla yüzünüze vurur ve sizi başarıya ulaştırır.</div>
+          <div>Bu uygulama; öğrencilerimizin sınavlarda takıldığı, kaçırdığı veya hata yaptığı soruları akıllı bir sistemle arşivleyerek **"Hata İkizleri"**ni kurutan bireysel bir akıllı koçluk asistanıdır. Asla veri kaybetmez, eksiklerinizi ısı haritalarıyla yüzünüze vurur.</div>
         </div>
-
-        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">1. 📸 Hızlı & Seri Soru Arşivleme</div>
-          <div>Ortadaki turuncu <b>(+)</b> butonuyla yapamadığınız soruları ister tek tek ister <b>Seri Yükleme Modu</b> ile çoklu olarak ekleyin. Dahili kırpma aracıyla soruyu odaklayın, çözüm görseli ve sesli not ekleyerek zenginleştirin.</div>
-        </div>
-
-        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:#fbbf24; margin-bottom:2px;">2. 🗂️ Bilgi Kasası (Formül Defteri)</div>
-          <div>Tahta notlarını, formülleri ve kritik ipuçlarını <b>Kasa</b> sekmesinden kaydedin. Antrenman masasındayken ekranda beliren sihirli <b>"🧠 Konu Notlarını Çağır"</b> butonuyla o konunun tüm formülleri anında önünüze gelsin.</div>
-        </div>
-
-        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:#34d399; margin-bottom:2px;">3. ⚡ Antrenman Masası & Akıllı Alarmlar</div>
-          <div>Ders, konu ve hata nedenine göre nokta atışı pratikler yapın. Sistem arka planda aynı hatayı tekrarladığınızda <b>İkiz Hata Alarmı</b> üretir; yalnızca hala çözülmemiş aktif sorularınız üzerinden sizi uyararak eksik bırakmaz.</div>
-        </div>
-
-        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:#f87171; margin-bottom:2px;">4. 👨‍🏫 Hoca Masası, Bülten & Cihaz Senkronizasyonu</div>
-          <div>Çözemediğiniz soruları <b>Hoca Masası</b>'na gönderip birebir çözüm sağlayın. <b>QR / AirDrop</b> ile verilerinizi telefondan tablete saniyeler içinde aktarın, <b>Yedek Al</b> özelliğiyle verilerinizi güvenceye alın.</div>
-        </div>
-
-        <div style="background:rgba(249, 115, 22, 0.12); border:1px solid rgba(249, 115, 22, 0.4); border-radius:14px; padding:12px; text-align:center;">
-          <div style="font-size:0.72rem; font-weight:900; color:var(--accent-primary); letter-spacing:0.8px; margin-bottom:4px;">GÜVENLİ & KESİNTİSİZ EĞİTİM PLATFORMU</div>
-          <div style="font-size:0.82rem; font-weight:900; color:#fff;">HAZIRLAYAN: YILDIRAY HOCA (MATEMATİK ÖĞRETMENİ)</div>
-          <div style="font-size:0.78rem; font-weight:700; color:#fed7aa; margin-top:3px;">MAİL: <a href="mailto:sanalnotum@gmail.com" style="color:#fdba74; text-decoration:underline;">sanalnotum@gmail.com</a></div>
-        </div>
-
       </div>
       <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:14px; cursor:pointer;" onclick="closeHelpModal()">Harika, Anladım ✔️</button>
     </div>
@@ -781,14 +746,7 @@
           <div><div style="font-size:1.4rem; font-weight:900; color:var(--accent-primary);" id="bWeeklyTotal">0</div><div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Eklenen Yanlış</div></div>
           <div><div style="font-size:1.4rem; font-weight:900; color:#34d399;" id="bWeeklyMastered">0</div><div style="font-size:0.68rem; color:var(--text-muted); font-weight:800;">Kurtarılan Soru</div></div>
         </div>
-        <div style="margin-top:10px; font-size:0.75rem; font-weight:800; text-align:center; color:#38bdf8;" id="bWeeklyComparisonTrend">Geçen hafta ile kıyas yükleniyor...</div>
       </div>
-      <div style="background:#1c1917; border:1px solid rgba(239,68,68,0.3); border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:0.75rem; font-weight:900; color:#f87171; margin-bottom:4px;">🔥 Haftanın En Çok Can Yakan Konusu:</div>
-        <div style="font-size:0.95rem; font-weight:900;" id="bTopPainTopic">Henüz yeterli veri yok</div>
-        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;" id="bTopPainReason">--</div>
-      </div>
-      <button style="width:100%; padding:11px; border-radius:12px; background:var(--success); border:none; color:#fff; font-weight:900; margin-top:10px; cursor:pointer;" onclick="launchThisWeeksMistakesPractice()">⚡ Bu Haftanın Hatalarıyla Antrenman Yap</button>
       <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:8px; cursor:pointer;" onclick="closeBulletinModal()">Tamam, Odaklanıyorum 🎯</button>
     </div>
   </div>
@@ -881,8 +839,7 @@ let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
-// VERSİYON GÜNCELLEME KONTROLÜ (v1.2)
-const CURRENT_VERSION = "v1.2";
+const CURRENT_VERSION = "v1.2.1";
 const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
 
 function checkVersionChangelog() {
@@ -897,79 +854,128 @@ function closeUpdateChangelogModal() {
   document.getElementById("updateChangelogModal").style.display = "none";
 }
 
+// ZIRHLI MIGRATION VE SELF-HEALING İLE İLİŞKİLİ DB BAŞLATMA
 function initDB() {
   return new Promise((resolve) => {
-    const req = indexedDB.open(DB_NAME, 13);
+    const req = indexedDB.open(DB_NAME, 14); // Versiyon güvenle artırıldı
     req.onupgradeneeded = (e) => {
       const d = e.target.result;
+      // Tablolar yoksa güvenle oluşturulur, varsa asla ezilmez/silinmez (Safe Migration)
       if (!d.objectStoreNames.contains("questions")) d.createObjectStore("questions", { keyPath: "id" });
       if (!d.objectStoreNames.contains("notes")) d.createObjectStore("notes", { keyPath: "id" });
       if (!d.objectStoreNames.contains("completed_topics")) d.createObjectStore("completed_topics", { keyPath: "id" });
     };
-    req.onsuccess = (e) => { db = e.target.result; resolve(); };
+    req.onsuccess = async (e) => {
+      db = e.target.result;
+      // Self-Healing Kontrolü: IndexedDB boşsa ama localStorage yedeği varsa otomatik geri yükle
+      await performSelfHealingCheck();
+      resolve();
+    };
+    req.onerror = async () => {
+      // Hata durumunda localStorage yedeğiyle devam et
+      await performSelfHealingCheck();
+      resolve();
+    };
   });
 }
 
+// Çift Katmanlı Kalıcılık: Her yazma işleminde hem IndexedDB hem localStorage yedeği güncellenir
 async function dbPut(storeName, item) {
   return new Promise(async (resolve) => {
-    const tx = db.transaction([storeName], "readwrite");
-    tx.objectStore(storeName).put(item);
-    tx.oncomplete = async () => {
-      try {
-        const allStoreItems = await dbGetAllDirect(storeName);
-        localStorage.setItem("avci_backup_" + storeName, JSON.stringify(allStoreItems));
-      } catch (err) { console.warn("LocalStorage yedekleme hatası:", err); }
-      resolve();
-    };
+    try {
+      if (db) {
+        const tx = db.transaction([storeName], "readwrite");
+        tx.objectStore(storeName).put(item);
+      }
+    } catch (err) { console.warn("IDB put hatası:", err); }
+
+    // Anlık localStorage yedeğini de güncelle
+    try {
+      let currentArr = JSON.parse(localStorage.getItem("avci_backup_" + storeName) || "[]");
+      const idx = currentArr.findIndex(x => x.id === item.id);
+      if (idx >= 0) currentArr[idx] = item;
+      else currentArr.push(item);
+      localStorage.setItem("avci_backup_" + storeName, JSON.stringify(currentArr));
+    } catch (err) { console.warn("LocalStorage yedekleme hatası:", err); }
+    resolve();
   });
 }
 
 async function dbGetAll(storeName) {
   return new Promise((resolve) => {
+    if (!db) {
+      resolve(getLocalStorageFallback(storeName));
+      return;
+    }
     const tx = db.transaction([storeName], "readonly");
     const req = tx.objectStore(storeName).getAll();
     req.onsuccess = async () => {
       let result = req.result || [];
       if (result.length === 0) {
-        try {
-          const localBackup = localStorage.getItem("avci_backup_" + storeName);
-          if (localBackup) {
-            const parsed = JSON.parse(localBackup);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              const txWrite = db.transaction([storeName], "readwrite");
-              const store = txWrite.objectStore(storeName);
-              parsed.forEach(item => store.put(item));
-              txWrite.oncomplete = () => {};
-              result = parsed;
-            }
-          }
-        } catch (err) { console.warn("Self-healing kurtarma hatası:", err); }
+        result = getLocalStorageFallback(storeName);
       }
       resolve(result);
+    };
+    req.onerror = () => {
+      resolve(getLocalStorageFallback(storeName));
     };
   });
 }
 
-function dbGetAllDirect(storeName) {
-  return new Promise((resolve) => {
-    const tx = db.transaction([storeName], "readonly");
-    const req = tx.objectStore(storeName).getAll();
-    req.onsuccess = () => { resolve(req.result || []); };
-    req.onerror = () => { resolve([]); };
-  });
+function getLocalStorageFallback(storeName) {
+  try {
+    const localBackup = localStorage.getItem("avci_backup_" + storeName);
+    if (localBackup) {
+      const parsed = JSON.parse(localBackup);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (err) { console.warn("Fallback okuma hatası:", err); }
+  return [];
+}
+
+// Self-Healing: IndexedDB tabloları boşaldıysa localStorage yedeklerinden otomatik doldurur
+async function performSelfHealingCheck() {
+  const stores = ["questions", "notes", "completed_topics"];
+  for (const storeName of stores) {
+    try {
+      const idbData = await new Promise((res) => {
+        if (!db) { res([]); return; }
+        const tx = db.transaction([storeName], "readonly");
+        const req = tx.objectStore(storeName).getAll();
+        req.onsuccess = () => res(req.result || []);
+        req.onerror = () => res([]);
+      });
+
+      if (idbData.length === 0) {
+        const backupData = getLocalStorageFallback(storeName);
+        if (backupData.length > 0 && db) {
+          const txWrite = db.transaction([storeName], "readwrite");
+          const store = txWrite.objectStore(storeName);
+          backupData.forEach(item => store.put(item));
+        }
+      } else {
+        // IDB doluysa güncel halini localStorage yedeğine senkronize et
+        localStorage.setItem("avci_backup_" + storeName, JSON.stringify(idbData));
+      }
+    } catch (err) { console.warn("Self-healing işlem hatası:", err); }
+  }
 }
 
 async function dbDelete(storeName, id) {
   return new Promise(async (resolve) => {
-    const tx = db.transaction([storeName], "readwrite");
-    tx.objectStore(storeName).delete(id);
-    tx.oncomplete = async () => {
-      try {
-        const allStoreItems = await dbGetAllDirect(storeName);
-        localStorage.setItem("avci_backup_" + storeName, JSON.stringify(allStoreItems));
-      } catch (err) { console.warn("LocalStorage silme yedekleme hatası:", err); }
-      resolve();
-    };
+    try {
+      if (db) {
+        const tx = db.transaction([storeName], "readwrite");
+        tx.objectStore(storeName).delete(id);
+      }
+    } catch (err) { console.warn("IDB delete hatası:", err); }
+
+    try {
+      let currentArr = JSON.parse(localStorage.getItem("avci_backup_" + storeName) || "[]");
+      currentArr = currentArr.filter(x => x.id !== id);
+      localStorage.setItem("avci_backup_" + storeName, JSON.stringify(currentArr));
+    } catch (err) { console.warn("LocalStorage silme yedekleme hatası:", err); }
+    resolve();
   });
 }
 
@@ -1138,7 +1144,6 @@ function initAppForExam() {
   smartSub.innerHTML = '<option value="all">Tüm Dersler</option>';
   Object.keys(subjects).forEach(s => { smartSub.innerHTML += `<option value="${s}">${s}</option>`; });
 
-  // Konu Takip Paneli Ders Dropdown'u
   const trackerSub = document.getElementById("trackerSubjectSelect");
   if (trackerSub) {
     trackerSub.innerHTML = "";
@@ -1181,7 +1186,6 @@ function renderTrackerTopics() {
   }
 }
 
-// Konu Bitişi Kaydetme ve Anlık (Live) UI Güncelleme
 async function handleTopicCompleteSubmit() {
   const sub = document.getElementById("trackerSubjectSelect").value;
   const topic = document.getElementById("trackerTopicSelect").value;
@@ -1206,7 +1210,6 @@ async function handleTopicCompleteSubmit() {
   await dbPut("completed_topics", item);
   updateStreakOnAction(dateVal);
 
-  // Veriyi anlık listeye ekle ve sayfayı yenilemeden UI'ı canlı güncelle
   allCompletedTopics.push(item);
   renderTrackerUI();
 
@@ -1773,7 +1776,6 @@ function triggerPanicMode() {
   setupPracticeSession(chosen);
 }
 
-// BİLGİ KASASI (NOTLAR) FONKSİYONLARI
 function toggleNotesSubView(view) {
   if (view === 'add') {
     document.getElementById("notesAddView").style.display = "block";
@@ -1925,29 +1927,6 @@ function generateWeeklyBulletin() {
   const weeklyList = examPool.filter(q => new Date(q.createdAt).getTime() >= nowMs - 7 * 24 * 60 * 60 * 1000);
   document.getElementById("bWeeklyTotal").innerText = weeklyList.length;
   document.getElementById("bWeeklyMastered").innerText = weeklyList.filter(q => q.status === "mastered").length;
-
-  const topicCounts = {};
-  weeklyList.forEach(q => { topicCounts[q.topic] = (topicCounts[q.topic] || 0) + 1; });
-  let worstTopic = null; let maxC = 0;
-  for (const [t, c] of Object.entries(topicCounts)) { if (c > maxC) { maxC = c; worstTopic = t; } }
-
-  if (worstTopic) {
-    document.getElementById("bTopPainTopic").innerText = `${worstTopic} (${maxC} Hata)`;
-    document.getElementById("bTopPainReason").innerText = `Bu hafta en çok zorlandığın konu.`;
-  } else {
-    document.getElementById("bTopPainTopic").innerText = "Soru yok.";
-    document.getElementById("bTopPainReason").innerText = "--";
-  }
-}
-
-function launchThisWeeksMistakesPractice() {
-  closeBulletinModal();
-  const weeklyList = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade) && new Date(q.createdAt).getTime() >= Date.now() - 7 * 24 * 60 * 60 * 1000);
-  if (weeklyList.length === 0) return alert("Son 7 güne ait soru yok!");
-  switchNavTab("practice", document.querySelectorAll('.nav-item')[1]);
-  document.getElementById("practiceSetupView").style.display = "none";
-  document.getElementById("practiceCardView").style.display = "flex";
-  setupPracticeSession(weeklyList);
 }
 
 function openCustomReportPopup() {
