@@ -54,7 +54,7 @@
     .btn-icon-head.coach-btn { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
 
     .dropdown-menu {
-      position: absolute; top: calc(100% + 8px); right: 0; width: 220px;
+      position: absolute; top: calc(100% + 8px); right: 0; width: 230px;
       background: rgba(41, 37, 36, 0.98); backdrop-filter: blur(20px);
       border: 1px solid var(--accent-primary); border-radius: 16px;
       padding: 6px; display: none; flex-direction: column; gap: 4px;
@@ -219,6 +219,25 @@
 </head>
 <body onclick="handleBodyBackgroundClick(event)">
 
+  <!-- VERSİYON 1.2 GÜNCELLEME POP-UP MODALI -->
+  <div class="modal-overlay" id="updateChangelogModal" style="display:none;" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:420px; text-align:left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.5; margin-bottom: 12px;">
+        Uygulamamız yenilendi! Bu sürümde eklenen harika yeni özellikler:
+      </p>
+      <ul style="color: #fafaf9; font-size: 0.78rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6;">
+        <li><b>📚 Konu Takip Paneli:</b> Artık "Araçlar" menüsünden ulaşılan, sayfanı aşağıya uzatmayan kompakt ve açılır/kapanır detaylı konu takip modülü!</li>
+        <li><b>⚡ Canlı Anlık Güncelleme:</b> Konu bitişi işaretlediğin an sayfa yenilenmeden ilerleme barları ve yüzdeler anında gözünün önünde güncellenir!</li>
+        <li><b>🔥 Günlük Seri (Streak) Sistemi:</b> Her gün düzenli çalışarak çalışma serini artır ve rozetleri kap!</li>
+      </ul>
+      <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
+    </div>
+  </div>
+
   <div class="exam-select-modal" id="examSelectModal" style="display:none;" onclick="event.stopPropagation()">
     <div class="exam-select-card">
       <img src="logo.png" alt="Logo" style="width:48px; height:48px; object-fit:contain; margin-bottom:8px;" onerror="this.style.display='none'">
@@ -242,6 +261,7 @@
       <button class="btn-icon-head" onclick="toggleQuickMenu(event)" title="Menü">☰ Araçlar</button>
 
       <div class="dropdown-menu" id="quickMenu">
+        <button class="dropdown-item" onclick="closeQuickMenu(); openTrackerModal();">📚 Konu Takip Paneli</button>
         <button class="dropdown-item" onclick="closeQuickMenu(); openHelpModal();">📖 Kullanım Kılavuzu</button>
         <button class="dropdown-item" onclick="closeQuickMenu(); openPdfModal();">🖨️ PDF Kitapçık Bas</button>
         <button class="dropdown-item" onclick="closeQuickMenu(); openBulletinModal();">📊 Haftalık Bülten</button>
@@ -249,6 +269,61 @@
       </div>
     </div>
   </header>
+
+  <!-- KONU TAKİP PANELİ MODALI (RAPOR SAYFASINDAN TAŞINDI) -->
+  <div class="modal-overlay" id="trackerModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:540px; max-height:85vh; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
+        <div>
+          <h3 style="font-size:1.05rem; font-weight:900; color:var(--accent-primary);">📚 Konu Takip ve İlerleme Paneli</h3>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Sınav grubuna ait konuları bitir, ilerlemeni anlık görselleştir.</div>
+        </div>
+        <button onclick="closeTrackerModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="flex:1; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:14px;">
+        <!-- Üst Bilgi & Streak -->
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#1c1917; padding:10px 14px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-size:0.75rem; font-weight:800; color:#fff;">Çalışma Serisi Durumu</div>
+          <div style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); padding:4px 10px; border-radius:8px; font-size:0.8rem; font-weight:900; color:#fbbf24;" id="streakCountBadge">🔥 0 Gün</div>
+        </div>
+
+        <!-- Hızlı Konu Bitişi Kaydet -->
+        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px;">
+          <div style="font-size:0.75rem; font-weight:900; color:#34d399; margin-bottom:8px;">✨ Yeni Konu Bitişi Kaydet</div>
+          <div class="input-group" style="margin-bottom:8px;">
+            <label>Ders Seçimi</label>
+            <select id="trackerSubjectSelect" onchange="renderTrackerTopics()"></select>
+          </div>
+          <div class="input-group" style="margin-bottom:8px;">
+            <label>Konu Seçimi</label>
+            <select id="trackerTopicSelect"></select>
+          </div>
+          <div class="input-group" style="margin-bottom:10px;">
+            <label>Bitiş Tarihi (Esnek Seçim)</label>
+            <input type="date" id="trackerDateInput">
+          </div>
+          <button style="width:100%; padding:11px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.82rem; cursor:pointer;" onclick="handleTopicCompleteSubmit()">
+            Konuyu Bitti Olarak İşaretle ✔️
+          </button>
+        </div>
+
+        <!-- Ders Bazlı Özet İlerleme Çubukları (Açılır Detaylı) -->
+        <div>
+          <div style="font-size:0.78rem; font-weight:900; color:#fff; margin-bottom:8px;">📊 Ders Bazlı İlerleme Durumu (Detay için dokun)</div>
+          <div id="subjectProgressBarsContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <!-- Bitirdiğim Konular Kronolojisi -->
+        <div>
+          <div style="font-size:0.78rem; font-weight:900; color:#fff; margin-bottom:6px;">📋 Bitirdiğim Konular Kronolojisi</div>
+          <div id="completedTopicsList" style="max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; padding-right:4px;"></div>
+        </div>
+      </div>
+
+      <button style="width:100%; padding:11px; border-radius:12px; background:#292524; border:1px solid var(--card-border); color:#fff; font-weight:900; margin-top:12px; cursor:pointer;" onclick="closeTrackerModal()">Kapat</button>
+    </div>
+  </div>
 
   <!-- 1. AKIŞ SEKMESİ -->
   <div id="tab-feed" class="tab-view active" onclick="event.stopPropagation()">
@@ -523,7 +598,7 @@
     </div>
   </div>
 
-  <!-- 5. ANALİZ & RAPOR SEKMESİ -->
+  <!-- 5. ANALİZ & RAPOR SEKMESİ (PIRIL PIRIL VE TEMİZ) -->
   <div id="tab-analytics" class="tab-view" onclick="event.stopPropagation()">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
       <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); text-transform:uppercase;">Genel Hata Analizi</div>
@@ -800,24 +875,41 @@ const DB_NAME = "SoruAvcisiDB_YildirayHoca_v12";
 let db;
 let allQuestions = [];
 let allNotes = [];
+let allCompletedTopics = [];
 let activeExam = "";
 let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
+// VERSİYON GÜNCELLEME KONTROLÜ (v1.2)
+const CURRENT_VERSION = "v1.2";
+const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
+
+function checkVersionChangelog() {
+  const lastSeen = localStorage.getItem(VERSION_STORAGE_KEY);
+  if (lastSeen !== CURRENT_VERSION) {
+    document.getElementById("updateChangelogModal").style.display = "flex";
+  }
+}
+
+function closeUpdateChangelogModal() {
+  localStorage.setItem(VERSION_STORAGE_KEY, CURRENT_VERSION);
+  document.getElementById("updateChangelogModal").style.display = "none";
+}
+
 function initDB() {
   return new Promise((resolve) => {
-    const req = indexedDB.open(DB_NAME, 12);
+    const req = indexedDB.open(DB_NAME, 13);
     req.onupgradeneeded = (e) => {
       const d = e.target.result;
       if (!d.objectStoreNames.contains("questions")) d.createObjectStore("questions", { keyPath: "id" });
       if (!d.objectStoreNames.contains("notes")) d.createObjectStore("notes", { keyPath: "id" });
+      if (!d.objectStoreNames.contains("completed_topics")) d.createObjectStore("completed_topics", { keyPath: "id" });
     };
     req.onsuccess = (e) => { db = e.target.result; resolve(); };
   });
 }
 
-// ÇİFT KATMANLI KALICILIK & KESİN SİLME SENKRONİZASYONU
 async function dbPut(storeName, item) {
   return new Promise(async (resolve) => {
     const tx = db.transaction([storeName], "readwrite");
@@ -858,7 +950,6 @@ async function dbGetAll(storeName) {
   });
 }
 
-// Yedek senkronizasyonu için doğrudan IndexedDB okuma
 function dbGetAllDirect(storeName) {
   return new Promise((resolve) => {
     const tx = db.transaction([storeName], "readonly");
@@ -874,7 +965,6 @@ async function dbDelete(storeName, id) {
     tx.objectStore(storeName).delete(id);
     tx.oncomplete = async () => {
       try {
-        // Silme işleminden hemen sonra güncel listeyi alıp localStorage yedeğini de güncelliyoruz (Geri yükleme hatasını önlemek için)
         const allStoreItems = await dbGetAllDirect(storeName);
         localStorage.setItem("avci_backup_" + storeName, JSON.stringify(allStoreItems));
       } catch (err) { console.warn("LocalStorage silme yedekleme hatası:", err); }
@@ -1048,6 +1138,20 @@ function initAppForExam() {
   smartSub.innerHTML = '<option value="all">Tüm Dersler</option>';
   Object.keys(subjects).forEach(s => { smartSub.innerHTML += `<option value="${s}">${s}</option>`; });
 
+  // Konu Takip Paneli Ders Dropdown'u
+  const trackerSub = document.getElementById("trackerSubjectSelect");
+  if (trackerSub) {
+    trackerSub.innerHTML = "";
+    Object.keys(subjects).forEach(s => { trackerSub.innerHTML += `<option value="${s}">${s}</option>`; });
+    renderTrackerTopics();
+  }
+
+  const dateInput = document.getElementById("trackerDateInput");
+  if (dateInput) {
+    const todayStr = new Date().toISOString().split('T')[0];
+    dateInput.value = todayStr;
+  }
+
   const tagLabel = activeExam === "MAARİF" ? `MAARİF (${activeMaarifGrade})` : activeExam;
   document.getElementById("practiceActiveExamTag").innerText = tagLabel;
 
@@ -1063,6 +1167,163 @@ function renderTopicDropdown(subId, topId, manId) {
   top.innerHTML = '<option value="">-- Konu Seçin --</option>';
   if (subjects[sub]) {
     subjects[sub].forEach(t => { top.innerHTML += `<option value="${t}">${t}</option>`; });
+  }
+}
+
+function renderTrackerTopics() {
+  const subjects = getCurrentActiveSubjectsObj();
+  const sub = document.getElementById("trackerSubjectSelect").value;
+  const topSelect = document.getElementById("trackerTopicSelect");
+  if (!topSelect) return;
+  topSelect.innerHTML = "";
+  if (subjects[sub]) {
+    subjects[sub].forEach(t => { topSelect.innerHTML += `<option value="${t}">${t}</option>`; });
+  }
+}
+
+// Konu Bitişi Kaydetme ve Anlık (Live) UI Güncelleme
+async function handleTopicCompleteSubmit() {
+  const sub = document.getElementById("trackerSubjectSelect").value;
+  const topic = document.getElementById("trackerTopicSelect").value;
+  const dateVal = document.getElementById("trackerDateInput").value;
+
+  if (!sub || !topic) return alert("Lütfen ders ve konu seçiniz.");
+  if (!dateVal) return alert("Lütfen bitiş tarihi seçiniz.");
+
+  const exists = allCompletedTopics.some(x => x.exam === activeExam && x.subject === sub && x.topic === topic);
+  if (exists) return alert(`"${topic}" konusu zaten tamamlanmış olarak kaydedilmiş!`);
+
+  const item = {
+    id: "ct_" + Date.now(),
+    exam: activeExam,
+    maarifGrade: activeExam === "MAARİF" ? activeMaarifGrade : null,
+    subject: sub,
+    topic: topic,
+    completedDate: dateVal,
+    createdAt: new Date().toISOString()
+  };
+
+  await dbPut("completed_topics", item);
+  updateStreakOnAction(dateVal);
+
+  // Veriyi anlık listeye ekle ve sayfayı yenilemeden UI'ı canlı güncelle
+  allCompletedTopics.push(item);
+  renderTrackerUI();
+
+  alert(`"${topic}" konusu başarıyla tamamlandı olarak işlendi! 🎯`);
+}
+
+function updateStreakOnAction(actionDateStr) {
+  let lastDate = localStorage.getItem("avci_last_activity_date");
+  let streak = parseInt(localStorage.getItem("avci_streak_count") || "0", 10);
+
+  if (!lastDate) {
+    streak = 1;
+  } else {
+    const lastD = new Date(lastDate);
+    const actD = new Date(actionDateStr);
+    const diffDays = Math.round((actD - lastD) / (1000 * 60 * 60 * 24));
+    if (diffDays === 1) {
+      streak++;
+    } else if (diffDays > 1) {
+      streak = 1;
+    }
+  }
+  localStorage.setItem("avci_last_activity_date", actionDateStr);
+  localStorage.setItem("avci_streak_count", streak);
+}
+
+function openTrackerModal() {
+  document.getElementById("trackerModal").classList.add("active");
+  renderTrackerUI();
+}
+function closeTrackerModal() {
+  document.getElementById("trackerModal").classList.remove("active");
+}
+
+let expandedTrackerSubject = null;
+
+function toggleTrackerSubjectDetail(sub) {
+  if (expandedTrackerSubject === sub) expandedTrackerSubject = null;
+  else expandedTrackerSubject = sub;
+  renderTrackerUI();
+}
+
+function renderTrackerUI() {
+  const subjects = getCurrentActiveSubjectsObj();
+  const barsContainer = document.getElementById("subjectProgressBarsContainer");
+  const listContainer = document.getElementById("completedTopicsList");
+  if (!barsContainer || !listContainer) return;
+
+  barsContainer.innerHTML = "";
+  listContainer.innerHTML = "";
+
+  const activeGroupTopics = allCompletedTopics.filter(x => x.exam === activeExam && (activeExam !== "MAARİF" || x.maarifGrade === activeMaarifGrade));
+
+  Object.keys(subjects).forEach(sub => {
+    const totalInSub = subjects[sub].length;
+    const finishedItems = activeGroupTopics.filter(x => x.subject === sub);
+    const finishedInSub = finishedItems.length;
+    const pct = totalInSub > 0 ? Math.min(100, Math.round((finishedInSub / totalInSub) * 100)) : 0;
+    const isExpanded = (expandedTrackerSubject === sub);
+
+    let subTopicsHtml = '';
+    if (isExpanded) {
+      if (finishedItems.length === 0) {
+        subTopicsHtml = `<div style="font-size:0.7rem; color:var(--text-muted); padding:6px 0;">Bu derste henüz bitirilen konu yok.</div>`;
+      } else {
+        finishedItems.forEach(fi => {
+          subTopicsHtml += `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#141210; padding:4px 8px; border-radius:6px; margin-top:4px; font-size:0.7rem;">
+              <span>✔️ ${fi.topic} <span style="color:var(--text-muted);">(${fi.completedDate})</span></span>
+              <button onclick="deleteCompletedTopic('${fi.id}')" style="background:none; border:none; color:#fca5a5; font-weight:900; cursor:pointer;" title="Sil">✕</button>
+            </div>
+          `;
+        });
+      }
+    }
+
+    barsContainer.innerHTML += `
+      <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:10px; padding:8px 10px; cursor:pointer;" onclick="toggleTrackerSubjectDetail('${sub}')">
+        <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:800; margin-bottom:4px;">
+          <span>${sub} ${isExpanded ? '▲' : '▼'}</span>
+          <span style="color:var(--accent-primary);">${finishedInSub} / ${totalInSub} Konu (%${pct})</span>
+        </div>
+        <div style="background:#141210; height:7px; border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
+          <div style="width:${pct}%; background:var(--accent-gradient); height:100%; transition: width 0.3s ease;"></div>
+        </div>
+        ${subTopicsHtml}
+      </div>
+    `;
+  });
+
+  const sortedCompleted = [...activeGroupTopics].sort((a,b) => new Date(b.completedDate) - new Date(a.completedDate));
+  if (sortedCompleted.length === 0) {
+    listContainer.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:0.75rem;">Henüz tamamlanan konu kaydedilmedi.</div>`;
+  } else {
+    sortedCompleted.forEach(ct => {
+      listContainer.innerHTML += `
+        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:10px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; font-size:0.75rem;">
+          <div>
+            <div style="font-weight:900; color:#fff;">${ct.subject} — ${ct.topic}</div>
+            <div style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">Bitiş: ${ct.completedDate}</div>
+          </div>
+          <button onclick="deleteCompletedTopic('${ct.id}')" style="background:rgba(239,68,68,0.2); border:none; color:#fca5a5; padding:4px 8px; border-radius:6px; font-weight:900; cursor:pointer;" title="Sil">🗑️</button>
+        </div>
+      `;
+    });
+  }
+
+  const streak = localStorage.getItem("avci_streak_count") || "0";
+  const streakBadge = document.getElementById("streakCountBadge");
+  if (streakBadge) streakBadge.innerText = `🔥 ${streak} Gün`;
+}
+
+async function deleteCompletedTopic(id) {
+  if (confirm("Bu konu bitiş kaydını silmek istediğine emin misin?")) {
+    await dbDelete("completed_topics", id);
+    allCompletedTopics = allCompletedTopics.filter(x => x.id !== id);
+    renderTrackerUI();
   }
 }
 
@@ -1599,7 +1860,6 @@ function generateNoteCardHTML(n, showDeleteBtn = true) {
   `;
 }
 
-// Bilgi Kasası silme fonksiyonu - Kalıcı silme hatası düzeltildi
 async function deleteNote(id) {
   if (confirm("Bu bilgi kartını silmek istediğine emin misin?")) {
     await dbDelete("notes", id);
@@ -1621,7 +1881,6 @@ function openPracticeNotesModal() {
 }
 function closePracticeNotesModal() { document.getElementById("practiceNotesModal").classList.remove("active"); }
 
-// Hoca Masası & Bülten Fonksiyonları
 let teacherDeskQuestions = [];
 let tdCurrentIdx = 0;
 function openTeacherDeskModal() {
@@ -2124,7 +2383,7 @@ function switchNavTab(tabId, btn) {
 }
 
 async function exportDataBackup() {
-  const data = { questions: await dbGetAll("questions"), notes: await dbGetAll("notes") };
+  const data = { questions: await dbGetAll("questions"), notes: await dbGetAll("notes"), completed_topics: await dbGetAll("completed_topics") };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `SoruAvcisi_Yedek_${new Date().toISOString().slice(0,10)}.json`; a.click();
 }
@@ -2139,6 +2398,7 @@ function importDataBackup(e) {
       else {
         if(data.questions) for (const q of data.questions) await dbPut("questions", q);
         if(data.notes) for (const n of data.notes) await dbPut("notes", n);
+        if(data.completed_topics) for (const ct of data.completed_topics) await dbPut("completed_topics", ct);
       }
       alert("Yedek başarıyla yüklendi!"); await refreshAll();
     } catch(err) { alert("Hatalı dosya biçimi!"); }
@@ -2149,6 +2409,7 @@ function importDataBackup(e) {
 async function refreshAll() {
   allQuestions = await dbGetAll("questions");
   allNotes = await dbGetAll("notes");
+  allCompletedTopics = await dbGetAll("completed_topics");
   buildStoriesBar();
   buildExamPills();
   renderFeed();
@@ -2163,6 +2424,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadMaarifExcelFromRepo();
   checkExamSelection();
   await refreshAll();
+
+  checkVersionChangelog();
 
   const today = new Date();
   if (today.getDay() === 0 && !sessionStorage.getItem("bulletin_shown")) {
