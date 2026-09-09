@@ -219,19 +219,19 @@
 </head>
 <body onclick="handleBodyBackgroundClick(event)">
 
-  <!-- VERSİYON 1.2 GÜNCELLEME POP-UP MODALI -->
+  <!-- VERSİYON GÜNCELLEME POP-UP MODALI -->
   <div class="modal-overlay" id="updateChangelogModal" style="display:none;" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:420px; text-align:left;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
-        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.1</span>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.2</span>
       </div>
       <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.5; margin-bottom: 12px;">
-        Bu güncellemede verilerini zırh gibi koruyan **Çift Katmanlı Kalıcılık ve Self-Healing (Kendi Kendini Onarma)** mimarisi eklendi:
+        Bu güncellemede kılavuzumuz yenilendi ve verilerini zırh gibi koruyan **Çift Katmanlı Kalıcılık** mimarisi geliştirildi:
       </p>
       <ul style="color: #fafaf9; font-size: 0.78rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6;">
-        <li><b>🛡️ Zırh Gibi Veri Güvenliği:</b> Mobil PWA güncellemelerinde ve veritabanı geçişlerinde veriler asla uçmaz, arka planda anında localStorage ile yedeklenir.</li>
-        <li><b>🔄 Akıllı Kurtarma (Self-Healing):</b> Mobil tarayıcılar önbellek temizlese bile uygulama açılışında verileri anında kurtarıp yerine yazar.</li>
+        <li><b>📖 Detaylı Kılavuz:</b> Uygulamanın tüm özellikleri adım adım açıklandı.</li>
+        <li><b>🛡️ Zırh Gibi Güvenlik:</b> Mobil PWA güncellemelerinde veriler asla uçmaz.</li>
       </ul>
       <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
     </div>
@@ -670,6 +670,7 @@
     </div>
   </div>
 
+  <!-- DETAYLI KILAVUZ MODALI (YILDIRAY HOCA İMZALI) -->
   <div class="modal-overlay" id="helpModal" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:560px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
@@ -681,10 +682,38 @@
       </div>
 
       <div style="font-size:0.78rem; line-height:1.6; color:#d6d3d1; display:flex; flex-direction:column; gap:12px; max-height:70vh; overflow-y:auto; padding-right:4px;">
+        
         <div style="background:rgba(249, 115, 22, 0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(249, 115, 22, 0.3);">
           <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">🎯 Soru Avcısı Nedir? Avantajları Nelerdir?</div>
-          <div>Bu uygulama; öğrencilerimizin sınavlarda takıldığı, kaçırdığı veya hata yaptığı soruları akıllı bir sistemle arşivleyerek **"Hata İkizleri"**ni kurutan bireysel bir akıllı koçluk asistanıdır. Asla veri kaybetmez, eksiklerinizi ısı haritalarıyla yüzünüze vurur.</div>
+          <div>Bu uygulama; öğrencilerimizin sınavlarda (YKS, LGS, KPSS vb.) takıldığı, kaçırdığı veya hata yaptığı soruları akıllı bir sistemle arşivleyerek **"Hata İkizleri"**ni kurutan bireysel bir akıllı koçluk asistanıdır. Asla veri kaybetmez, eksiklerinizi ısı haritalarıyla yüzünüze vurur ve sizi başarıya ulaştırır.</div>
         </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">1. 📸 Hızlı & Seri Soru Arşivleme</div>
+          <div>Ortadaki turuncu <b>(+)</b> butonuyla yapamadığınız soruları ister tek tek ister <b>Seri Yükleme Modu</b> ile çoklu olarak ekleyin. Dahili kırpma aracıyla soruyu odaklayın, çözüm görseli ve sesli not ekleyerek zenginleştirin.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#fbbf24; margin-bottom:2px;">2. 🗂️ Bilgi Kasası (Formül Defteri)</div>
+          <div>Tahta notlarını, formülleri ve kritik ipuçlarını <b>Kasa</b> sekmesinden kaydedin. Antrenman masasındayken ekranda beliren sihirli <b>"🧠 Konu Notlarını Çağır"</b> butonuyla o konunun tüm formülleri anında önünüze gelsin.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#34d399; margin-bottom:2px;">3. 📚 Konu Takip Paneli & Streak Sistemi</div>
+          <div>Sağ üstteki <b>Araçlar</b> menüsünden ulaşabileceğiniz bu panel ile sınav grubuna ait konuları bitirip ilerleme barlarını anlık takip edin. Her gün düzenli çalışma yaparak <b>Günlük Seri (Streak)</b> rozetlerini toplayın.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:#f87171; margin-bottom:2px;">4. 👨‍🏫 Hoca Masası, Bülten & Cihaz Senkronizasyonu</div>
+          <div>Çözemediğiniz soruları <b>Hoca Masası</b>'na gönderip birebir çözüm sağlayın. <b>QR / AirDrop</b> ile verilerinizi telefondan tablete saniyeler içinde aktarın, zırhlı <b>Yedek Al</b> özelliğiyle verilerinizi güvenceye alın.</div>
+        </div>
+
+        <div style="background:rgba(249, 115, 22, 0.12); border:1px solid rgba(249, 115, 22, 0.4); border-radius:14px; padding:12px; text-align:center;">
+          <div style="font-size:0.72rem; font-weight:900; color:var(--accent-primary); letter-spacing:0.8px; margin-bottom:4px;">GÜVENLİ & KESİNTİSİZ EĞİTİM PLATFORMU</div>
+          <div style="font-size:0.82rem; font-weight:900; color:#fff;">HAZIRLAYAN: YILDIRAY HOCA (MATEMATİK ÖĞRETMENİ)</div>
+          <div style="font-size:0.78rem; font-weight:700; color:#fed7aa; margin-top:3px;">MAİL: <a href="mailto:sanalnotum@gmail.com" style="color:#fdba74; text-decoration:underline;">sanalnotum@gmail.com</a></div>
+        </div>
+
       </div>
       <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-primary); border:none; color:#fff; font-weight:900; margin-top:14px; cursor:pointer;" onclick="closeHelpModal()">Harika, Anladım ✔️</button>
     </div>
@@ -839,7 +868,7 @@ let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
-const CURRENT_VERSION = "v1.2.1";
+const CURRENT_VERSION = "v1.2.2";
 const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
 
 function checkVersionChangelog() {
@@ -854,32 +883,27 @@ function closeUpdateChangelogModal() {
   document.getElementById("updateChangelogModal").style.display = "none";
 }
 
-// ZIRHLI MIGRATION VE SELF-HEALING İLE İLİŞKİLİ DB BAŞLATMA
 function initDB() {
   return new Promise((resolve) => {
-    const req = indexedDB.open(DB_NAME, 14); // Versiyon güvenle artırıldı
+    const req = indexedDB.open(DB_NAME, 14);
     req.onupgradeneeded = (e) => {
       const d = e.target.result;
-      // Tablolar yoksa güvenle oluşturulur, varsa asla ezilmez/silinmez (Safe Migration)
       if (!d.objectStoreNames.contains("questions")) d.createObjectStore("questions", { keyPath: "id" });
       if (!d.objectStoreNames.contains("notes")) d.createObjectStore("notes", { keyPath: "id" });
       if (!d.objectStoreNames.contains("completed_topics")) d.createObjectStore("completed_topics", { keyPath: "id" });
     };
     req.onsuccess = async (e) => {
       db = e.target.result;
-      // Self-Healing Kontrolü: IndexedDB boşsa ama localStorage yedeği varsa otomatik geri yükle
       await performSelfHealingCheck();
       resolve();
     };
     req.onerror = async () => {
-      // Hata durumunda localStorage yedeğiyle devam et
       await performSelfHealingCheck();
       resolve();
     };
   });
 }
 
-// Çift Katmanlı Kalıcılık: Her yazma işleminde hem IndexedDB hem localStorage yedeği güncellenir
 async function dbPut(storeName, item) {
   return new Promise(async (resolve) => {
     try {
@@ -889,7 +913,6 @@ async function dbPut(storeName, item) {
       }
     } catch (err) { console.warn("IDB put hatası:", err); }
 
-    // Anlık localStorage yedeğini de güncelle
     try {
       let currentArr = JSON.parse(localStorage.getItem("avci_backup_" + storeName) || "[]");
       const idx = currentArr.findIndex(x => x.id === item.id);
@@ -933,7 +956,6 @@ function getLocalStorageFallback(storeName) {
   return [];
 }
 
-// Self-Healing: IndexedDB tabloları boşaldıysa localStorage yedeklerinden otomatik doldurur
 async function performSelfHealingCheck() {
   const stores = ["questions", "notes", "completed_topics"];
   for (const storeName of stores) {
@@ -954,7 +976,6 @@ async function performSelfHealingCheck() {
           backupData.forEach(item => store.put(item));
         }
       } else {
-        // IDB doluysa güncel halini localStorage yedeğine senkronize et
         localStorage.setItem("avci_backup_" + storeName, JSON.stringify(idbData));
       }
     } catch (err) { console.warn("Self-healing işlem hatası:", err); }
