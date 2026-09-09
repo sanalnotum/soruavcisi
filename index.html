@@ -223,16 +223,14 @@
     <div class="modal-card" style="max-width:420px; text-align:left;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
-        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.3</span>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.4</span>
       </div>
       <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; margin-bottom: 12px; font-weight: 700;">
-        Bu güncellemede Yıldıray Hocam'ın talimatlarıyla çok kritik iyileştirmeler yapıldı:
+        Bu güncellemede Yıldıray Hocam'ın talimatlarıyla form sıfırlama ve sayım mantığı kusursuzlaştırıldı:
       </p>
       <ul style="color: #ffffff; font-size: 0.8rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6; font-weight: 700;">
-        <li><b>⚙️ Ders-Konu Senkronizasyonu:</b> Tüm sınav gruplarında ders değişimlerindeki konu liste bug'ı kökten çözüldü.</li>
-        <li><b>📊 Zenginleştirilmiş Bülten:</b> Haftalık Hata Bülteni; ders dağılımı, başarı oranı ve baskın hata teşhisi ile donatıldı.</li>
-        <li><b>🎨 Yüksek Kontrast:</b> Yazılar ve etiketler en net okunabilirliğe kavuşturuldu.</li>
-        <li><b>🎯 Akıllı Story Halkaları:</b> Ders dairelerinin üzerindeki sayaç ve tıkalı rozetleri kararlı hale getirildi.</li>
+        <li><b>⚙️ Kesin Ders-Konu Senkronizasyonu:</b> Soru ekledikten sonra form sıfırlanırken konu listesinin eski derste takılması sorunu kökten çözüldü.</li>
+        <li><b>🎯 Seçenek C Story Halkaları:</b> Sadece çözülmemiş aktif soru varsa sayı yazması, hepsi bittiyse sayının kalkması mantığına geçirildi.</li>
       </ul>
       <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
     </div>
@@ -883,7 +881,7 @@ let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
-const CURRENT_VERSION = "v1.2.3";
+const CURRENT_VERSION = "v1.2.4";
 const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
 
 function checkVersionChangelog() {
@@ -1200,7 +1198,6 @@ function initAppForExam() {
   buildExamPills();
 }
 
-// KRİTİK REVİZE 1: DERS-KONU EŞLEŞTİRME BUG'INI KÖKTEN ÇÖZEN METOT
 function renderTopicDropdown(subId, topId, manId) {
   const subjects = getCurrentActiveSubjectsObj();
   const subSelect = document.getElementById(subId);
@@ -1216,7 +1213,6 @@ function renderTopicDropdown(subId, topId, manId) {
       topSelect.innerHTML += `<option value="${t}">${t}</option>`; 
     });
   }
-  // Eğer ders değiştiğinde elle girilen eski konu kalıntısını temizle
   if (manInput && !subjects[chosenSub]?.includes(manInput.value)) {
     manInput.value = "";
   }
@@ -1471,6 +1467,10 @@ async function handleQuestionSubmit(e) {
   await dbPut("questions", newQuestion);
 
   document.getElementById("addForm").reset();
+  
+  // KESİN ÇÖZÜM: Form sıfırlandıktan sonra ders-konu dropdown'ını zorunlu senkronize et
+  renderTopicDropdown('formSubjectSelect', 'formTopicSelect', 'formTopicManual');
+
   processedImages.q = null; processedImages.s = null;
   document.getElementById("previewQImg").style.display = "none"; document.getElementById("btnCropQ").style.display = "none";
   document.getElementById("previewSImg").style.display = "none"; document.getElementById("btnCropS").style.display = "none";
@@ -1515,6 +1515,10 @@ async function handleNoteSubmit(e) {
 
   await dbPut("notes", item);
   document.getElementById("addNoteForm").reset();
+  
+  // Bilgi formu sıfırlandığında da konu dropdown'ını senkronize et
+  renderTopicDropdown('noteSubjectSelect', 'noteTopicSelect', 'noteTopicManual');
+
   processedImages.n = null;
   document.getElementById("previewNoteImg").style.display = "none";
   document.getElementById("btnCropN").style.display = "none";
@@ -1573,7 +1577,7 @@ function launchTwinPractice() {
   setupPracticeSession(filtered);
 }
 
-// KRİTİK REVİZE 4: STORY HALKALARI SAYAÇ STANDARDI (TOPLAM SORU + STUCK BADGE)
+// SEÇENEK C MANTIĞI: Sadece çözülmemiş aktif soru varsa sayı yazar, hepsi bittiyse sayı kalkar.
 function buildStoriesBar() {
   const container = document.getElementById("storiesContainer");
   container.innerHTML = "";
@@ -1582,7 +1586,7 @@ function buildStoriesBar() {
   const subStats = {};
   Object.keys(subjects).forEach(sub => {
     subLastAdded[sub] = 0;
-    subStats[sub] = { total: 0, mastered: 0, stuck: 0 };
+    subStats[sub] = { total: 0, active: 0, mastered: 0, stuck: 0 };
   });
 
   allQuestions.forEach(q => {
@@ -1591,7 +1595,11 @@ function buildStoriesBar() {
       if (t > (subLastAdded[q.subject] || 0)) subLastAdded[q.subject] = t;
       if (subStats[q.subject]) {
         subStats[q.subject].total++;
-        if (q.status === 'mastered') subStats[q.subject].mastered++;
+        if (q.status === 'mastered') {
+          subStats[q.subject].mastered++;
+        } else {
+          subStats[q.subject].active++;
+        }
         if (q.status === 'stuck') subStats[q.subject].stuck++;
       }
     }
@@ -1602,15 +1610,15 @@ function buildStoriesBar() {
     const emojis = { "Matematik": "📐", "Türkçe": "📚", "Fizik": "⚡", "Kimya": "🧪", "Biyoloji": "🧬", "Tarih": "📜", "Coğrafya": "🌍", "Geometri": "🔺", "Edebiyat": "✒️", "Felsefe": "🧠", "Din": "🌙", "İngilizce": "🇬🇧", "Fen": "🔬", "Anatomi": "🫀", "Gramer": "📖", "Hayat": "🌱" };
     let em = "🎯";
     for (const [k, v] of Object.entries(emojis)) { if (sub.includes(k)) { em = v; break; } }
-    const stats = subStats[sub] || { total: 0, mastered: 0, stuck: 0 };
+    const stats = subStats[sub] || { total: 0, active: 0, mastered: 0, stuck: 0 };
     const pct = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
     const ringBackground = stats.total > 0 ? `conic-gradient(#10b981 ${pct}%, #f97316 ${pct}%, #292524 100%)` : `linear-gradient(135deg, #f97316, #292524)`;
 
     let badgeHtml = '';
     if (stats.stuck > 0) {
       badgeHtml = `<span style="position:absolute; top:-2px; right:-2px; background:#ef4444; color:#fff; font-size:10px; font-weight:900; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #1c1917; z-index:3;" title="${stats.stuck} Tıkalı Soru">${stats.stuck}</span>`;
-    } else if (stats.total > 0) {
-      badgeHtml = `<span style="position:absolute; top:-2px; right:-2px; background:var(--accent-primary); color:#fff; font-size:9px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #1c1917; z-index:3;" title="${stats.total} Toplam Soru">${stats.total}</span>`;
+    } else if (stats.active > 0) {
+      badgeHtml = `<span style="position:absolute; top:-2px; right:-2px; background:var(--accent-primary); color:#fff; font-size:9px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #1c1917; z-index:3;" title="${stats.active} Çözülmemiş Soru">${stats.active}</span>`;
     }
 
     container.innerHTML += `
@@ -1976,7 +1984,6 @@ function nextTeacherDeskQuestion() { tdCurrentIdx++; if (tdCurrentIdx >= teacher
 function openBulletinModal() { document.getElementById("bulletinModal").classList.add("active"); generateWeeklyBulletin(); }
 function closeBulletinModal() { document.getElementById("bulletinModal").classList.remove("active"); }
 
-// KRİTİK REVİZE 2: ZENGİNLEŞTİRİLMİŞ HAFTALIK BÜLTEN & KARNE MANTIĞI
 function generateWeeklyBulletin() {
   const examPool = allQuestions.filter(q => q.exam === activeExam && (activeExam !== "MAARİF" || q.maarifGrade === activeMaarifGrade));
   const nowMs = Date.now();
@@ -1992,7 +1999,6 @@ function generateWeeklyBulletin() {
   const successRate = totalAdded > 0 ? Math.round((totalMastered / totalAdded) * 100) : 0;
   document.getElementById("bSuccessRatePct").innerText = `%${successRate}`;
 
-  // Ders Bazlı Yanlış Dağılımı (Fikir 1)
   const subMap = {};
   weeklyList.forEach(q => { subMap[q.subject] = (subMap[q.subject] || 0) + 1; });
   const subBreakdownBox = document.getElementById("bulletinSubjectBreakdown");
@@ -2010,7 +2016,6 @@ function generateWeeklyBulletin() {
     }
   }
 
-  // En Baskın Hata Teşhisi (Fikir 4)
   const reasonMap = {};
   weeklyList.forEach(q => { reasonMap[q.reason] = (reasonMap[q.reason] || 0) + 1; });
   let topReason = "Henüz yeterli veri yok";
