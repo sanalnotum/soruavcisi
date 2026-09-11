@@ -211,7 +211,15 @@
     .lightbox-stage { position: relative; width: 100vw; height: 100vh; height: 100dvh; display: flex; align-items: center; justify-content: center; }
     #lightboxImg { width: 96vw !important; height: 88vh !important; max-width: 96vw !important; max-height: 88vh !important; object-fit: contain !important; display: block; user-select: none; -webkit-user-drag: none; border-radius: 8px; }
     #lightboxCanvas { position: absolute; top: 0; left: 0; touch-action: none; cursor: crosshair; z-index: 310; }
-    .lightbox-bar { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); right: 16px; z-index: 350; display: flex; gap: 8px; }
+    .lightbox-bar { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); right: 16px; z-index: 350; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+
+    /* Tablet Çizim Stüdyosu Araç Çubuğu */
+    .studio-toolbar { display: none; align-items: center; gap: 6px; background: rgba(41, 37, 36, 0.95); padding: 6px 10px; border-radius: 12px; border: 1px solid var(--card-border); backdrop-filter: blur(10px); }
+    .studio-toolbar.active { display: flex; }
+    .tool-btn { background: #1c1917; border: 1px solid var(--card-border); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 900; cursor: pointer; }
+    .tool-btn.active { background: var(--accent-primary); border-color: var(--accent-primary); }
+    .color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; display: inline-block; }
+    .color-dot.active { border-color: #fff; transform: scale(1.1); }
 
     .badge-locked { filter: grayscale(100%); opacity: 0.35; transition: all 0.3s ease; }
     .badge-unlocked { filter: grayscale(0%); opacity: 1; transform: scale(1.02); border-color: rgba(249, 115, 22, 0.6) !important; background: rgba(249, 115, 22, 0.1) !important; }
@@ -223,13 +231,14 @@
     <div class="modal-card" style="max-width:420px; text-align:left;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
-        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.2.5</span>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.3.0</span>
       </div>
       <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; margin-bottom: 12px; font-weight: 700;">
-        Bu güncellemede hafıza ve performans optimizasyonu yapıldı:
+        Bu büyük sürümde hafıza ve stüdyo optimizasyonları yapıldı:
       </p>
       <ul style="color: #ffffff; font-size: 0.8rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6; font-weight: 700;">
-        <li><b>⚡ Akıllı Görsel Sıkıştırma:</b> Yüksek MB'lı fotoğraflar, kalite kaybı yaratmadan (max 1200px, %80 kalite) otomatik olarak optimize edilerek depolama ve senkronizasyon uçuruldu.</li>
+        <li><b>⚡ Aralıklı Tekrar (SRS) Motoru:</b> Vadesi gelen sorular ve zaman bazlı Pratik Masası filtreleri eklendi.</li>
+        <li><b>🎨 Gelişmiş Çizim Stüdyosu:</b> Fosforlu kalem, renk paleti, undo/redo ve çözümü soruya kalıcı kaydetme özelliği geldi.</li>
       </ul>
       <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
     </div>
@@ -353,7 +362,7 @@
   <div id="tab-practice" class="tab-view" onclick="event.stopPropagation()">
     <div id="practiceSetupView" class="setup-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary);">⚡ Antrenman Masası</h3>
+        <h3 style="font-size:1.1rem; font-weight:900; color:var(--accent-primary);">⚡ Antrenman Masası & SRS</h3>
         <span style="font-size:0.78rem; color:var(--text); font-weight:900;" id="practiceActiveExamTag">YKS</span>
       </div>
       <div class="input-group">
@@ -369,13 +378,16 @@
         </select>
       </div>
       <div class="input-group">
-        <label>Soru Niteliği / Filtre</label>
+        <label>Soru Niteliği / Zaman Kapsamı (SRS Filtreleri)</label>
         <select id="pSetupScope" onchange="updatePracticeCounterBadge()">
           <option value="all">Tüm Soru Havuzu</option>
+          <option value="srs_due">⏰ Tekrar Vadesi Gelenler (Akıllı SRS)</option>
+          <option value="today">🔥 Sıcağı Sıcağına (Bugün Eklenenler)</option>
+          <option value="last7">📅 Son 7 Günlük Tarama</option>
+          <option value="doubt">⏳ Şüpheliler Kulübü</option>
           <option value="trials">🎯 Sadece Deneme Hataları</option>
           <option value="traps">⚠️ Sadece Tuzak Sorular</option>
           <option value="stuck">🚨 Sadece Tıkalı / Hoca Masası Soruları</option>
-          <option value="doubt">⏳ Şüpheli / 48 Saatlik Tekrarlar</option>
         </select>
       </div>
       <div class="input-group">
@@ -419,11 +431,16 @@
         <div class="practice-timer" id="pTimer">⏱️ 00:00</div>
       </div>
       
+      <!-- Psikolojik Ön Bilgilendirme Bandı -->
+      <div id="coachPsychBand" style="display:none; background:linear-gradient(135deg, rgba(249,115,22,0.25), rgba(239,68,68,0.25)); border:1px solid rgba(249,115,22,0.5); border-radius:10px; padding:8px 12px; margin-bottom:8px; font-size:0.78rem; font-weight:900; color:#fdba74;">
+        ⚠️ <span id="coachPsychText">Bu soruda daha önce hata yapmıştın!</span>
+      </div>
+
       <div class="practice-box">
         <button id="pNotesHintBtn" class="btn-call-notes" onclick="openPracticeNotesModal()">🧠 Konu Notlarını Çağır</button>
         
         <div style="font-size:0.8rem; font-weight:900; color:var(--accent-primary); margin-bottom:6px; flex-shrink:0;" id="pMetaText">Ders - Konu</div>
-        <div class="practice-img-area" onclick="openLightbox(document.getElementById('pQuestionImg').src)">
+        <div class="practice-img-area" onclick="openLightbox(document.getElementById('pQuestionImg').src, currentPracticeItemForLightbox())">
           <img id="pQuestionImg" alt="Soru Görseli">
         </div>
         <button style="width:100%; padding:11px; border-radius:12px; border:1px solid var(--card-border); background:#292524; color:var(--text); font-weight:900; font-size:0.85rem; cursor:pointer; margin-top:10px;" onclick="toggleSolutionDrawer()">
@@ -441,7 +458,7 @@
       </div>
       <div class="sweet-choice-bar-triple">
         <button class="btn-choice btn-choice-stuck" onclick="handleThreeLevelChoice('stuck')"><span style="font-size:1.1rem;">🚨</span><span>Tıkalıyım</span><span style="font-size:0.65rem; opacity:0.9; font-weight:800;">Hoca Masasına</span></button>
-        <button class="btn-choice btn-choice-doubt" onclick="handleThreeLevelChoice('doubt')"><span style="font-size:1.1rem;">⏳</span><span>Şüpheliyim</span><span style="font-size:0.65rem; opacity:0.9; font-weight:800;">48s Sonra Tekrar</span></button>
+        <button class="btn-choice btn-choice-doubt" onclick="handleThreeLevelChoice('doubt')"><span style="font-size:1.1rem;">⏳</span><span>Şüpheliyim</span><span style="font-size:0.65rem; opacity:0.9; font-weight:800;">SRS Tekrarına</span></button>
         <button class="btn-choice btn-choice-master" onclick="handleThreeLevelChoice('mastered')"><span style="font-size:1.1rem;">👑</span><span>Tam Oturdu</span><span style="font-size:0.65rem; opacity:0.9; font-weight:800;">Avlandı</span></button>
       </div>
     </div>
@@ -758,7 +775,7 @@
     </div>
   </div>
 
-  <!-- YENİLENMİŞ ZENGİN HAFTALIK BÜLTEN MODALI -->
+  <!-- HAFTALIK BÜLTEN MODALI -->
   <div class="modal-overlay" id="bulletinModal" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:520px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -841,11 +858,27 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
+  <!-- TABLET UYUMLU DİJİTAL STÜDYOLU LIGHTBOX -->
+  <div class="modal-overlay" id="lightboxModal" onclick="closeLightboxWithSavePrompt()">
     <div class="lightbox-bar" onclick="event.stopPropagation()">
-      <button class="btn-icon-head" onclick="toggleCanvasMode()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.8rem; padding:8px 12px; font-weight:900;">✏️ Çiz / Karala</button>
-      <button class="btn-icon-head" onclick="clearCanvas()" id="canvasClearBtn" style="display:none; background:#ef4444; border:none; color:#fff; font-size:0.8rem; padding:8px 12px; font-weight:900;">🗑️ Sil</button>
-      <button class="btn-icon-head" onclick="closeLightbox()" style="font-size:0.8rem; padding:8px 12px; font-weight:900;">✕ Kapat</button>
+      <!-- Gelişmiş Çizim Araç Çubuğu -->
+      <div class="studio-toolbar" id="studioToolbar">
+        <button class="tool-btn active" id="toolPen" onclick="setDrawingTool('pen')">✏️ Kalem</button>
+        <button class="tool-btn" id="toolHighlighter" onclick="setDrawingTool('highlighter')">🖍️ Fosforlu</button>
+        <button class="tool-btn" onclick="undoCanvasStroke()">↩️ Geri Al</button>
+        <button class="tool-btn" onclick="redoCanvasStroke()">↪️ İleri Al</button>
+        <button class="tool-btn" onclick="clearCanvas()" style="background:#ef4444; border-color:#ef4444;">🗑️ Temizle</button>
+        <div style="display:flex; gap:4px; align-items:center; margin-left:4px;">
+          <span class="color-dot active" style="background:#f97316;" onclick="setDrawColor('#f97316', this)"></span>
+          <span class="color-dot" style="background:#34d399;" onclick="setDrawColor('#34d399', this)"></span>
+          <span class="color-dot" style="background:#3b82f6;" onclick="setDrawColor('#3b82f6', this)"></span>
+          <span class="color-dot" style="background:#ef4444;" onclick="setDrawColor('#ef4444', this)"></span>
+          <span class="color-dot" style="background:#eab308;" onclick="setDrawColor('#eab308', this)"></span>
+          <span class="color-dot" style="background:#ffffff;" onclick="setDrawColor('#ffffff', this)"></span>
+        </div>
+      </div>
+      <button class="btn-icon-head" onclick="toggleCanvasStudio()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.8rem; padding:8px 12px; font-weight:900;">✏️ Çiz / Karala</button>
+      <button class="btn-icon-head" onclick="closeLightboxWithSavePrompt()" style="font-size:0.8rem; padding:8px 12px; font-weight:900;">✕ Kapat</button>
     </div>
     <div class="lightbox-stage" onclick="event.stopPropagation()">
       <img id="lightboxImg" alt="Büyütülmüş Soru" onload="positionLightboxCanvas()">
@@ -880,7 +913,7 @@ let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
-const CURRENT_VERSION = "v1.2.5";
+const CURRENT_VERSION = "v1.3.0";
 const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
 
 function checkVersionChangelog() {
@@ -1388,12 +1421,15 @@ function updatePracticeCounterBadge() {
   document.getElementById("pFoundCount").innerText = `${count} Soru`;
 }
 
+// ARALIKLI TEKRAR (SRS) & ZAMAN FİLTRESİ MİMARİSİ
 function getFilteredPracticeQuestions() {
   const sub = document.getElementById("pSetupSubject").value;
   const topic = document.getElementById("pSetupTopic").value;
   const scope = document.getElementById("pSetupScope").value;
   const reason = document.getElementById("pSetupReason").value;
   const diff = document.getElementById("pSetupDifficulty").value;
+
+  const nowMs = Date.now();
 
   return allQuestions.filter(q => {
     if (q.exam !== activeExam) return false;
@@ -1402,17 +1438,35 @@ function getFilteredPracticeQuestions() {
     if (topic !== "all" && q.topic !== topic) return false;
     if (reason !== "all" && q.reason !== reason) return false;
     if (diff !== "all" && String(q.difficulty || 3) !== String(diff)) return false;
+
+    // Zaman Kapsamı & SRS Filtreleri
     if (scope === "trials" && !q.isTrial) return false;
     if (scope === "traps" && !q.isTrap) return false;
     if (scope === "stuck" && q.status !== "stuck") return false;
     if (scope === "doubt" && q.status !== "doubt") return false;
+    if (scope === "today") {
+      const qDate = new Date(q.createdAt).toDateString();
+      const todayDate = new Date().toDateString();
+      if (qDate !== todayDate) return false;
+    }
+    if (scope === "last7") {
+      const qTime = new Date(q.createdAt).getTime();
+      if (nowMs - qTime > 7 * 24 * 60 * 60 * 1000) return false;
+    }
+    if (scope === "srs_due") {
+      // Aralıklı tekrar vadesi gelenler (Örn: son gözden geçirmeden veya eklenmeden 1, 3, 7 gün geçenler)
+      const baseTime = q.lastReviewedAt ? new Date(q.lastReviewedAt).getTime() : new Date(q.createdAt).getTime();
+      const daysPassed = (nowMs - baseTime) / (1000 * 60 * 60 * 24);
+      const reviewInterval = q.srsInterval || 1; // varsayılan 1. gün tekrarı
+      if (daysPassed < reviewInterval || q.status === 'mastered') return false;
+    }
     return true;
   });
 }
 
 function launchTargetedPractice() {
   let targetQuestions = getFilteredPracticeQuestions();
-  if (targetQuestions.length === 0) return alert("Seçtiğin kriterlere uygun soru bulunamadı!");
+  if (targetQuestions.length === 0) return alert("Seçtiğin kriterlere veya SRS tekrar vadesine uygun soru bulunamadı!");
   const limitVal = document.getElementById("pSetupLimit").value;
   targetQuestions = targetQuestions.sort(() => 0.5 - Math.random());
   if (limitVal !== "all") { targetQuestions = targetQuestions.slice(0, parseInt(limitVal, 10)); }
@@ -1459,6 +1513,7 @@ async function handleQuestionSubmit(e) {
     notes: document.getElementById("formNotes").value.trim(),
     audioData: audioBlobsBase64['q'] || null,
     status: 'doubt',
+    srsInterval: 1, // 1. gün tekrar aralığı
     createdAt: new Date().toISOString(),
     reactions: { heart: false, star: false, excl: false }
   };
@@ -1702,7 +1757,7 @@ function renderFeed() {
           <span class="tag-reason">${q.reason}</span>
         </div>
       </div>
-      <div class="card-image-wrap" onclick="openLightbox('${q.questionImg}')"><img src="${q.questionImg}" alt="Soru"></div>
+      <div class="card-image-wrap" onclick="openLightbox('${q.studentSolutionDrawing || q.questionImg}', '${q.id}')"><img src="${q.studentSolutionDrawing || q.questionImg}" alt="Soru"></div>
       <div class="card-body">
         <div class="topic-title">${q.topic}</div>
         ${statusBadge}
@@ -1711,7 +1766,7 @@ function renderFeed() {
       </div>
       ${q.solutionImg ? `<button class="solution-accordion-btn" onclick="toggleAccordion(this)"><span>💡 Çözümü Göster</span><span>▼</span></button><div class="solution-accordion-content"><img src="${q.solutionImg}" style="max-width:100%; border-radius:6px;" onclick="openLightbox('${q.solutionImg}')"></div>` : ''}
       <div class="card-actions">
-        <button class="btn-action" style="background:var(--accent-gradient); border:none; color:#fff;" onclick="openLightbox('${q.questionImg}')">✏️ Büyüt & Karala</button>
+        <button class="btn-action" style="background:var(--accent-gradient); border:none; color:#fff;" onclick="openLightbox('${q.studentSolutionDrawing || q.questionImg}', '${q.id}')">✏️ Büyüt & Karala</button>
         <button class="btn-action" style="color:#fca5a5;" onclick="deleteQuestion('${q.id}')">🗑️ Sil</button>
       </div>
     `;
@@ -1776,9 +1831,16 @@ function startTimer() {
   }, 1000);
 }
 
+function currentPracticeItemForLightbox() {
+  if (practiceList.length === 0 || currentPracticeIdx >= practiceList.length) return null;
+  return practiceList[currentPracticeIdx].id;
+}
+
 function loadCurrentPracticeCard() {
   document.getElementById("solutionDrawer").classList.remove("open");
   document.getElementById("pNotesHintBtn").style.display = "none";
+  document.getElementById("coachPsychBand").style.display = "none";
+
   if (practiceList.length === 0 || currentPracticeIdx >= practiceList.length) {
     clearInterval(practiceTimerInterval);
     alert("Tebrikler! Antrenman seansı tamamlandı. 🎉");
@@ -1790,10 +1852,16 @@ function loadCurrentPracticeCard() {
   const starRating = '⭐'.repeat(q.difficulty || 3);
   document.getElementById("pCardCount").innerText = `Soru ${currentPracticeIdx + 1} / ${practiceList.length}`;
   document.getElementById("pMetaText").innerText = `${q.subject} - ${q.topic} (${starRating})`;
-  document.getElementById("pQuestionImg").src = q.questionImg;
+  document.getElementById("pQuestionImg").src = q.studentSolutionDrawing || q.questionImg;
   document.getElementById("pSolutionImg").src = q.solutionImg || q.questionImg;
   document.getElementById("pReasonText").innerText = `Teşhis: ${q.reason}`;
   document.getElementById("pNotesText").innerText = q.notes ? `Not: ${q.notes}` : "";
+
+  // Psikolojik Ön Bilgilendirme Bandı Tetikleyicisi
+  if (q.reason) {
+    document.getElementById("coachPsychText").innerText = `Bu soruda daha önce [${q.reason}] hatası yapmıştın! Dikkatli ol.`;
+    document.getElementById("coachPsychBand").style.display = "block";
+  }
 
   const audioBox = document.getElementById("pAudioContainer");
   if (q.audioData) {
@@ -1814,10 +1882,18 @@ async function handleThreeLevelChoice(level) {
   const currentQ = practiceList[currentPracticeIdx];
   currentQ.status = level;
   currentQ.lastReviewedAt = new Date().toISOString();
+
+  // Aralıklı tekrar (SRS) döngü güncellemesi
   if (level === "mastered") {
+    currentQ.srsInterval = (currentQ.srsInterval || 1) * 3; // Başarılıysa periyodu katla (1 -> 3 -> 9 gün)
     let mCount = parseInt(localStorage.getItem("avci_mastered") || "0", 10) + 1;
     localStorage.setItem("avci_mastered", mCount);
+  } else if (level === "doubt") {
+    currentQ.srsInterval = 1; // Şüphelendiyse 1 gün sonra tekrar merkeze al
+  } else if (level === "stuck") {
+    currentQ.srsInterval = 1;
   }
+
   await dbPut("questions", currentQ);
   currentPracticeIdx++;
   loadCurrentPracticeCard();
@@ -1960,7 +2036,7 @@ function renderTeacherDeskCard() {
   const q = teacherDeskQuestions[tdCurrentIdx];
   document.getElementById("tdMeta").innerText = `${q.subject} - ${q.topic}`;
   document.getElementById("tdCounter").innerText = `${tdCurrentIdx + 1} / ${teacherDeskQuestions.length}`;
-  document.getElementById("tdImg").src = q.questionImg;
+  document.getElementById("tdImg").src = q.studentSolutionDrawing || q.questionImg;
   document.getElementById("tdReason").innerText = `Hata: ${q.reason}`;
   document.getElementById("tdNotes").innerText = q.notes ? `Öğrenci Notu: ${q.notes}` : "";
   const tdAudioArea = document.getElementById("tdAudioArea");
@@ -2087,7 +2163,7 @@ function executeFilteredPrint() {
 
   items.forEach((q, idx) => {
     htmlContent += `<div class="question-block"><div class="q-meta"><span>Soru #${idx+1} • ${q.subject}</span><span>Teşhis: ${q.reason}</span></div><div style="font-size:0.85rem;font-weight:bold;margin:4px 0;">Konu: ${q.topic}</div>`;
-    if (mode !== "solutions") htmlContent += `<div class="img-wrap"><img src="${q.questionImg}"></div>`;
+    if (mode !== "solutions") htmlContent += `<div class="img-wrap"><img src="${q.studentSolutionDrawing || q.questionImg}"></div>`;
     if (q.notes) htmlContent += `<div style="font-size:0.78rem;font-style:italic;"><b>Not:</b> ${q.notes}</div>`;
     if (mode !== "questions" && q.solutionImg) htmlContent += `<div class="solution-box"><b style="color:#065f46;">Çözüm:</b><div class="img-wrap"><img src="${q.solutionImg}"></div></div>`;
     htmlContent += `</div>`;
@@ -2129,7 +2205,7 @@ function openStoryViewer(subject) {
   if (filtered.length === 0) return alert(`${subject} dersine ait soru yok!`);
   storySlides = [];
   filtered.forEach(q => {
-    storySlides.push({ img: q.questionImg, type: "SORU", topic: q.topic, reason: q.reason, notes: q.notes, audio: q.audioData });
+    storySlides.push({ img: q.studentSolutionDrawing || q.questionImg, type: "SORU", topic: q.topic, reason: q.reason, notes: q.notes, audio: q.audioData });
     if (q.solutionImg) storySlides.push({ img: q.solutionImg, type: "💡 ÇÖZÜM", topic: q.topic, reason: q.reason, notes: q.notes, audio: q.audioData });
   });
   currentStoryIdx = 0;
@@ -2183,7 +2259,6 @@ let cropCanvas, cropCtx; let cropImageObj = new Image(); let rotationAngle = 0; 
 
 function readFileAsBase64(file) { return new Promise((resolve) => { const r = new FileReader(); r.onload = e => resolve(e.target.result); r.readAsDataURL(file); }); }
 
-// AKILLI GÖRSEL SIKIŞTIRMA VE ÖLÇEKLENDİRME FONKSİYONU
 function compressImageIfNeeded(base64Str, maxDimension = 1200, quality = 0.8) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -2206,7 +2281,7 @@ function compressImageIfNeeded(base64Str, maxDimension = 1200, quality = 0.8) {
       ctx.drawImage(img, 0, 0, width, height);
       resolve(canvas.toDataURL("image/jpeg", quality));
     };
-    img.onerror = () => resolve(base64Str); // Hata olursa orijinalini döndür
+    img.onerror = () => resolve(base64Str);
     img.src = base64Str;
   });
 }
@@ -2284,7 +2359,6 @@ async function applyCropAndClose() {
   fCtx.restore();
   
   const rawCroppedB64 = fc.toDataURL("image/jpeg", 0.95);
-  // Kırpılan görseli de akıllı sıkıştırma süzgecinden geçir
   const b64 = await compressImageIfNeeded(rawCroppedB64, 1200, 0.8);
   
   processedImages[curCropTarget] = b64;
@@ -2335,46 +2409,192 @@ function toggleAudio(target) {
   }
 }
 
-let isCanvasActive = false; let canvasCtx = null; let drawing = false;
+// ----------------------------------------------------
+// TABLET UYUMLU GELİŞMİŞ ÇİZİM STÜDYOSU (UNDO/REDO, FOSFORLU, KALEM, KAYDET)
+// ----------------------------------------------------
+let isCanvasActive = false; 
+let canvasCtx = null; 
+let drawing = false;
+let currentActiveQuestionId = null;
+let strokeHistory = [];
+let redoStack = [];
+let currentTool = 'pen'; // 'pen' veya 'highlighter'
+let currentColor = '#f97316';
 
-function openLightbox(src) {
+function openLightbox(src, questionId = null) {
   if (!src) return;
+  currentActiveQuestionId = questionId;
+  strokeHistory = [];
+  redoStack = [];
   document.getElementById("lightboxImg").src = src;
   document.getElementById("lightboxModal").classList.add("active");
-  isCanvasActive = false; document.getElementById("lightboxCanvas").style.display = "none";
-  document.getElementById("canvasToggleBtn").innerText = "✏️ Çiz / Karala"; document.getElementById("canvasClearBtn").style.display = "none";
+  isCanvasActive = false; 
+  document.getElementById("lightboxCanvas").style.display = "none";
+  document.getElementById("studioToolbar").classList.remove("active");
+  document.getElementById("canvasToggleBtn").innerText = "✏️ Çiz / Karala"; 
 }
 
 function positionLightboxCanvas() {
-  const img = document.getElementById("lightboxImg"); const canvas = document.getElementById("lightboxCanvas");
+  const img = document.getElementById("lightboxImg"); 
+  const canvas = document.getElementById("lightboxCanvas");
   if (!img || !canvas) return;
   const rect = img.getBoundingClientRect();
-  canvas.style.left = rect.left + "px"; canvas.style.top = rect.top + "px";
-  canvas.width = rect.width; canvas.height = rect.height;
-  canvasCtx = canvas.getContext("2d"); canvasCtx.strokeStyle = "#f97316"; canvasCtx.lineWidth = 4; canvasCtx.lineCap = "round"; canvasCtx.lineJoin = "round";
+  canvas.style.left = rect.left + "px"; 
+  canvas.style.top = rect.top + "px";
+  canvas.width = rect.width; 
+  canvas.height = rect.height;
+  canvasCtx = canvas.getContext("2d"); 
+  applyToolSettings();
+}
+
+function applyToolSettings() {
+  if (!canvasCtx) return;
+  if (currentTool === 'highlighter') {
+    canvasCtx.strokeStyle = currentColor;
+    canvasCtx.lineWidth = 18;
+    canvasCtx.globalAlpha = 0.35; // Fosforlu şeffaflığı
+    canvasCtx.lineCap = "butt";
+    canvasCtx.lineJoin = "miter";
+  } else {
+    canvasCtx.strokeStyle = currentColor;
+    canvasCtx.lineWidth = 4;
+    canvasCtx.globalAlpha = 1.0; // Normal kalem netliği
+    canvasCtx.lineCap = "round";
+    canvasCtx.lineJoin = "round";
+  }
+}
+
+function setDrawingTool(tool) {
+  currentTool = tool;
+  document.getElementById("toolPen").classList.toggle("active", tool === 'pen');
+  document.getElementById("toolHighlighter").classList.toggle("active", tool === 'highlighter');
+  applyToolSettings();
+}
+
+function setDrawColor(hex, el) {
+  currentColor = hex;
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  applyToolSettings();
+}
+
+function toggleCanvasStudio() {
+  isCanvasActive = !isCanvasActive;
+  const canvas = document.getElementById("lightboxCanvas"); 
+  const btn = document.getElementById("canvasToggleBtn"); 
+  const toolbar = document.getElementById("studioToolbar");
+  
+  if (isCanvasActive) {
+    positionLightboxCanvas(); 
+    canvas.style.display = "block"; 
+    toolbar.classList.add("active");
+    btn.innerText = "👁️ Karalamayı Koru";
+    
+    canvas.onmousedown = startDraw; 
+    canvas.onmousemove = draw; 
+    canvas.onmouseup = stopDraw;
+    canvas.ontouchstart = (e) => { startDraw(e.touches[0]); e.preventDefault(); };
+    canvas.ontouchmove = (e) => { draw(e.touches[0]); e.preventDefault(); };
+    canvas.ontouchend = stopDraw;
+  } else { 
+    canvas.style.display = "none"; 
+    toolbar.classList.remove("active");
+    btn.innerText = "✏️ Çiz / Karala"; 
+  }
+}
+
+let lastDrawX = 0, lastDrawY = 0;
+function startDraw(e) { 
+  drawing = true; 
+  const r = document.getElementById("lightboxCanvas").getBoundingClientRect(); 
+  lastDrawX = e.clientX - r.left;
+  lastDrawY = e.clientY - r.top;
+  canvasCtx.beginPath(); 
+  canvasCtx.moveTo(lastDrawX, lastDrawY); 
+}
+
+function draw(e) { 
+  if (!drawing) return; 
+  const r = document.getElementById("lightboxCanvas").getBoundingClientRect(); 
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  canvasCtx.lineTo(x, y); 
+  canvasCtx.stroke(); 
+}
+
+function stopDraw() { 
+  if (!drawing) return;
+  drawing = false; 
+  if (canvasCtx) {
+    strokeHistory.push(canvasCtx.getImageData(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height));
+    redoStack = []; // yeni çizimde redo sıfırlanır
+  }
+}
+
+function undoCanvasStroke() {
+  if (strokeHistory.length <= 1) {
+    clearCanvas();
+    strokeHistory = [];
+    return;
+  }
+  redoStack.push(strokeHistory.pop());
+  const prevState = strokeHistory[strokeHistory.length - 1];
+  canvasCtx.putImageData(prevState, 0, 0);
+}
+
+function redoCanvasStroke() {
+  if (redoStack.length === 0) return;
+  const nextState = redoStack.pop();
+  strokeHistory.push(nextState);
+  canvasCtx.putImageData(nextState, 0, 0);
+}
+
+function clearCanvas() { 
+  if (canvasCtx) {
+    canvasCtx.clearRect(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height);
+    strokeHistory = [];
+    redoStack = [];
+  } 
+}
+
+// İsteğe Bağlı Kalıcı Çözüm Kaydı
+async function closeLightboxWithSavePrompt() {
+  if (isCanvasActive && strokeHistory.length > 0 && currentActiveQuestionId) {
+    const saveConfirmed = confirm("Bu soru üzerinde yaptığınız çizimler/çözümler kalıcı olarak kaydedilsin mi?");
+    if (saveConfirmed) {
+      const qObj = allQuestions.find(x => x.id === currentActiveQuestionId);
+      if (qObj) {
+        // Lightbox canvas ve orijinal görseli birleştirip yeni görsel üret
+        const baseImg = document.getElementById("lightboxImg");
+        const canvas = document.getElementById("lightboxCanvas");
+        const mergedCanvas = document.createElement("canvas");
+        mergedCanvas.width = baseImg.naturalWidth || baseImg.width;
+        mergedCanvas.height = baseImg.naturalHeight || baseImg.height;
+        const mCtx = mergedCanvas.getContext("2d");
+        
+        const tempImg = new Image();
+        tempImg.src = baseImg.src;
+        await new Promise(r => tempImg.onload = r);
+        mCtx.drawImage(tempImg, 0, 0, mergedCanvas.width, mergedCanvas.height);
+        mCtx.drawImage(canvas, 0, 0, mergedCanvas.width, mergedCanvas.height);
+        
+        qObj.studentSolutionDrawing = mergedCanvas.toDataURL("image/jpeg", 0.9);
+        await dbPut("questions", qObj);
+        await refreshAll();
+        alert("Çiziminiz soruya özel kalıcı çözüm olarak kaydedildi! 👑");
+      }
+    }
+  }
+  closeLightbox();
 }
 
 function closeLightbox() {
   document.getElementById("lightboxModal").classList.remove("active");
-  isCanvasActive = false; if (canvasCtx) canvasCtx.clearRect(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height);
+  isCanvasActive = false; 
+  document.getElementById("studioToolbar").classList.remove("active");
+  if (canvasCtx) canvasCtx.clearRect(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height);
 }
 
-function toggleCanvasMode() {
-  isCanvasActive = !isCanvasActive;
-  const canvas = document.getElementById("lightboxCanvas"); const btn = document.getElementById("canvasToggleBtn"); const clearBtn = document.getElementById("canvasClearBtn");
-  if (isCanvasActive) {
-    positionLightboxCanvas(); canvas.style.display = "block"; btn.innerText = "👁️ Karalamayı Koru"; clearBtn.style.display = "inline-block";
-    canvas.onmousedown = startDraw; canvas.onmousemove = draw; canvas.onmouseup = stopDraw;
-    canvas.ontouchstart = (e) => { startDraw(e.touches[0]); e.preventDefault(); };
-    canvas.ontouchmove = (e) => { draw(e.touches[0]); e.preventDefault(); };
-    canvas.ontouchend = stopDraw;
-  } else { canvas.style.display = "none"; btn.innerText = "✏️ Çiz / Karala"; clearBtn.style.display = "none"; }
-}
-
-function startDraw(e) { drawing = true; const r = document.getElementById("lightboxCanvas").getBoundingClientRect(); canvasCtx.beginPath(); canvasCtx.moveTo(e.clientX - r.left, e.clientY - r.top); }
-function draw(e) { if (!drawing) return; const r = document.getElementById("lightboxCanvas").getBoundingClientRect(); canvasCtx.lineTo(e.clientX - r.left, e.clientY - r.top); canvasCtx.stroke(); }
-function stopDraw() { drawing = false; }
-function clearCanvas() { if (canvasCtx) canvasCtx.clearRect(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height); }
 window.addEventListener("resize", () => { if (document.getElementById("lightboxModal").classList.contains("active") && isCanvasActive) positionLightboxCanvas(); });
 
 function handleBodyBackgroundClick(e) {
