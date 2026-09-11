@@ -211,15 +211,24 @@
     .lightbox-stage { position: relative; width: 100vw; height: 100vh; height: 100dvh; display: flex; align-items: center; justify-content: center; }
     #lightboxImg { width: 96vw !important; height: 88vh !important; max-width: 96vw !important; max-height: 88vh !important; object-fit: contain !important; display: block; user-select: none; -webkit-user-drag: none; border-radius: 8px; }
     #lightboxCanvas { position: absolute; top: 0; left: 0; touch-action: none; cursor: crosshair; z-index: 310; }
-    .lightbox-bar { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); right: 16px; z-index: 350; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+    
+    /* Ikonlar Sağda, Kaydırılabilir Stüdyo Barı Solda */
+    .lightbox-bar { 
+      position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 10px; right: 10px; z-index: 350; 
+      display: flex; gap: 6px; justify-content: space-between; align-items: center; pointer-events: none;
+    }
+    .lightbox-bar > * { pointer-events: auto; }
 
-    /* Tablet Çizim Stüdyosu Araç Çubuğu */
-    .studio-toolbar { display: none; align-items: center; gap: 6px; background: rgba(41, 37, 36, 0.95); padding: 6px 10px; border-radius: 12px; border: 1px solid var(--card-border); backdrop-filter: blur(10px); }
+    .studio-toolbar { 
+      display: none; align-items: center; gap: 5px; background: rgba(41, 37, 36, 0.98); padding: 6px 10px; border-radius: 12px; border: 1px solid var(--card-border); backdrop-filter: blur(10px); 
+      overflow-x: auto; max-width: calc(100vw - 160px); scrollbar-width: none; flex-wrap: nowrap; -webkit-overflow-scrolling: touch;
+    }
+    .studio-toolbar::-webkit-scrollbar { display: none; }
     .studio-toolbar.active { display: flex; }
-    .tool-btn { background: #1c1917; border: 1px solid var(--card-border); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 900; cursor: pointer; }
+    .tool-btn { background: #1c1917; border: 1px solid var(--card-border); color: #fff; padding: 6px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: 900; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
     .tool-btn.active { background: var(--accent-primary); border-color: var(--accent-primary); }
-    .color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; display: inline-block; }
-    .color-dot.active { border-color: #fff; transform: scale(1.1); }
+    .color-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; display: inline-block; flex-shrink: 0; }
+    .color-dot.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 8px rgba(255,255,255,0.7); }
 
     .badge-locked { filter: grayscale(100%); opacity: 0.35; transition: all 0.3s ease; }
     .badge-unlocked { filter: grayscale(0%); opacity: 1; transform: scale(1.02); border-color: rgba(249, 115, 22, 0.6) !important; background: rgba(249, 115, 22, 0.1) !important; }
@@ -231,14 +240,15 @@
     <div class="modal-card" style="max-width:420px; text-align:left;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
-        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;" id="modalVersionBadge">v1.3.0</span>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;">v1.3.3</span>
       </div>
       <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; margin-bottom: 12px; font-weight: 700;">
-        Bu büyük sürümde hafıza ve stüdyo optimizasyonları yapıldı:
+        Çizim stüdyosu kusursuz mobil ergonomiye kavuştu:
       </p>
       <ul style="color: #ffffff; font-size: 0.8rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6; font-weight: 700;">
-        <li><b>⚡ Aralıklı Tekrar (SRS) Motoru:</b> Vadesi gelen sorular ve zaman bazlı Pratik Masası filtreleri eklendi.</li>
-        <li><b>🎨 Gelişmiş Çizim Stüdyosu:</b> Fosforlu kalem, renk paleti, undo/redo ve çözümü soruya kalıcı kaydetme özelliği geldi.</li>
+        <li><b>🧹 Silgi Sorunu Giderildi:</b> Silgi aracı artık pikselleri tertemiz siliyor.</li>
+        <li><b>🎨 Dinamik Renk & Fosforlu:</b> Kalemde Kırmızı, Mavi, Siyah, Beyaz; fosforluda Sarı ve Turkuaz (ultra şeffaf).</li>
+        <li><b>📍 Sağ Panel Yerleşimi:</b> Çiz/İzle ve Kaydet tuşları yeniden sağ köşeye alındı.</li>
       </ul>
       <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
     </div>
@@ -858,27 +868,26 @@
     </div>
   </div>
 
-  <!-- TABLET UYUMLU DİJİTAL STÜDYOLU LIGHTBOX -->
-  <div class="modal-overlay" id="lightboxModal" onclick="closeLightboxWithSavePrompt()">
+  <!-- MOBİL UYUMLU, SAĞDA BUTONLAR VE SOLDA KAYDIRILABİLİR STÜDYO BAR -->
+  <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
     <div class="lightbox-bar" onclick="event.stopPropagation()">
-      <!-- Gelişmiş Çizim Araç Çubuğu -->
+      <!-- Sol Taraf: Kaydırılabilir Kompakt Stüdyo Araçları ve Renkler -->
       <div class="studio-toolbar" id="studioToolbar">
-        <button class="tool-btn active" id="toolPen" onclick="setDrawingTool('pen')">✏️ Kalem</button>
-        <button class="tool-btn" id="toolHighlighter" onclick="setDrawingTool('highlighter')">🖍️ Fosforlu</button>
-        <button class="tool-btn" onclick="undoCanvasStroke()">↩️ Geri Al</button>
-        <button class="tool-btn" onclick="redoCanvasStroke()">↪️ İleri Al</button>
-        <button class="tool-btn" onclick="clearCanvas()" style="background:#ef4444; border-color:#ef4444;">🗑️ Temizle</button>
-        <div style="display:flex; gap:4px; align-items:center; margin-left:4px;">
-          <span class="color-dot active" style="background:#f97316;" onclick="setDrawColor('#f97316', this)"></span>
-          <span class="color-dot" style="background:#34d399;" onclick="setDrawColor('#34d399', this)"></span>
-          <span class="color-dot" style="background:#3b82f6;" onclick="setDrawColor('#3b82f6', this)"></span>
-          <span class="color-dot" style="background:#ef4444;" onclick="setDrawColor('#ef4444', this)"></span>
-          <span class="color-dot" style="background:#eab308;" onclick="setDrawColor('#eab308', this)"></span>
-          <span class="color-dot" style="background:#ffffff;" onclick="setDrawColor('#ffffff', this)"></span>
-        </div>
+        <button class="tool-btn active" id="toolPen" onclick="setDrawingTool('pen')">✏️</button>
+        <button class="tool-btn" id="toolHighlighter" onclick="setDrawingTool('highlighter')">🖍️</button>
+        <button class="tool-btn" id="toolEraser" onclick="setDrawingTool('eraser')">🧹</button>
+        <button class="tool-btn" onclick="undoCanvasStroke()" title="Geri Al">↩️</button>
+        <button class="tool-btn" onclick="redoCanvasStroke()" title="İleri Al">↪️</button>
+        <button class="tool-btn" onclick="clearCanvas()" style="background:#ef4444; border-color:#ef4444;" title="Sıfırla">🗑️</button>
+        <!-- Dinamik Renk Paleti -->
+        <div style="display:flex; gap:4px; align-items:center; margin-left:2px;" id="colorPaletteContainer"></div>
       </div>
-      <button class="btn-icon-head" onclick="toggleCanvasStudio()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.8rem; padding:8px 12px; font-weight:900;">✏️ Çiz / Karala</button>
-      <button class="btn-icon-head" onclick="closeLightboxWithSavePrompt()" style="font-size:0.8rem; padding:8px 12px; font-weight:900;">✕ Kapat</button>
+      <!-- Sağ Taraf: Çiz / İzle, Kaydet ve Kapat Tuşları -->
+      <div style="display:flex; gap:5px; align-items:center; flex-shrink:0;">
+        <button class="btn-icon-head" onclick="toggleCanvasStudio()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.72rem; padding:8px 8px; font-weight:900;">✏️ Çiz</button>
+        <button class="btn-icon-head" onclick="saveCanvasSolutionAndClose()" id="saveStudioBtn" style="display:none; background:#10b981; border:none; color:#fff; font-size:0.72rem; padding:8px 8px; font-weight:900;">💾 Kaydet</button>
+        <button class="btn-icon-head" onclick="closeLightbox()" style="font-size:0.72rem; padding:8px 8px; font-weight:900;">✕</button>
+      </div>
     </div>
     <div class="lightbox-stage" onclick="event.stopPropagation()">
       <img id="lightboxImg" alt="Büyütülmüş Soru" onload="positionLightboxCanvas()">
@@ -913,7 +922,7 @@ let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
-const CURRENT_VERSION = "v1.3.0";
+const CURRENT_VERSION = "v1.3.3";
 const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
 
 function checkVersionChangelog() {
@@ -1421,7 +1430,6 @@ function updatePracticeCounterBadge() {
   document.getElementById("pFoundCount").innerText = `${count} Soru`;
 }
 
-// ARALIKLI TEKRAR (SRS) & ZAMAN FİLTRESİ MİMARİSİ
 function getFilteredPracticeQuestions() {
   const sub = document.getElementById("pSetupSubject").value;
   const topic = document.getElementById("pSetupTopic").value;
@@ -1439,7 +1447,6 @@ function getFilteredPracticeQuestions() {
     if (reason !== "all" && q.reason !== reason) return false;
     if (diff !== "all" && String(q.difficulty || 3) !== String(diff)) return false;
 
-    // Zaman Kapsamı & SRS Filtreleri
     if (scope === "trials" && !q.isTrial) return false;
     if (scope === "traps" && !q.isTrap) return false;
     if (scope === "stuck" && q.status !== "stuck") return false;
@@ -1454,10 +1461,9 @@ function getFilteredPracticeQuestions() {
       if (nowMs - qTime > 7 * 24 * 60 * 60 * 1000) return false;
     }
     if (scope === "srs_due") {
-      // Aralıklı tekrar vadesi gelenler (Örn: son gözden geçirmeden veya eklenmeden 1, 3, 7 gün geçenler)
       const baseTime = q.lastReviewedAt ? new Date(q.lastReviewedAt).getTime() : new Date(q.createdAt).getTime();
       const daysPassed = (nowMs - baseTime) / (1000 * 60 * 60 * 24);
-      const reviewInterval = q.srsInterval || 1; // varsayılan 1. gün tekrarı
+      const reviewInterval = q.srsInterval || 1;
       if (daysPassed < reviewInterval || q.status === 'mastered') return false;
     }
     return true;
@@ -1513,7 +1519,7 @@ async function handleQuestionSubmit(e) {
     notes: document.getElementById("formNotes").value.trim(),
     audioData: audioBlobsBase64['q'] || null,
     status: 'doubt',
-    srsInterval: 1, // 1. gün tekrar aralığı
+    srsInterval: 1,
     createdAt: new Date().toISOString(),
     reactions: { heart: false, star: false, excl: false }
   };
@@ -1857,7 +1863,6 @@ function loadCurrentPracticeCard() {
   document.getElementById("pReasonText").innerText = `Teşhis: ${q.reason}`;
   document.getElementById("pNotesText").innerText = q.notes ? `Not: ${q.notes}` : "";
 
-  // Psikolojik Ön Bilgilendirme Bandı Tetikleyicisi
   if (q.reason) {
     document.getElementById("coachPsychText").innerText = `Bu soruda daha önce [${q.reason}] hatası yapmıştın! Dikkatli ol.`;
     document.getElementById("coachPsychBand").style.display = "block";
@@ -1883,13 +1888,12 @@ async function handleThreeLevelChoice(level) {
   currentQ.status = level;
   currentQ.lastReviewedAt = new Date().toISOString();
 
-  // Aralıklı tekrar (SRS) döngü güncellemesi
   if (level === "mastered") {
-    currentQ.srsInterval = (currentQ.srsInterval || 1) * 3; // Başarılıysa periyodu katla (1 -> 3 -> 9 gün)
+    currentQ.srsInterval = (currentQ.srsInterval || 1) * 3;
     let mCount = parseInt(localStorage.getItem("avci_mastered") || "0", 10) + 1;
     localStorage.setItem("avci_mastered", mCount);
   } else if (level === "doubt") {
-    currentQ.srsInterval = 1; // Şüphelendiyse 1 gün sonra tekrar merkeze al
+    currentQ.srsInterval = 1;
   } else if (level === "stuck") {
     currentQ.srsInterval = 1;
   }
@@ -2410,7 +2414,7 @@ function toggleAudio(target) {
 }
 
 // ----------------------------------------------------
-// TABLET UYUMLU GELİŞMİŞ ÇİZİM STÜDYOSU (UNDO/REDO, FOSFORLU, KALEM, KAYDET)
+// MOBİL UYUMLU DİNAMİK RENK PALETLİ ÇİZİM STÜDYOSU (V1.3.3)
 // ----------------------------------------------------
 let isCanvasActive = false; 
 let canvasCtx = null; 
@@ -2418,8 +2422,22 @@ let drawing = false;
 let currentActiveQuestionId = null;
 let strokeHistory = [];
 let redoStack = [];
-let currentTool = 'pen'; // 'pen' veya 'highlighter'
-let currentColor = '#f97316';
+let currentTool = 'pen'; // 'pen', 'highlighter', 'eraser'
+let currentColor = '#ef4444'; // Varsayılan: Kırmızı
+
+const PALETTES = {
+  pen: [
+    { hex: '#ef4444', label: 'Kırmızı' },
+    { hex: '#3b82f6', label: 'Mavi' },
+    { hex: '#1c1917', label: 'Siyah' },
+    { hex: '#ffffff', label: 'Beyaz' }
+  ],
+  highlighter: [
+    { hex: '#eab308', label: 'Sarı' },
+    { hex: '#06b6d4', label: 'Turkuaz' }
+  ],
+  eraser: []
+};
 
 function openLightbox(src, questionId = null) {
   if (!src) return;
@@ -2431,7 +2449,8 @@ function openLightbox(src, questionId = null) {
   isCanvasActive = false; 
   document.getElementById("lightboxCanvas").style.display = "none";
   document.getElementById("studioToolbar").classList.remove("active");
-  document.getElementById("canvasToggleBtn").innerText = "✏️ Çiz / Karala"; 
+  document.getElementById("saveStudioBtn").style.display = "none";
+  document.getElementById("canvasToggleBtn").innerText = "✏️ Çiz"; 
 }
 
 function positionLightboxCanvas() {
@@ -2449,33 +2468,77 @@ function positionLightboxCanvas() {
 
 function applyToolSettings() {
   if (!canvasCtx) return;
-  if (currentTool === 'highlighter') {
-    canvasCtx.strokeStyle = currentColor;
-    canvasCtx.lineWidth = 18;
-    canvasCtx.globalAlpha = 0.35; // Fosforlu şeffaflığı
-    canvasCtx.lineCap = "butt";
-    canvasCtx.lineJoin = "miter";
-  } else {
-    canvasCtx.strokeStyle = currentColor;
-    canvasCtx.lineWidth = 4;
-    canvasCtx.globalAlpha = 1.0; // Normal kalem netliği
+  if (currentTool === 'eraser') {
+    canvasCtx.globalCompositeOperation = "destination-out";
+    canvasCtx.strokeStyle = "rgba(0,0,0,1)";
+    canvasCtx.fillStyle = "rgba(0,0,0,1)";
+    canvasCtx.lineWidth = 32;
+    canvasCtx.globalAlpha = 1.0;
     canvasCtx.lineCap = "round";
     canvasCtx.lineJoin = "round";
+  } else {
+    canvasCtx.globalCompositeOperation = "source-over";
+    if (currentTool === 'highlighter') {
+      canvasCtx.strokeStyle = currentColor;
+      canvasCtx.fillStyle = currentColor;
+      canvasCtx.lineWidth = 30;
+      canvasCtx.globalAlpha = 0.15; // Arkadaki yazıyı pırıl pırıl bırakan ultra şeffaf doku
+      canvasCtx.lineCap = "butt";
+      canvasCtx.lineJoin = "miter";
+    } else {
+      canvasCtx.strokeStyle = currentColor;
+      canvasCtx.fillStyle = currentColor;
+      canvasCtx.lineWidth = 4;
+      canvasCtx.globalAlpha = 1.0; 
+      canvasCtx.lineCap = "round";
+      canvasCtx.lineJoin = "round";
+    }
   }
+}
+
+function renderColorPalette() {
+  const container = document.getElementById("colorPaletteContainer");
+  if (!container) return;
+  container.innerHTML = "";
+  const colors = PALETTES[currentTool] || [];
+  if (colors.length === 0) return;
+
+  if (!colors.some(c => c.hex === currentColor)) {
+    currentColor = colors[0].hex;
+  }
+
+  colors.forEach(c => {
+    const dot = document.createElement("span");
+    dot.className = `color-dot ${currentColor === c.hex ? 'active' : ''}`;
+    dot.style.background = c.hex;
+    if (c.hex === '#ffffff') dot.style.border = '1px solid #78716c';
+    dot.onclick = () => setDrawColor(c.hex, dot);
+    container.appendChild(dot);
+  });
+  applyToolSettings();
 }
 
 function setDrawingTool(tool) {
   currentTool = tool;
   document.getElementById("toolPen").classList.toggle("active", tool === 'pen');
   document.getElementById("toolHighlighter").classList.toggle("active", tool === 'highlighter');
-  applyToolSettings();
+  document.getElementById("toolEraser").classList.toggle("active", tool === 'eraser');
+  
+  if (tool === 'highlighter') {
+    currentColor = '#eab308'; // Sarı
+  } else if (tool === 'pen') {
+    currentColor = '#ef4444'; // Kırmızı
+  }
+
+  renderColorPalette();
 }
 
 function setDrawColor(hex, el) {
   currentColor = hex;
   document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
   el.classList.add('active');
-  applyToolSettings();
+  if (currentTool === 'eraser') setDrawingTool('pen');
+  else applyToolSettings();
 }
 
 function toggleCanvasStudio() {
@@ -2483,12 +2546,15 @@ function toggleCanvasStudio() {
   const canvas = document.getElementById("lightboxCanvas"); 
   const btn = document.getElementById("canvasToggleBtn"); 
   const toolbar = document.getElementById("studioToolbar");
+  const saveBtn = document.getElementById("saveStudioBtn");
   
   if (isCanvasActive) {
     positionLightboxCanvas(); 
     canvas.style.display = "block"; 
     toolbar.classList.add("active");
-    btn.innerText = "👁️ Karalamayı Koru";
+    if (currentActiveQuestionId) saveBtn.style.display = "inline-block";
+    btn.innerText = "👁️ İzle";
+    renderColorPalette();
     
     canvas.onmousedown = startDraw; 
     canvas.onmousemove = draw; 
@@ -2499,18 +2565,21 @@ function toggleCanvasStudio() {
   } else { 
     canvas.style.display = "none"; 
     toolbar.classList.remove("active");
-    btn.innerText = "✏️ Çiz / Karala"; 
+    saveBtn.style.display = "none";
+    btn.innerText = "✏️ Çiz"; 
   }
 }
 
-let lastDrawX = 0, lastDrawY = 0;
 function startDraw(e) { 
   drawing = true; 
   const r = document.getElementById("lightboxCanvas").getBoundingClientRect(); 
-  lastDrawX = e.clientX - r.left;
-  lastDrawY = e.clientY - r.top;
   canvasCtx.beginPath(); 
-  canvasCtx.moveTo(lastDrawX, lastDrawY); 
+  const startX = e.clientX - r.left;
+  const startY = e.clientY - r.top;
+  canvasCtx.moveTo(startX, startY);
+  if (currentTool === 'eraser') {
+    canvasCtx.clearRect(startX - 13, startY - 13, 26, 26);
+  }
 }
 
 function draw(e) { 
@@ -2518,8 +2587,18 @@ function draw(e) {
   const r = document.getElementById("lightboxCanvas").getBoundingClientRect(); 
   const x = e.clientX - r.left;
   const y = e.clientY - r.top;
-  canvasCtx.lineTo(x, y); 
-  canvasCtx.stroke(); 
+  if (currentTool === 'eraser') {
+    canvasCtx.save();
+    canvasCtx.globalCompositeOperation = "destination-out";
+    canvasCtx.beginPath();
+    // Silgi için daire şeklinde pikselleri temizle
+    canvasCtx.arc(x, y, 16, 0, Math.PI * 2, false);
+    canvasCtx.fill();
+    canvasCtx.restore();
+  } else {
+    canvasCtx.lineTo(x, y); 
+    canvasCtx.stroke(); 
+  }
 }
 
 function stopDraw() { 
@@ -2527,7 +2606,7 @@ function stopDraw() {
   drawing = false; 
   if (canvasCtx) {
     strokeHistory.push(canvasCtx.getImageData(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height));
-    redoStack = []; // yeni çizimde redo sıfırlanır
+    redoStack = []; 
   }
 }
 
@@ -2557,41 +2636,36 @@ function clearCanvas() {
   } 
 }
 
-// İsteğe Bağlı Kalıcı Çözüm Kaydı
-async function closeLightboxWithSavePrompt() {
-  if (isCanvasActive && strokeHistory.length > 0 && currentActiveQuestionId) {
-    const saveConfirmed = confirm("Bu soru üzerinde yaptığınız çizimler/çözümler kalıcı olarak kaydedilsin mi?");
-    if (saveConfirmed) {
-      const qObj = allQuestions.find(x => x.id === currentActiveQuestionId);
-      if (qObj) {
-        // Lightbox canvas ve orijinal görseli birleştirip yeni görsel üret
-        const baseImg = document.getElementById("lightboxImg");
-        const canvas = document.getElementById("lightboxCanvas");
-        const mergedCanvas = document.createElement("canvas");
-        mergedCanvas.width = baseImg.naturalWidth || baseImg.width;
-        mergedCanvas.height = baseImg.naturalHeight || baseImg.height;
-        const mCtx = mergedCanvas.getContext("2d");
-        
-        const tempImg = new Image();
-        tempImg.src = baseImg.src;
-        await new Promise(r => tempImg.onload = r);
-        mCtx.drawImage(tempImg, 0, 0, mergedCanvas.width, mergedCanvas.height);
-        mCtx.drawImage(canvas, 0, 0, mergedCanvas.width, mergedCanvas.height);
-        
-        qObj.studentSolutionDrawing = mergedCanvas.toDataURL("image/jpeg", 0.9);
-        await dbPut("questions", qObj);
-        await refreshAll();
-        alert("Çiziminiz soruya özel kalıcı çözüm olarak kaydedildi! 👑");
-      }
-    }
+async function saveCanvasSolutionAndClose() {
+  if (!currentActiveQuestionId) return alert("Bu ekran doğrudan kayıt desteklemiyor.");
+  const qObj = allQuestions.find(x => x.id === currentActiveQuestionId);
+  if (qObj) {
+    const baseImg = document.getElementById("lightboxImg");
+    const canvas = document.getElementById("lightboxCanvas");
+    const mergedCanvas = document.createElement("canvas");
+    mergedCanvas.width = baseImg.naturalWidth || baseImg.width;
+    mergedCanvas.height = baseImg.naturalHeight || baseImg.height;
+    const mCtx = mergedCanvas.getContext("2d");
+    
+    const tempImg = new Image();
+    tempImg.src = baseImg.src;
+    await new Promise(r => tempImg.onload = r);
+    mCtx.drawImage(tempImg, 0, 0, mergedCanvas.width, mergedCanvas.height);
+    mCtx.drawImage(canvas, 0, 0, mergedCanvas.width, mergedCanvas.height);
+    
+    qObj.studentSolutionDrawing = mergedCanvas.toDataURL("image/jpeg", 0.9);
+    await dbPut("questions", qObj);
+    await refreshAll();
+    alert("Çözüm başarıyla kaydedildi! 💾👑");
+    closeLightbox();
   }
-  closeLightbox();
 }
 
 function closeLightbox() {
   document.getElementById("lightboxModal").classList.remove("active");
   isCanvasActive = false; 
   document.getElementById("studioToolbar").classList.remove("active");
+  document.getElementById("saveStudioBtn").style.display = "none";
   if (canvasCtx) canvasCtx.clearRect(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height);
 }
 
