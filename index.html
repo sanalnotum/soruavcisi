@@ -16,6 +16,7 @@
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="db.js"></script>
 
   <style>
@@ -31,6 +32,7 @@
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
+      --info: #3b82f6;
       --nav-height: 68px;
     }
 
@@ -54,7 +56,7 @@
     .btn-icon-head.coach-btn { background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
 
     .dropdown-menu {
-      position: absolute; top: calc(100% + 8px); right: 0; width: 230px;
+      position: absolute; top: calc(100% + 8px); right: 0; width: 240px;
       background: rgba(41, 37, 36, 0.98); backdrop-filter: blur(20px);
       border: 1px solid var(--accent-primary); border-radius: 16px;
       padding: 6px; display: none; flex-direction: column; gap: 4px;
@@ -212,7 +214,6 @@
     #lightboxImg { width: 96vw !important; height: 88vh !important; max-width: 96vw !important; max-height: 88vh !important; object-fit: contain !important; display: block; user-select: none; -webkit-user-drag: none; border-radius: 8px; }
     #lightboxCanvas { position: absolute; top: 0; left: 0; touch-action: none; cursor: crosshair; z-index: 310; }
     
-    /* Ikonlar Sağda, Kaydırılabilir Stüdyo Barı Solda */
     .lightbox-bar { 
       position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 10px; right: 10px; z-index: 350; 
       display: flex; gap: 6px; justify-content: space-between; align-items: center; pointer-events: none;
@@ -240,15 +241,15 @@
     <div class="modal-card" style="max-width:420px; text-align:left;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin: 0; color: #fff; font-size: 1.15rem; font-weight:900;">🚀 Soru Avcısı Güncellendi!</h3>
-        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;">v1.3.3</span>
+        <span style="background: rgba(249,115,22,0.2); color: var(--accent-primary); border:1px solid var(--accent-primary); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: bold;">v1.5.3</span>
       </div>
       <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; margin-bottom: 12px; font-weight: 700;">
-        Çizim stüdyosu kusursuz mobil ergonomiye kavuştu:
+        Aktif/Pasif Durum Butonları ve Dinamik Tarih Güncellemeleri Tamamlandı:
       </p>
       <ul style="color: #ffffff; font-size: 0.8rem; padding-left: 18px; margin-bottom: 16px; line-height: 1.6; font-weight: 700;">
-        <li><b>🧹 Silgi Sorunu Giderildi:</b> Silgi aracı artık pikselleri tertemiz siliyor.</li>
-        <li><b>🎨 Dinamik Renk & Fosforlu:</b> Kalemde Kırmızı, Mavi, Siyah, Beyaz; fosforluda Sarı ve Turkuaz (ultra şeffaf).</li>
-        <li><b>📍 Sağ Panel Yerleşimi:</b> Çiz/İzle ve Kaydet tuşları yeniden sağ köşeye alındı.</li>
+        <li><b>🎨 Aktif Durum Renkleri:</b> Görev butonlarında yalnızca seçilen durum (Yeşil/Kırmızı/Mavi) canlı yanar, diğerleri koyu pasif görünür.</li>
+        <li><b>📅 Dinamik Takvim Tarihleri:</b> Görev eklerken gün seçimi artık gerçek takvim tarihleriyle listelenir.</li>
+        <li><b>📊 Uyum Karnesi:</b> Program arşivinde Tamamlanan, Yapılmadı ve Kaydırıldı sayıları anlık sergilenir.</li>
       </ul>
       <button onclick="closeUpdateChangelogModal()" style="width: 100%; background: var(--accent-gradient); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(249,115,22,0.4);">Harika, Devam Et ✔️</button>
     </div>
@@ -277,6 +278,7 @@
       <button class="btn-icon-head" onclick="toggleQuickMenu(event)" title="Menü">☰ Araçlar</button>
 
       <div class="dropdown-menu" id="quickMenu">
+        <button class="dropdown-item" onclick="closeQuickMenu(); openPlannerModal();">📅 Akıllı Ders Planım & Arşiv</button>
         <button class="dropdown-item" onclick="closeQuickMenu(); openTrackerModal();">📚 Konu Takip Paneli</button>
         <button class="dropdown-item" onclick="closeQuickMenu(); openHelpModal();">📖 Kullanım Kılavuzu</button>
         <button class="dropdown-item" onclick="closeQuickMenu(); openPdfModal();">🖨️ PDF Kitapçık Bas</button>
@@ -285,6 +287,125 @@
       </div>
     </div>
   </header>
+
+  <!-- AKILLI DERS PLANI & ARŞİV MODALI -->
+  <div class="modal-overlay" id="plannerModal" onclick="event.stopPropagation()">
+    <div class="modal-card" style="max-width:580px; max-height:90vh; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--card-border); padding-bottom:8px;">
+        <div>
+          <h3 style="font-size:1.05rem; font-weight:900; color:var(--accent-primary);">📅 Haftalık Programlar & Arşiv</h3>
+          <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Yeni program oluştur, geçmiş programlarını incele ve durumlarını güncelle.</div>
+        </div>
+        <button onclick="closePlannerModal()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="flex:1; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:14px;">
+        
+        <!-- UYUM KARNESİ MODÜLÜ -->
+        <div style="background:linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); border-radius:14px; padding:12px; color:#fff; box-shadow:0 4px 12px rgba(59,130,246,0.3);">
+          <div style="font-size:0.88rem; font-weight:900; margin-bottom:4px; text-align:center;">📊 Uyum Karnesi & Başarı Özeti</div>
+          <div style="font-size:0.7rem; opacity:0.9; margin-bottom:8px; text-align:center; font-weight:700;">Tüm haftalık programlar boyunca görev durumlarının anlık dökümü:</div>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; text-align:center;">
+            <div style="background:rgba(0,0,0,0.2); padding:8px; border-radius:10px;"><div style="font-size:1.2rem; font-weight:900; color:#10b981;" id="statPlanDone">0</div><div style="font-size:0.68rem; color:#fff;">Tamamlanan (✓)</div></div>
+            <div style="background:rgba(0,0,0,0.2); padding:8px; border-radius:10px;"><div style="font-size:1.2rem; font-weight:900; color:#ef4444;" id="statPlanMissed">0</div><div style="font-size:0.68rem; color:#fff;">Yapılmadı (❌)</div></div>
+            <div style="background:rgba(0,0,0,0.2); padding:8px; border-radius:10px;"><div style="font-size:1.2rem; font-weight:900; color:#3b82f6;" id="statPlanShifted">0</div><div style="font-size:0.68rem; color:#fff;">Kaydırıldı (➔)</div></div>
+          </div>
+        </div>
+
+        <!-- Öğrenci Adı Ayarı -->
+        <div style="background:#1c1917; padding:10px 14px; border-radius:12px; border:1px solid var(--card-border);">
+          <div class="input-group" style="margin-bottom:0;">
+            <label>Öğrenci Adı Soyadı (Çıktılarda Görünecek)</label>
+            <input type="text" id="plannerStudentName" placeholder="Adınızı girin..." oninput="savePlannerStudentName(this.value)">
+          </div>
+        </div>
+
+        <!-- Yeni Program Oluşturma Alanı -->
+        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px;">
+          <div style="font-size:0.85rem; font-weight:900; color:var(--accent-primary); margin-bottom:8px;">✨ Yeni Haftalık Program Oluştur</div>
+          
+          <!-- PROGRAM BAŞLANGIÇ GÜNÜ SEÇENEĞİ -->
+          <div class="input-group" style="margin-bottom:8px;">
+            <label>Program Başlangıç Günü</label>
+            <select id="planStartDaySelect" onchange="renderDynamicDayCheckboxes()">
+              <option value="today">Bugünden Başla</option>
+              <option value="tomorrow">Yarından Başla</option>
+              <option value="next_monday">Gelecek Pazartesi</option>
+            </select>
+          </div>
+
+          <div class="input-group" style="margin-bottom:8px;">
+            <label>Ders</label>
+            <select id="planSubSelect" onchange="renderPlanTopics()"></select>
+          </div>
+          <div class="input-group" style="margin-bottom:8px;">
+            <label>Konu</label>
+            <select id="planTopSelect"></select>
+          </div>
+          
+          <!-- Çoklu Çalışma Şekli Seçimi -->
+          <div class="input-group" style="margin-bottom:8px;">
+            <label>Çalışma Şekli (Birden Fazla Seçebilirsin)</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: #141210; padding: 10px; border-radius: 10px; border: 1px solid var(--card-border);">
+              <label style="font-size:0.75rem; font-weight:800; display:flex; align-items:center; gap:6px; cursor:pointer; color:#fff;">
+                <input type="checkbox" value="Soru Çözümü 🎯" class="plan-type-chk" style="width:16px; height:16px; cursor:pointer;" checked> Soru Çözümü 🎯
+              </label>
+              <label style="font-size:0.75rem; font-weight:800; display:flex; align-items:center; gap:6px; cursor:pointer; color:#fff;">
+                <input type="checkbox" value="Konu Çalışımı 📖" class="plan-type-chk" style="width:16px; height:16px; cursor:pointer;"> Konu Çalışımı 📖
+              </label>
+              <label style="font-size:0.75rem; font-weight:800; display:flex; align-items:center; gap:6px; cursor:pointer; color:#fff;">
+                <input type="checkbox" value="Video İzleme 💻" class="plan-type-chk" style="width:16px; height:16px; cursor:pointer;"> Video İzleme 💻
+              </label>
+              <label style="font-size:0.75rem; font-weight:800; display:flex; align-items:center; gap:6px; cursor:pointer; color:#fff;">
+                <input type="checkbox" value="Formül / Tekrar 📐" class="plan-type-chk" style="width:16px; height:16px; cursor:pointer;"> Formül / Tekrar 📐
+              </label>
+              <label style="font-size:0.75rem; font-weight:800; display:flex; align-items:center; gap:6px; cursor:pointer; color:#fff; grid-column: span 2;">
+                <input type="checkbox" value="Deneme Analizi 📊" class="plan-type-chk" style="width:16px; height:16px; cursor:pointer;"> Deneme Analizi 📊
+              </label>
+            </div>
+          </div>
+
+          <!-- DİNAMİK TAKVİM TARİHLİ GÜN SEÇİM KUTULARI -->
+          <div class="input-group" style="margin-bottom:8px;">
+            <label>Hangi Gün(ler) Yapılacak?</label>
+            <div id="dynamicDayCheckboxesContainer" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: #141210; padding: 10px; border-radius: 10px; border: 1px solid var(--card-border);">
+              <!-- Dinamik doldurulacak -->
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-bottom:10px;">
+            <label>Kaynak / Kitap / Kanal (İsteğe Bağlı)</label>
+            <input type="text" id="planSourceInput" placeholder="Örn: 3D Yayınları / Rehber Matematik">
+          </div>
+          <button style="width:100%; padding:10px; border-radius:10px; background:#292524; border:1px solid var(--accent-primary); color:#fff; font-weight:900; font-size:0.82rem; cursor:pointer;" onclick="addPlanTaskToPool()">
+            Görev Havuzuna Ekle 📥
+          </button>
+        </div>
+
+        <!-- Havuz Listesi -->
+        <div style="background:#1c1917; border:1px solid var(--card-border); border-radius:14px; padding:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-size:0.78rem; font-weight:900; color:#34d399;">📋 Hazırlanan Havuz Görevleri (<span id="poolCountBadge">0</span>)</div>
+            <button onclick="clearPlanPool()" style="background:none; border:none; color:#fca5a5; font-size:0.72rem; font-weight:900; cursor:pointer;">Havuzu Temizle 🗑️</button>
+          </div>
+          <div id="planPoolListContainer" style="max-height:120px; overflow-y:auto; display:flex; flex-direction:column; gap:4px; margin-bottom:12px;"></div>
+          
+          <button style="width:100%; padding:12px; border-radius:12px; background:var(--accent-gradient); border:none; color:#fff; font-weight:900; font-size:0.88rem; cursor:pointer;" onclick="saveAndPublishNewWeeklyProgram()">
+            Bu Programı Yayınla ve Arşive Ekle 🚀
+          </button>
+        </div>
+
+        <!-- Aktif ve Geçmiş Programlar Listesi (Akordiyon Arşiv) -->
+        <div>
+          <div style="font-size:0.85rem; font-weight:900; color:#fff; margin-bottom:8px;">📁 Haftalık Programlar Arşivi (Akordiyon Yapı)</div>
+          <div id="studyPlansArchiveContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+      </div>
+
+      <button style="width:100%; padding:11px; border-radius:12px; background:#292524; border:1px solid var(--card-border); color:#fff; font-weight:900; margin-top:12px; cursor:pointer;" onclick="closePlannerModal()">Kapat</button>
+    </div>
+  </div>
 
   <!-- KONU TAKİP PANELİ MODALI -->
   <div class="modal-overlay" id="trackerModal" onclick="event.stopPropagation()">
@@ -337,7 +458,7 @@
     </div>
   </div>
 
-  <!-- 1. AKIŞ SEKMESİ -->
+  <!-- 1. AKIŞ SEKMESİ (ORİJİNAL) -->
   <div id="tab-feed" class="tab-view active" onclick="event.stopPropagation()">
     <div class="stories-container" id="storiesContainer"></div>
     <div class="coach-alarm-banner" id="coachTwinAlarmBanner">
@@ -441,7 +562,6 @@
         <div class="practice-timer" id="pTimer">⏱️ 00:00</div>
       </div>
       
-      <!-- Psikolojik Ön Bilgilendirme Bandı -->
       <div id="coachPsychBand" style="display:none; background:linear-gradient(135deg, rgba(249,115,22,0.25), rgba(239,68,68,0.25)); border:1px solid rgba(249,115,22,0.5); border-radius:10px; padding:8px 12px; margin-bottom:8px; font-size:0.78rem; font-weight:900; color:#fdba74;">
         ⚠️ <span id="coachPsychText">Bu soruda daha önce hata yapmıştın!</span>
       </div>
@@ -616,7 +736,7 @@
     </div>
   </div>
 
-  <!-- 5. ANALİZ & RAPOR SEKMESİ -->
+  <!-- 5. ANALİZ & RAPOR SEKMESİ (SADELEŞTİRİLDİ) -->
   <div id="tab-analytics" class="tab-view" onclick="event.stopPropagation()">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
       <div style="font-size:0.88rem; font-weight:900; color:var(--accent-primary); text-transform:uppercase;">Genel Hata Analizi</div>
@@ -634,6 +754,7 @@
       <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:#34d399;" id="statMasteredCount">0</div><div style="font-size:0.72rem; color:var(--text); font-weight:800;">Tam Oturan</div></div>
       <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px; padding:12px 8px; text-align:center;"><div style="font-size:1.5rem; font-weight:900; color:#ef4444;" id="statStuckCount">0</div><div style="font-size:0.72rem; color:var(--text); font-weight:800;">Hoca Masası</div></div>
     </div>
+
     <div style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:14px; margin-bottom:14px; display:flex; flex-direction:column; gap:8px;">
       <button style="background:var(--accent-gradient); border:none; color:#fff; padding:12px; border-radius:12px; font-weight:900; font-size:0.88rem; cursor:pointer;" onclick="openAirDropSender()">📲➡️💻 QR / AirDrop ile Tablete Aktar</button>
       <div style="display:flex; gap:8px;">
@@ -712,23 +833,18 @@
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">1. 📸 Hızlı & Seri Soru Arşivleme</div>
+          <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">1. 📅 Haftalık Program Arşivi & Uyum Karnesi</div>
+          <div>Araçlar menüsünden ulaşabileceğiniz bu modülle dinamik takvim tarihli programlar oluşturun, akordiyon arşivde geçmiş programlarınızı yönetin ve Uyum Karnesi ile başarı oranınızı takip edin.</div>
+        </div>
+
+        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
+          <div style="font-weight:900; color:var(--accent-primary); margin-bottom:2px;">2. 📸 Hızlı & Seri Soru Arşivleme</div>
           <div>Ortadaki turuncu <b>(+)</b> butonuyla yapamadığınız soruları ister tek tek ister <b>Seri Yükleme Modu</b> ile çoklu olarak ekleyin. Dahili kırpma aracıyla soruyu odaklayın, çözüm görseli ve sesli not ekleyerek zenginleştirin.</div>
         </div>
 
         <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:#fbbf24; margin-bottom:2px;">2. 🗂️ Bilgi Kasası (Formül Defteri)</div>
+          <div style="font-weight:900; color:#fbbf24; margin-bottom:2px;">3. 🗂️ Bilgi Kasası (Formül Defteri)</div>
           <div>Tahta notlarını, formülleri ve kritik ipuçlarını <b>Kasa</b> sekmesinden kaydedin. Antrenman masasındayken ekranda beliren sihirli <b>"🧠 Konu Notlarını Çağır"</b> butonuyla o konunun tüm formülleri anında önünüze gelsin.</div>
-        </div>
-
-        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:#34d399; margin-bottom:2px;">3. 📚 Konu Takip Paneli & Streak Sistemi</div>
-          <div>Sağ üstteki <b>Araçlar</b> menüsünden ulaşabileceğiniz bu panel ile sınav grubuna ait konuları bitirip ilerleme barlarını anlık takip edin. Her gün düzenli çalışma yaparak <b>Günlük Seri (Streak)</b> rozetlerini toplayın.</div>
-        </div>
-
-        <div style="background:#1c1917; padding:10px 12px; border-radius:12px; border:1px solid var(--card-border);">
-          <div style="font-weight:900; color:#f87171; margin-bottom:2px;">4. 👨‍🏫 Hoca Masası, Bülten & Cihaz Senkronizasyonu</div>
-          <div>Çözemediğiniz soruları <b>Hoca Masası</b>'na gönderip birebir çözüm sağlayın. <b>QR / AirDrop</b> ile verilerinizi telefondan tablete saniyeler içinde aktarın, zırhlı <b>Yedek Al</b> özelliğiyle verilerinizi güvenceye alın.</div>
         </div>
 
         <div style="background:rgba(249, 115, 22, 0.15); border:1px solid rgba(249, 115, 22, 0.45); border-radius:14px; padding:12px; text-align:center;">
@@ -785,7 +901,6 @@
     </div>
   </div>
 
-  <!-- HAFTALIK BÜLTEN MODALI -->
   <div class="modal-overlay" id="bulletinModal" onclick="event.stopPropagation()">
     <div class="modal-card" style="max-width:520px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -868,10 +983,8 @@
     </div>
   </div>
 
-  <!-- MOBİL UYUMLU, SAĞDA BUTONLAR VE SOLDA KAYDIRILABİLİR STÜDYO BAR -->
   <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
     <div class="lightbox-bar" onclick="event.stopPropagation()">
-      <!-- Sol Taraf: Kaydırılabilir Kompakt Stüdyo Araçları ve Renkler -->
       <div class="studio-toolbar" id="studioToolbar">
         <button class="tool-btn active" id="toolPen" onclick="setDrawingTool('pen')">✏️</button>
         <button class="tool-btn" id="toolHighlighter" onclick="setDrawingTool('highlighter')">🖍️</button>
@@ -879,10 +992,8 @@
         <button class="tool-btn" onclick="undoCanvasStroke()" title="Geri Al">↩️</button>
         <button class="tool-btn" onclick="redoCanvasStroke()" title="İleri Al">↪️</button>
         <button class="tool-btn" onclick="clearCanvas()" style="background:#ef4444; border-color:#ef4444;" title="Sıfırla">🗑️</button>
-        <!-- Dinamik Renk Paleti -->
         <div style="display:flex; gap:4px; align-items:center; margin-left:2px;" id="colorPaletteContainer"></div>
       </div>
-      <!-- Sağ Taraf: Çiz / İzle, Kaydet ve Kapat Tuşları -->
       <div style="display:flex; gap:5px; align-items:center; flex-shrink:0;">
         <button class="btn-icon-head" onclick="toggleCanvasStudio()" id="canvasToggleBtn" style="background:var(--accent-primary); border:none; color:#fff; font-size:0.72rem; padding:8px 8px; font-weight:900;">✏️ Çiz</button>
         <button class="btn-icon-head" onclick="saveCanvasSolutionAndClose()" id="saveStudioBtn" style="display:none; background:#10b981; border:none; color:#fff; font-size:0.72rem; padding:8px 8px; font-weight:900;">💾 Kaydet</button>
@@ -917,12 +1028,15 @@ let db;
 let allQuestions = [];
 let allNotes = [];
 let allCompletedTopics = [];
+let allStudyPlans = [];
 let activeExam = "";
 let activeMaarifGrade = "";
 let selectedSubjectFilter = "";
 let feedDisplayLimit = 10;
 
-const CURRENT_VERSION = "v1.3.3";
+let planTaskPool = [];
+
+const CURRENT_VERSION = "v1.5.3";
 const VERSION_STORAGE_KEY = "soru_avcisi_last_seen_version";
 
 function checkVersionChangelog() {
@@ -939,12 +1053,13 @@ function closeUpdateChangelogModal() {
 
 function initDB() {
   return new Promise((resolve) => {
-    const req = indexedDB.open(DB_NAME, 14);
+    const req = indexedDB.open(DB_NAME, 15);
     req.onupgradeneeded = (e) => {
       const d = e.target.result;
       if (!d.objectStoreNames.contains("questions")) d.createObjectStore("questions", { keyPath: "id" });
       if (!d.objectStoreNames.contains("notes")) d.createObjectStore("notes", { keyPath: "id" });
       if (!d.objectStoreNames.contains("completed_topics")) d.createObjectStore("completed_topics", { keyPath: "id" });
+      if (!d.objectStoreNames.contains("study_plans")) d.createObjectStore("study_plans", { keyPath: "id" });
     };
     req.onsuccess = async (e) => {
       db = e.target.result;
@@ -1011,14 +1126,14 @@ function getLocalStorageFallback(storeName) {
 }
 
 async function performSelfHealingCheck() {
-  const stores = ["questions", "notes", "completed_topics"];
+  const stores = ["questions", "notes", "completed_topics", "study_plans"];
   for (const storeName of stores) {
     try {
       const idbData = await new Promise((res) => {
         if (!db) { res([]); return; }
         const tx = db.transaction([storeName], "readonly");
         const req = tx.objectStore(storeName).getAll();
-        req.onsuccess = () => res(req.result || []);
+        req.onsuccess = () => res(req.result || [] );
         req.onerror = () => res([]);
       });
 
@@ -1210,6 +1325,13 @@ function initAppForExam() {
   Object.keys(subjects).forEach(s => { noteSubSelect.innerHTML += `<option value="${s}">${s}</option>`; });
   renderTopicDropdown('noteSubjectSelect','noteTopicSelect','noteTopicManual');
 
+  const planSub = document.getElementById("planSubSelect");
+  if (planSub) {
+    planSub.innerHTML = "";
+    Object.keys(subjects).forEach(s => { planSub.innerHTML += `<option value="${s}">${s}</option>`; });
+    renderPlanTopics();
+  }
+
   const pSetupSub = document.getElementById("pSetupSubject");
   pSetupSub.innerHTML = '<option value="all">Tüm Dersler</option>';
   Object.keys(subjects).forEach(s => { pSetupSub.innerHTML += `<option value="${s}">${s}</option>`; });
@@ -1232,11 +1354,16 @@ function initAppForExam() {
     dateInput.value = todayStr;
   }
 
+  const savedStudentName = localStorage.getItem("avci_student_name") || "";
+  const nameInput = document.getElementById("plannerStudentName");
+  if (nameInput) nameInput.value = savedStudentName;
+
   const tagLabel = activeExam === "MAARİF" ? `MAARİF (${activeMaarifGrade})` : activeExam;
   document.getElementById("practiceActiveExamTag").innerText = tagLabel;
 
   buildStoriesBar();
   buildExamPills();
+  renderDynamicDayCheckboxes();
 }
 
 function renderTopicDropdown(subId, topId, manId) {
@@ -1257,6 +1384,505 @@ function renderTopicDropdown(subId, topId, manId) {
   if (manInput && !subjects[chosenSub]?.includes(manInput.value)) {
     manInput.value = "";
   }
+}
+
+function renderPlanTopics() {
+  const subjects = getCurrentActiveSubjectsObj();
+  const sub = document.getElementById("planSubSelect").value;
+  const topSelect = document.getElementById("planTopSelect");
+  if (!topSelect) return;
+  topSelect.innerHTML = "";
+  if (subjects[sub]) {
+    subjects[sub].forEach(t => { topSelect.innerHTML += `<option value="${t}">${t}</option>`; });
+  }
+}
+
+function savePlannerStudentName(val) {
+  localStorage.setItem("avci_student_name", val.trim());
+}
+
+function openPlannerModal() {
+  document.getElementById("plannerModal").classList.add("active");
+  renderDynamicDayCheckboxes();
+  renderPlanPoolUI();
+  renderStudyPlansArchiveUI();
+}
+function closePlannerModal() {
+  document.getElementById("plannerModal").classList.remove("active");
+}
+
+function getDynamicDaysArray(startSelectionType) {
+  let baseDate = new Date();
+  if (startSelectionType === 'tomorrow') {
+    baseDate.setDate(baseDate.getDate() + 1);
+  } else if (startSelectionType === 'next_monday') {
+    const day = baseDate.getDay();
+    const diff = (8 - day) % 7 || 7;
+    baseDate.setDate(baseDate.getDate() + diff);
+  }
+
+  const dayNames = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+  let orderedDays = [];
+
+  for (let i = 0; i < 7; i++) {
+    let d = new Date(baseDate);
+    d.setDate(baseDate.getDate() + i);
+    let dayName = dayNames[d.getDay()];
+    let formattedDate = `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}`;
+    orderedDays.push({
+      index: i,
+      title: `${dayName} (${formattedDate})`,
+      rawDate: d
+    });
+  }
+  return orderedDays;
+}
+
+function renderDynamicDayCheckboxes() {
+  const container = document.getElementById("dynamicDayCheckboxesContainer");
+  if (!container) return;
+  const startTypeEl = document.getElementById("planStartDaySelect");
+  const startType = startTypeEl ? startTypeEl.value : 'today';
+  const dynamicDays = getDynamicDaysArray(startType);
+
+  container.innerHTML = "";
+  dynamicDays.forEach(d => {
+    container.innerHTML += `
+      <label style="font-size:0.75rem; font-weight:800; display:flex; align-items:center; gap:6px; cursor:pointer; color:#fff;">
+        <input type="checkbox" value="${d.index}" class="task-day-idx-chk" style="width:16px; height:16px; cursor:pointer;"> ${d.title}
+      </label>
+    `;
+  });
+}
+
+function addPlanTaskToPool() {
+  const sub = document.getElementById("planSubSelect").value;
+  const topic = document.getElementById("planTopSelect").value;
+  const source = document.getElementById("planSourceInput").value.trim();
+
+  const checkedTypes = Array.from(document.querySelectorAll(".plan-type-chk:checked")).map(cb => cb.value);
+  const selectedDayIndices = Array.from(document.querySelectorAll(".task-day-idx-chk:checked")).map(cb => parseInt(cb.value, 10));
+
+  if (!sub || !topic) return alert("Lütfen ders ve konu seçiniz.");
+  if (checkedTypes.length === 0) return alert("Lütfen en az bir çalışma şekli seçiniz.");
+  if (selectedDayIndices.length === 0) return alert("Lütfen bu görevin hangi takvim gününde yapılacağını seçiniz.");
+
+  if (selectedDayIndices.length === 1 && checkedTypes.length >= 3) {
+    alert("💡 Dijital Koç Uyarısı: Tek bir güne 3'ten fazla yoğun çalışma türü seçildi, yük dengelemesi önerilir!");
+  }
+
+  const taskItem = {
+    id: "task_" + Date.now() + "_" + Math.floor(Math.random()*1000),
+    subject: sub,
+    topic: topic,
+    type: checkedTypes.join(" + "),
+    source: source || "Genel Çalışma",
+    dayIndices: selectedDayIndices,
+    status: 'pending',
+    reason: ''
+  };
+
+  planTaskPool.push(taskItem);
+  renderPlanPoolUI();
+  document.getElementById("planSourceInput").value = "";
+  document.querySelectorAll(".task-day-idx-chk").forEach(cb => cb.checked = false);
+}
+
+function renderPlanPoolUI() {
+  const container = document.getElementById("planPoolListContainer");
+  const countBadge = document.getElementById("poolCountBadge");
+  if (!container) return;
+  countBadge.innerText = planTaskPool.length;
+  container.innerHTML = "";
+
+  if (planTaskPool.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:10px; color:var(--text); font-size:0.75rem; font-weight:800;">Havuzda henüz görev yok. Görev ekleyin.</div>`;
+    return;
+  }
+
+  const startType = document.getElementById("planStartDaySelect").value;
+  const dynamicDays = getDynamicDaysArray(startType);
+
+  planTaskPool.forEach((t, idx) => {
+    let dayLabels = t.dayIndices.map(di => {
+      let found = dynamicDays.find(d => d.index === di);
+      return found ? found.title : `${di+1}. Gün`;
+    }).join(", ");
+
+    container.innerHTML += `
+      <div style="background:#141210; padding:6px 10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; font-weight:800;">
+        <div>
+          <span style="color:var(--accent-primary); font-weight:900;">${idx+1}. ${t.subject}</span> — ${t.topic} 
+          <div style="font-size:0.68rem; color:#fdba74; margin-top:2px;">Tür: ${t.type} | Günler: ${dayLabels}</div>
+        </div>
+        <button onclick="removePlanTask('${t.id}')" style="background:none; border:none; color:#fca5a5; font-weight:900; cursor:pointer;">✕</button>
+      </div>
+    `;
+  });
+}
+
+function removePlanTask(id) {
+  planTaskPool = planTaskPool.filter(x => x.id !== id);
+  renderPlanPoolUI();
+}
+
+function clearPlanPool() {
+  planTaskPool = [];
+  renderPlanPoolUI();
+}
+
+async function saveAndPublishNewWeeklyProgram() {
+  if (planTaskPool.length === 0) return alert("Program oluşturmak için önce havuza görev eklemelisiniz!");
+
+  const startType = document.getElementById("planStartDaySelect").value;
+  const dynamicDays = getDynamicDaysArray(startType);
+  
+  let planDaysMap = {};
+  dynamicDays.forEach(d => { planDaysMap[d.index] = []; });
+
+  planTaskPool.forEach(task => {
+    task.dayIndices.forEach(dayIdx => {
+      if (planDaysMap[dayIdx]) {
+        planDaysMap[dayIdx].push({ ...task });
+      }
+    });
+  });
+
+  const nextSeqNo = allStudyPlans.length + 1;
+  const newPlanItem = {
+    id: "plan_" + Date.now(),
+    seqNo: nextSeqNo,
+    createdAt: new Date().toLocaleDateString('tr-TR'),
+    studentName: localStorage.getItem("avci_student_name") || "Öğrenci",
+    examGroup: activeExam === "MAARİF" ? `MAARİF (${activeMaarifGrade})` : activeExam,
+    startType: startType,
+    dynamicDaysDefinition: dynamicDays,
+    daysMap: planDaysMap
+  };
+
+  await dbPut("study_plans", newPlanItem);
+  allStudyPlans.push(newPlanItem);
+  planTaskPool = [];
+  renderPlanPoolUI();
+  renderStudyPlansArchiveUI();
+  updatePlanAnalyticsSummary();
+  alert(`Program #${String(nextSeqNo).padStart(2, '0')} başarıyla dinamik gün ve tarih sırasıyla arşive eklendi! 🚀`);
+}
+
+async function renderStudyPlansArchiveUI() {
+  const container = document.getElementById("studyPlansArchiveContainer");
+  if (!container) return;
+  container.innerHTML = "";
+
+  allStudyPlans = await dbGetAll("study_plans");
+  const sortedPlans = [...allStudyPlans].sort((a, b) => b.seqNo - a.seqNo);
+
+  if (sortedPlans.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:14px; color:var(--text-muted); font-size:0.78rem; font-weight:800;">Henüz kayıtlı haftalık program bulunmuyor.</div>`;
+    updatePlanAnalyticsSummary();
+    return;
+  }
+
+  sortedPlans.forEach((plan, index) => {
+    const isLatest = (index === 0);
+    const seqStr = String(plan.seqNo).padStart(2, '0');
+
+    let totalTasks = 0;
+    let doneTasks = 0;
+    const daysMap = plan.daysMap || {};
+    for (const tasks of Object.values(daysMap)) {
+      tasks.forEach(t => {
+        totalTasks++;
+        if (t.status === 'done') doneTasks++;
+      });
+    }
+    const isAllCompleted = totalTasks > 0 && doneTasks === totalTasks;
+
+    let daysHtml = '';
+    const dayDefs = plan.dynamicDaysDefinition || [];
+    
+    dayDefs.forEach(dayDef => {
+      const tasks = daysMap[dayDef.index] || [];
+      if (tasks.length === 0) return;
+
+      let dayTasksHtml = '';
+      tasks.forEach((t, tIdx) => {
+        let statusColor = '#f97316';
+        if (t.status === 'done') statusColor = '#10b981';
+        else if (t.status === 'missed') statusColor = '#ef4444';
+        else if (t.status === 'shifted') statusColor = '#3b82f6';
+
+        // 2. Madde Gereği: Seçilen buton kendi canlı rengini alır, diğerleri koyu/pasif kalır.
+        const isDoneActive = t.status === 'done';
+        const isMissedActive = t.status === 'missed';
+        const isShiftedActive = t.status === 'shifted';
+
+        dayTasksHtml += `
+          <div style="background:#141210; padding:8px 10px; border-radius:8px; margin-top:6px; font-size:0.78rem; font-weight:800; border-left:3px solid ${statusColor};">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div style="font-weight:900; color:#fff; text-decoration:${t.status==='done'?'line-through':'none'};">${tIdx+1}. ${t.subject} — ${t.topic}</div>
+                <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Şekil: ${t.type} | Kaynak: <span style="color:#fdba74;">${t.source}</span></div>
+                ${t.reason ? `<div style="font-size:0.68rem; color:#fca5a5; margin-top:2px;">Yansıtma: ${t.reason}</div>` : ''}
+              </div>
+              <div style="display:flex; gap:4px; align-items:center;">
+                <button onclick="event.stopPropagation(); updateTaskStatus(event, '${plan.id}', ${dayDef.index}, '${t.id}', 'done')" style="background:${isDoneActive ? '#10b981' : '#292524'}; border:1px solid ${isDoneActive ? '#10b981' : 'rgba(255,255,255,0.15)'}; color:#fff; width:26px; height:26px; border-radius:6px; font-size:0.75rem; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:${isDoneActive ? '1' : '0.4'};" title="Tamamla">✓</button>
+                <button onclick="event.stopPropagation(); promptTaskReason(event, '${plan.id}', ${dayDef.index}, '${t.id}')" style="background:${isMissedActive ? '#ef4444' : '#292524'}; border:1px solid ${isMissedActive ? '#ef4444' : 'rgba(255,255,255,0.15)'}; color:#fff; width:26px; height:26px; border-radius:6px; font-size:0.75rem; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:${isMissedActive ? '1' : '0.4'};" title="Yapılmadı">✕</button>
+                <button onclick="event.stopPropagation(); promptTaskShift(event, '${plan.id}', ${dayDef.index}, '${t.id}')" style="background:${isShiftedActive ? '#3b82f6' : '#292524'}; border:1px solid ${isShiftedActive ? '#3b82f6' : 'rgba(255,255,255,0.15)'}; color:#fff; width:26px; height:26px; border-radius:6px; font-size:0.75rem; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:${isShiftedActive ? '1' : '0.4'};" title="Kaydır">➔</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      daysHtml += `
+        <div style="margin-top:8px;">
+          <div style="font-size:0.78rem; font-weight:900; color:var(--accent-primary);">📌 ${dayDef.title}</div>
+          ${dayTasksHtml}
+        </div>
+      `;
+    });
+
+    container.innerHTML += `
+      <div style="background:#292524; border:1px solid ${isLatest ? 'var(--accent-primary)' : 'var(--card-border)'}; border-radius:14px; padding:12px; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px; margin-bottom:8px; cursor:pointer;" onclick="toggleArchiveAccordion(this)">
+          <div>
+            <div style="font-size:0.88rem; font-weight:900; color:#fff; display:flex; align-items:center; gap:6px;">
+              Program #${seqStr} 
+              ${isLatest ? '<span style="background:var(--accent-primary); color:#fff; font-size:0.65rem; padding:2px 6px; border-radius:6px;">AKTİF</span>' : ''}
+              ${isAllCompleted ? '<span style="background:#10b981; color:#fff; font-size:0.65rem; padding:2px 6px; border-radius:6px;">👑 TAMAMLANDI</span>' : ''}
+            </div>
+            <div style="font-size:0.7rem; color:var(--text-muted);">Oluşturma: ${plan.createdAt} | ${doneTasks}/${totalTasks} Tamamlandı</div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;" onclick="event.stopPropagation()">
+            <button onclick="downloadSpecificPlanAsImage('${plan.id}')" style="background:#10b981; border:none; color:#fff; padding:5px 8px; border-radius:6px; font-weight:900; font-size:0.7rem; cursor:pointer;">📸 Resim</button>
+            <button onclick="printSpecificPlanPDF('${plan.id}')" style="background:#3b82f6; border:none; color:#fff; padding:5px 8px; border-radius:6px; font-weight:900; font-size:0.7rem; cursor:pointer;">🖨️ PDF</button>
+            <button onclick="deleteStudyPlan('${plan.id}')" style="background:none; border:none; color:#fca5a5; font-weight:900; font-size:0.8rem; cursor:pointer;">🗑️</button>
+            <span style="font-size:0.8rem; color:#fff; margin-left:4px;" class="accordion-arrow">▼</span>
+          </div>
+        </div>
+        <div class="archive-accordion-content" style="display:${isLatest ? 'block' : 'none'}; max-height:220px; overflow-y:auto; padding-right:4px;">
+          ${daysHtml || '<div style="font-size:0.75rem; color:var(--text-muted);">Bu programda görev bulunmuyor.</div>'}
+        </div>
+      </div>
+    `;
+  });
+  updatePlanAnalyticsSummary();
+}
+
+function toggleArchiveAccordion(headerEl) {
+  const contentEl = headerEl.nextElementSibling;
+  const arrowEl = headerEl.querySelector(".accordion-arrow");
+  if (contentEl.style.display === "none") {
+    contentEl.style.display = "block";
+    if (arrowEl) arrowEl.innerText = "▲";
+  } else {
+    contentEl.style.display = "none";
+    if (arrowEl) arrowEl.innerText = "▼";
+  }
+}
+
+async function promptTaskReason(e, planId, dayIndex, taskId) {
+  if (e) e.stopPropagation();
+  const reason = prompt("🧠 Mini Yansıtma: Görev neden yapılmadı?\n1: Zaman yetmedi\n2: Konu zordu\n3: Yorgunluk / Halsizlik\n(İptal için boş bırakın)");
+  let reasonText = "";
+  if (reason === "1") reasonText = "Zaman Yetmedi ⏳";
+  else if (reason === "2") reasonText = "Konu Zordu 🚨";
+  else if (reason === "3") reasonText = "Yorgunluk / Halsizlik 💤";
+  else if (reason) reasonText = reason;
+
+  const plan = allStudyPlans.find(x => x.id === planId);
+  if (plan && plan.daysMap && plan.daysMap[dayIndex]) {
+    const t = plan.daysMap[dayIndex].find(x => x.id === taskId);
+    if (t) {
+      t.status = 'missed';
+      t.reason = reasonText;
+      await dbPut("study_plans", plan);
+      renderStudyPlansArchiveUI();
+    }
+  }
+}
+
+async function promptTaskShift(e, planId, dayIndex, taskId) {
+  if (e) e.stopPropagation();
+  const confirmShift = confirm("🔄 Akıllı Devir: Bu görev gelecek haftaya öncelikli devir olarak eklensin mi?");
+  const plan = allStudyPlans.find(x => x.id === planId);
+  if (!plan || !plan.daysMap || !plan.daysMap[dayIndex]) return;
+  const t = plan.daysMap[dayIndex].find(x => x.id === taskId);
+  if (!t) return;
+
+  t.status = 'shifted';
+  t.reason = "Geleceğe Devredildi ➔";
+  await dbPut("study_plans", plan);
+
+  if (confirmShift) {
+    let latestPlan = [...allStudyPlans].sort((a,b) => b.seqNo - a.seqNo)[0];
+    if (latestPlan && latestPlan.daysMap) {
+      if (!latestPlan.daysMap[0]) latestPlan.daysMap[0] = [];
+      latestPlan.daysMap[0].push({
+        id: "task_devir_" + Date.now(),
+        subject: t.subject,
+        topic: t.topic + " (Devir ➔)",
+        type: t.type,
+        source: t.source,
+        dayIndices: [0],
+        status: 'pending',
+        reason: 'Önceki haftadan devir'
+      });
+      await dbPut("study_plans", latestPlan);
+    }
+  }
+  renderStudyPlansArchiveUI();
+}
+
+async function updateTaskStatus(e, planId, dayIndex, taskId, newStatus) {
+  if (e) e.stopPropagation();
+  const plan = allStudyPlans.find(x => x.id === planId);
+  if (!plan || !plan.daysMap || !plan.daysMap[dayIndex]) return;
+  const t = plan.daysMap[dayIndex].find(x => x.id === taskId);
+  if (t) {
+    t.status = (t.status === newStatus) ? 'pending' : newStatus;
+    t.reason = '';
+    await dbPut("study_plans", plan);
+    renderStudyPlansArchiveUI();
+  }
+}
+
+async function deleteStudyPlan(planId) {
+  if (confirm("Bu haftalık programı arşivden silmek istediğine emin misin?")) {
+    await dbDelete("study_plans", planId);
+    allStudyPlans = allStudyPlans.filter(x => x.id !== planId);
+    renderStudyPlansArchiveUI();
+  }
+}
+
+function updatePlanAnalyticsSummary() {
+  let doneCount = 0, missedCount = 0, shiftedCount = 0;
+  allStudyPlans.forEach(plan => {
+    const daysMap = plan.daysMap || {};
+    for (const tasks of Object.values(daysMap)) {
+      tasks.forEach(t => {
+        if (t.status === 'done') doneCount++;
+        else if (t.status === 'missed') missedCount++;
+        else if (t.status === 'shifted') shiftedCount++;
+      });
+    }
+  });
+
+  const elDone = document.getElementById("statPlanDone");
+  const elMissed = document.getElementById("statPlanMissed");
+  const elShifted = document.getElementById("statPlanShifted");
+  if (elDone) elDone.innerText = doneCount;
+  if (elMissed) elMissed.innerText = missedCount;
+  if (elShifted) elShifted.innerText = shiftedCount;
+}
+
+async function downloadSpecificPlanAsImage(planId) {
+  const plan = allStudyPlans.find(x => x.id === planId);
+  if (!plan) return;
+
+  const exportContainer = document.createElement("div");
+  exportContainer.style.position = "absolute";
+  exportContainer.style.left = "-9999px";
+  exportContainer.style.top = "0";
+  exportContainer.style.width = "650px";
+  exportContainer.style.background = "#1c1917";
+  exportContainer.style.color = "#ffffff";
+  exportContainer.style.padding = "24px";
+  exportContainer.style.borderRadius = "20px";
+  exportContainer.style.border = "2px solid #f97316";
+  exportContainer.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+
+  let htmlMarkup = `
+    <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #f97316; padding-bottom:12px; margin-bottom:16px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="logo.png" style="width:40px; height:40px; object-fit:contain;" onerror="this.style.display='none'">
+        <div>
+          <div style="font-size:1.2rem; font-weight:900; background:linear-gradient(135deg, #f97316, #ea580c); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">SORU AVCISI</div>
+          <div style="font-size:0.65rem; color:#d6d3d1; font-weight:900;">HAZIRLAYAN: YILDIRAY HOCA | soruavcisi.com</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:0.85rem; font-weight:900; color:#fbbf24;">📅 HAFTALIK DERS PLANI #${String(plan.seqNo).padStart(2,'0')}</div>
+        <div style="font-size:0.72rem; color:#d6d3d1; font-weight:800;">Öğrenci: ${plan.studentName}</div>
+        <div style="font-size:0.68rem; color:#f97316; font-weight:900;">Grup: ${plan.examGroup}</div>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+  `;
+
+  const dayDefs = plan.dynamicDaysDefinition || [];
+  const daysMap = plan.daysMap || {};
+
+  dayDefs.forEach(dayDef => {
+    const tasks = daysMap[dayDef.index] || [];
+    if (tasks.length === 0) return;
+    htmlMarkup += `
+      <div style="background:#292524; border:1px solid rgba(249, 115, 22, 0.3); border-radius:12px; padding:12px;">
+        <div style="font-size:0.85rem; font-weight:900; color:#f97316; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px; margin-bottom:8px;">📌 ${dayDef.title}</div>
+    `;
+    tasks.forEach((t, idx) => {
+      let stText = "";
+      if (t.status === 'done') stText = " • [TAMAMLANDI ✔️]";
+      else if (t.status === 'missed') stText = " • [YAPILMADI ❌]";
+      else if (t.status === 'shifted') stText = " • [KAYDIRILDI ➔]";
+
+      htmlMarkup += `
+        <div style="background:#141210; padding:8px 10px; border-radius:8px; margin-top:6px; font-size:0.78rem; font-weight:800; border-left:3px solid #f97316;">
+          <div style="font-weight:900; color:#fff;">${idx+1}. ${t.subject} — ${t.topic}</div>
+          <div style="font-size:0.72rem; color:#d6d3d1; margin-top:3px;">Çalışma Şekli: <b>${t.type}</b> | Kaynak: <span style="color:#fdba74;">${t.source}</span> ${stText}</div>
+        </div>
+      `;
+    });
+    htmlMarkup += `</div>`;
+  });
+
+  htmlMarkup += `</div><div style="text-align:center; margin-top:16px; font-size:0.65rem; color:#78716c; font-weight:900;">Soru Avcısı Akıllı Koçluk Sistemi — Tüm hakları saklıdır.</div>`;
+
+  exportContainer.innerHTML = htmlMarkup;
+  document.body.appendChild(exportContainer);
+
+  try {
+    const canvas = await html2canvas(exportContainer, { backgroundColor: '#1c1917', scale: 2 });
+    const imgData = canvas.toDataURL("image/jpeg", 0.95);
+    const a = document.createElement("a");
+    a.href = imgData;
+    a.download = `SoruAvcisi_DersPlani_${String(plan.seqNo).padStart(2,'0')}_${plan.studentName.replace(/\s+/g, '_')}.jpg`;
+    a.click();
+    alert("Dinamik sıralı koçluk programı görseli galerinize indirildi! 📸👑");
+  } catch (err) {
+    alert("Görsel oluşturulurken hata oluştu: " + err.message);
+  } finally {
+    document.body.removeChild(exportContainer);
+  }
+}
+
+function printSpecificPlanPDF(planId) {
+  const plan = allStudyPlans.find(x => x.id === planId);
+  if (!plan) return;
+
+  let htmlContent = `<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><title>Haftalık Ders Planı</title><style>@page{size:A4 portrait;margin:12mm;}body{font-family:sans-serif;background:#fff;color:#000;font-size:10pt;}.header{text-align:center;border-bottom:2px solid #000;padding-bottom:4mm;margin-bottom:6mm;}.brand{font-size:1.3rem;font-weight:900;}.sub{font-size:0.85rem;font-weight:800;margin-top:2px;}.day-box{border:1px solid #333;border-radius:6px;padding:6mm;margin-bottom:4mm;page-break-inside:avoid;}.day-title{font-weight:900;font-size:11pt;border-bottom:1px solid #ccc;padding-bottom:2mm;margin-bottom:3mm;color:#ea580c;}.task-item{padding:5px 0;border-bottom:1px dashed #eee;font-size:9.5pt;}</style></head><body><div class="header"><div class="brand">SORU AVCISI — HAFTALIK DERS ÇALIŞMA PLANI #${String(plan.seqNo).padStart(2,'0')}</div><div class="sub">Öğrenci: ${plan.studentName} | Sınav Grubu: ${plan.examGroup} | Tarih: ${plan.createdAt}</div><div style="font-size:0.7rem;color:#666;margin-top:2px;">Hazırlayan: Yıldıray Hoca | soruavcisi.com</div></div>`;
+
+  const dayDefs = plan.dynamicDaysDefinition || [];
+  const daysMap = plan.daysMap || {};
+
+  dayDefs.forEach(dayDef => {
+    const tasks = daysMap[dayDef.index] || [];
+    if (tasks.length === 0) return;
+    htmlContent += `<div class="day-box"><div class="day-title">${dayDef.title}</div>`;
+    tasks.forEach((t, idx) => {
+      let stText = "";
+      if (t.status === 'done') stText = " [TAMAMLANDI]";
+      else if (t.status === 'missed') stText = " [YAPILMADI]";
+      else if (t.status === 'shifted') stText = " [KAYDIRILDI]";
+
+      htmlContent += `<div class="task-item"><b>${idx+1}. ${t.subject}</b> — ${t.topic}<br><span style="color:#445;font-size:8.5pt;">Şekil: ${t.type} | Kaynak: ${t.source}</span><b style="font-size:8pt;color:#d97706;">${stText}</b></div>`;
+    });
+    htmlContent += `</div>`;
+  });
+
+  htmlContent += `<script>window.onload = function() { setTimeout(function() { window.print(); }, 600); };<\/script></body></html>`;
+  triggerHiddenIframePrint(htmlContent);
 }
 
 function renderTrackerTopics() {
@@ -2413,17 +3039,14 @@ function toggleAudio(target) {
   }
 }
 
-// ----------------------------------------------------
-// MOBİL UYUMLU DİNAMİK RENK PALETLİ ÇİZİM STÜDYOSU (V1.3.3)
-// ----------------------------------------------------
 let isCanvasActive = false; 
 let canvasCtx = null; 
 let drawing = false;
 let currentActiveQuestionId = null;
 let strokeHistory = [];
 let redoStack = [];
-let currentTool = 'pen'; // 'pen', 'highlighter', 'eraser'
-let currentColor = '#ef4444'; // Varsayılan: Kırmızı
+let currentTool = 'pen';
+let currentColor = '#ef4444';
 
 const PALETTES = {
   pen: [
@@ -2482,7 +3105,7 @@ function applyToolSettings() {
       canvasCtx.strokeStyle = currentColor;
       canvasCtx.fillStyle = currentColor;
       canvasCtx.lineWidth = 30;
-      canvasCtx.globalAlpha = 0.15; // Arkadaki yazıyı pırıl pırıl bırakan ultra şeffaf doku
+      canvasCtx.globalAlpha = 0.15;
       canvasCtx.lineCap = "butt";
       canvasCtx.lineJoin = "miter";
     } else {
@@ -2525,9 +3148,9 @@ function setDrawingTool(tool) {
   document.getElementById("toolEraser").classList.toggle("active", tool === 'eraser');
   
   if (tool === 'highlighter') {
-    currentColor = '#eab308'; // Sarı
+    currentColor = '#eab308';
   } else if (tool === 'pen') {
-    currentColor = '#ef4444'; // Kırmızı
+    currentColor = '#ef4444';
   }
 
   renderColorPalette();
@@ -2591,7 +3214,6 @@ function draw(e) {
     canvasCtx.save();
     canvasCtx.globalCompositeOperation = "destination-out";
     canvasCtx.beginPath();
-    // Silgi için daire şeklinde pikselleri temizle
     canvasCtx.arc(x, y, 16, 0, Math.PI * 2, false);
     canvasCtx.fill();
     canvasCtx.restore();
@@ -2602,7 +3224,7 @@ function draw(e) {
 }
 
 function stopDraw() { 
-  if (!drawing) return;
+  if (!drawing) return; 
   drawing = false; 
   if (canvasCtx) {
     strokeHistory.push(canvasCtx.getImageData(0, 0, document.getElementById("lightboxCanvas").width, document.getElementById("lightboxCanvas").height));
@@ -2780,7 +3402,7 @@ function switchNavTab(tabId, btn) {
 }
 
 async function exportDataBackup() {
-  const data = { questions: await dbGetAll("questions"), notes: await dbGetAll("notes"), completed_topics: await dbGetAll("completed_topics") };
+  const data = { questions: await dbGetAll("questions"), notes: await dbGetAll("notes"), completed_topics: await dbGetAll("completed_topics"), study_plans: await dbGetAll("study_plans") };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `SoruAvcisi_Yedek_${new Date().toISOString().slice(0,10)}.json`; a.click();
 }
@@ -2796,6 +3418,7 @@ function importDataBackup(e) {
         if(data.questions) for (const q of data.questions) await dbPut("questions", q);
         if(data.notes) for (const n of data.notes) await dbPut("notes", n);
         if(data.completed_topics) for (const ct of data.completed_topics) await dbPut("completed_topics", ct);
+        if(data.study_plans) for (const sp of data.study_plans) await dbPut("study_plans", sp);
       }
       alert("Yedek başarıyla yüklendi!"); await refreshAll();
     } catch(err) { alert("Hatalı dosya biçimi!"); }
@@ -2807,6 +3430,7 @@ async function refreshAll() {
   allQuestions = await dbGetAll("questions");
   allNotes = await dbGetAll("notes");
   allCompletedTopics = await dbGetAll("completed_topics");
+  allStudyPlans = await dbGetAll("study_plans");
   buildStoriesBar();
   buildExamPills();
   renderFeed();
